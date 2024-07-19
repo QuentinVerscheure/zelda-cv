@@ -1,0 +1,189 @@
+{
+	"textures": [
+		{
+			"image": "Links_Default.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 242,
+				"h": 199
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "walkingRight/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 2,
+						"y": 8,
+						"w": 21,
+						"h": 21
+					}
+				},
+				{
+					"filename": "walkingRight/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 26,
+						"y": 8,
+						"w": 21,
+						"h": 21
+					}
+				},
+                {
+					"filename": "walkingLeft/frame0001",
+					"rotated": true,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 2,
+						"y": 8,
+						"w": 21,
+						"h": 21
+					}
+				},
+				{
+					"filename": "walkingLeft/frame0002",
+					"rotated": true,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 26,
+						"y": 8,
+						"w": 21,
+						"h": 21
+					}
+				},
+                {
+					"filename": "walkingDown/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 50,
+						"y": 8,
+						"w": 21,
+						"h": 21
+					}
+				},
+				{
+					"filename": "walkingDown/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 50,
+						"y": 32,
+						"w": 21,
+						"h": 21
+					}
+				},				
+                {
+					"filename": "walkingTop/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 74,
+						"y": 8,
+						"w": 21,
+						"h": 21
+					}
+				},
+				{
+					"filename": "walkingTop/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 21,
+						"h": 21                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 21,
+						"h": 21
+					},
+					"frame": {
+						"x": 74,
+						"y": 56,
+						"w": 21,
+						"h": 21
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"source": "https://www.spriters-resource.com/browser_games/supermariobroscrossover/sheet/176489/",
+		"version": "1.0",
+		"image": "Links_Default.png",
+		"size": {"w":242,"h":199}
+	}
+}

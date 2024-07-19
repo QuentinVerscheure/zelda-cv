@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Phaser from 'phaser';
+import { MovementService } from './movement.service'; // Assurez-vous que le chemin est correct
 
 @Component({
   selector: 'app-game',
@@ -11,12 +12,10 @@ import * as Phaser from 'phaser';
 export class CoreComponent extends Phaser.Scene implements OnInit {
   private phaserGame!: Phaser.Game;
   private config: Phaser.Types.Core.GameConfig;
-  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private background!: Phaser.GameObjects.Image;
-  private player!: Phaser.GameObjects.Image;
-  private keys!: { Z: Phaser.Input.Keyboard.Key, Q: Phaser.Input.Keyboard.Key, S: Phaser.Input.Keyboard.Key, D: Phaser.Input.Keyboard.Key };
+  private player!: Phaser.GameObjects.Sprite;
 
-  constructor() {
+  constructor(private movementService: MovementService) {
     super({ key: 'main' });
     this.config = {
       type: Phaser.AUTO,
@@ -35,49 +34,36 @@ export class CoreComponent extends Phaser.Scene implements OnInit {
   }
 
   preload() {
-    this.load.setBaseURL('http://localhost:4200/');
-
-    this.load.image('linkDefault', 'assets/game/Links_Default.png');
     this.load.image('world_background', 'assets/game/Koholint.png');
+    // this.load.spritesheet('tiles', 'https://labs.phaser.io/assets/tilemaps/tiles/fantasy-tiles.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.atlas(
+      'linkDefault',
+      'assets/game/Links_Default.png',
+      'assets/game/Links_Default.json'
+    );
   }
 
   create() {
     this.background = this.add.image(400, 300, 'world_background');
     this.background.setScale(2);
 
-
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
-    this.player = this.physics.add.image(centerX, centerY, 'linkDefault');
+    this.player = this.physics.add.sprite(centerX, centerY, 'linkDefault', 'walkingRight/frame0001');
     this.player.setScale(2);
-    
 
-    // Initialize keyboard controls if this.input.keyboard is available
+    // this.movementService.createAnimationPlayer();
+
+    // Initialize players animation
+    this.movementService.initializeMoveAnimation(this.anims);
+
+    // Initialize keyboard inputs
     if (this.input.keyboard) {
-      this.cursors = this.input.keyboard.createCursorKeys();
-      this.keys = this.input.keyboard.addKeys('Z,Q,S,D') as {
-        Z: Phaser.Input.Keyboard.Key;
-        Q: Phaser.Input.Keyboard.Key;
-        S: Phaser.Input.Keyboard.Key;
-        D: Phaser.Input.Keyboard.Key;
-      };
+      this.movementService.initializeKeyboardInput(this.input);
     }
   }
 
   override update() {
-    // Speed of background movement when player moove
-    const speed = 1.4;
-
-    if (this.cursors.left.isDown || this.keys.Q.isDown) {
-      this.background.x += speed;
-    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
-      this.background.x -= speed;
-    }
-
-    if (this.cursors.up.isDown || this.keys.Z.isDown) {
-      this.background.y += speed;
-    } else if (this.cursors.down.isDown || this.keys.S.isDown) {
-      this.background.y -= speed;
-    }
+    this.movementService.movePlayer(this.background, this.player);
   }
 }
