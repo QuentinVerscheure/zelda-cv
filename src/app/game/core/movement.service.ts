@@ -59,7 +59,7 @@ export class MovementService {
    * do the action associate to a spécific input
    */
   movePlayer(
-    background: Phaser.GameObjects.Image,
+    camera: Phaser.Cameras.Scene2D.Camera,
     player: Phaser.GameObjects.Sprite
   ) {
     const speed = 1.4; // Speed of background movement when player moves, the player stay in the middle of the screen
@@ -68,20 +68,20 @@ export class MovementService {
     let direction = ''; //use for chosing the frame of the statit player asset
 
     if (this.cursors.left.isDown || this.keys.Q.isDown) {
-      background.x += speed;
+      player.x -= speed;
       isMoving = true;
       direction = 'left';
     } else if (this.cursors.right.isDown || this.keys.D.isDown) {
-      background.x -= speed;
+      player.x += speed;
       isMoving = true;
       direction = 'right';
     }
     if (this.cursors.up.isDown || this.keys.Z.isDown) {
-      background.y += speed;
+      player.y -= speed;
       isMoving = true;
       direction = 'top';
     } else if (this.cursors.down.isDown || this.keys.S.isDown) {
-      background.y -= speed;
+      player.y += speed;
       isMoving = true;
       direction = 'down';
     }

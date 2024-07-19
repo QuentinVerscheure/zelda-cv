@@ -47,12 +47,13 @@ export class CoreComponent extends Phaser.Scene implements OnInit {
     this.background = this.add.image(400, 300, 'world_background');
     this.background.setScale(2);
 
-    const centerX = this.cameras.main.width / 2;
-    const centerY = this.cameras.main.height / 2;
-    this.player = this.physics.add.sprite(centerX, centerY, 'linkDefault', 'walkingRight/frame0001');
+    const initialPlayerX = -1345; // Set your desired initial X position
+    const initialPlayerY = 1000; // Set your desired initial Y position
+
+    this.player = this.physics.add.sprite(initialPlayerX, initialPlayerY, 'linkDefault', 'walkingRight/frame0001');
     this.player.setScale(2);
 
-    // this.movementService.createAnimationPlayer();
+    this.cameras.main.startFollow(this.player);
 
     // Initialize players animation
     this.movementService.initializeMoveAnimation(this.anims);
@@ -64,6 +65,6 @@ export class CoreComponent extends Phaser.Scene implements OnInit {
   }
 
   override update() {
-    this.movementService.movePlayer(this.background, this.player);
+    this.movementService.movePlayer(this.cameras.main, this.player);
   }
 }
