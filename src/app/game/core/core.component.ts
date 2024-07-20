@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Phaser from 'phaser';
-import { MovementService } from './movement.service'; // Assurez-vous que le chemin est correct
-import { BackgroundCollisionMap} from '../../models/koholint_collision_map.enum';
+import { MovementService } from './movement.service';
+import { WallCollisionService } from './wall-collision.service';
 
 @Component({
   selector: 'app-game',
@@ -19,7 +19,7 @@ export class CoreComponent extends Phaser.Scene implements OnInit {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
 
-  constructor(private movementService: MovementService) {
+  constructor(private movementService: MovementService, private wallCollisionService: WallCollisionService) {
     super({ key: 'main' });
     this.config = {
       type: Phaser.AUTO,
@@ -55,8 +55,8 @@ export class CoreComponent extends Phaser.Scene implements OnInit {
     this.background.setOrigin(0, 0); // Origin top left
     this.background.setScale(this.scaleOfTheGame);
 
-    const initialPlayerX = 817; // Set your desired initial X position
-    const initialPlayerY = 2756; // Set your desired initial Y position
+    const initialPlayerX = 408*this.scaleOfTheGame; // Set your desired initial X position
+    const initialPlayerY = 1378*this.scaleOfTheGame; // Set your desired initial Y position
 
     this.player = this.physics.add.sprite(
       initialPlayerX,
@@ -74,7 +74,7 @@ export class CoreComponent extends Phaser.Scene implements OnInit {
     this.movementService.initializeMoveAnimation(this.anims);
 
     // load the background collision map
-    this.loadCollisions();
+    this.wallCollisionService.loadCollisions(this, this.scaleOfTheGame, this.player);
 
     // Initialize keyboard inputs
     if (this.input.keyboard) {
@@ -82,37 +82,9 @@ export class CoreComponent extends Phaser.Scene implements OnInit {
     }
   }
 
-  loadCollisions() {
-    if (!this.cache.json.has('KoholintCollisionBackgroundData')) {
-      console.error('Collision data is not available in the cache.');
-      return;
-    }
 
-    const collisionData = this.cache.json.get('KoholintCollisionBackgroundData');
-    const objects = collisionData.layers.find(
-      (layer: { type: string }) => layer.type === 'objectgroup'
-    ).objects;
-    objects.forEach(
-      (obj: BackgroundCollisionMap) => {
-        const collisionObject = this.add.rectangle(
-          obj.x * this.scaleOfTheGame + (obj.width * this.scaleOfTheGame) / 2,
-          obj.y * this.scaleOfTheGame + (obj.height * this.scaleOfTheGame) / 2,
-          obj.width*this.scaleOfTheGame,
-          obj.height*this.scaleOfTheGame,
-          0xff0000,
-          0.5
-        );
-        this.physics.add.existing(collisionObject);
-        const collisionBody =
-          collisionObject.body as Phaser.Physics.Arcade.Body;
-        collisionBody.setImmovable(true);
-        this.physics.add.collider(this.player, collisionObject);
-        console.log(this.physics);
-      }
-    );
-  }
 
   override update() {
-    this.movementService.movePlayer(this.player);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 }

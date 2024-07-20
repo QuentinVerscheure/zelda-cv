@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import * as Phaser from 'phaser';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MovementService {
+
   cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   keys!: {
     Z: Phaser.Input.Keyboard.Key;
@@ -59,17 +60,17 @@ export class MovementService {
    * do the action associate to a spécific input
    */
   movePlayer(
-    player: Phaser.Physics.Arcade.Sprite
+    player: Phaser.Physics.Arcade.Sprite, scaleOfTheGame: number
   ) {
     let isMoving = false; //use for stopping the animation after the release of the key
     let direction = ''; //use for chosing the frame of the statit player asset
 
     if (this.cursors.left.isDown || this.keys.Q.isDown) {
-      player.setVelocityX(-160);
+      player.setVelocityX(-80*scaleOfTheGame);
       isMoving = true;
       direction = 'left';
     } else if (this.cursors.right.isDown || this.keys.D.isDown) {
-      player.setVelocityX(+160);
+      player.setVelocityX(+80*scaleOfTheGame);
       isMoving = true;
       direction = 'right';
     } else{
@@ -77,11 +78,11 @@ export class MovementService {
     }
 
     if (this.cursors.up.isDown || this.keys.Z.isDown) {
-      player.setVelocityY(-160);
+      player.setVelocityY(-80*scaleOfTheGame);
       isMoving = true;
       direction = 'top';
     } else if (this.cursors.down.isDown || this.keys.S.isDown) {
-      player.setVelocityY(+160);
+      player.setVelocityY(+80*scaleOfTheGame);
       isMoving = true;
       direction = 'down';
     } else{
