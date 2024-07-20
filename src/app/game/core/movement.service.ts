@@ -59,31 +59,33 @@ export class MovementService {
    * do the action associate to a spécific input
    */
   movePlayer(
-    camera: Phaser.Cameras.Scene2D.Camera,
-    player: Phaser.GameObjects.Sprite
+    player: Phaser.Physics.Arcade.Sprite
   ) {
-    const speed = 1.4; // Speed of background movement when player moves, the player stay in the middle of the screen
-
     let isMoving = false; //use for stopping the animation after the release of the key
     let direction = ''; //use for chosing the frame of the statit player asset
 
     if (this.cursors.left.isDown || this.keys.Q.isDown) {
-      player.x -= speed;
+      player.setVelocityX(-160);
       isMoving = true;
       direction = 'left';
     } else if (this.cursors.right.isDown || this.keys.D.isDown) {
-      player.x += speed;
+      player.setVelocityX(+160);
       isMoving = true;
       direction = 'right';
+    } else{
+      player.setVelocityX(0);
     }
+
     if (this.cursors.up.isDown || this.keys.Z.isDown) {
-      player.y -= speed;
+      player.setVelocityY(-160);
       isMoving = true;
       direction = 'top';
     } else if (this.cursors.down.isDown || this.keys.S.isDown) {
-      player.y += speed;
+      player.setVelocityY(+160);
       isMoving = true;
       direction = 'down';
+    } else{
+      player.setVelocityY(0);
     }
 
     //disciociate move and animation for the diagonale case
