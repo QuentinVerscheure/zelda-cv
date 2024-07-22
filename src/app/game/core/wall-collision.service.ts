@@ -9,13 +9,13 @@ export class WallCollisionService {
 
   constructor() { }
 
-  loadCollisions(scene: Phaser.Scene, scaleOfTheGame: number, player: Phaser.Physics.Arcade.Sprite) {
-    if (!scene.cache.json.has('KoholintCollisionBackgroundData')) {
+  loadWorldCollisions(scene: Phaser.Scene, scaleOfTheGame: number, player: Phaser.Physics.Arcade.Sprite, collisionFile: string) {
+    if (!scene.cache.json.has(collisionFile)) {
       console.error('Collision data is not available in the cache.');
       return;
     }
 
-    const collisionData = scene.cache.json.get('KoholintCollisionBackgroundData');
+    const collisionData = scene.cache.json.get(collisionFile);
     const objects = collisionData.layers.find(
       (layer: { type: string }) => layer.type === 'objectgroup'
     )?.objects;
@@ -35,7 +35,6 @@ export class WallCollisionService {
           const collisionBody = collisionObject.body as Phaser.Physics.Arcade.Body;
           collisionBody.setImmovable(true);
           scene.physics.add.collider(player, collisionObject);
-          console.log(scene.physics);
         }
       );
     }

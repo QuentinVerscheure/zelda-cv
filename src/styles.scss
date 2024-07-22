@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: "Pixelify_Sans";
+  src: url("/assets/fonts/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "PixelifySans-Bold";
+  src: url("/assets/fonts/Pixelify_Sans/static/PixelifySans-Bold.ttf")
+    format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ZeldaDXTTBRK";
+  src: url("/assets/fonts/zelda-dx-tt-brk/ZeldaDXTTBRK.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
