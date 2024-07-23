@@ -3,6 +3,7 @@ import { MovementService } from '../../core/movement.service';
 import { WallCollisionService } from '../../core/wall-collision.service';
 import { CvContent } from '../../../models/Cv_content.enum';
 import { CvContentService } from './cvContent.service';
+import { PlayerService } from '../../core/player.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class SceneCVService extends Phaser.Scene {
   constructor(
     private movementService: MovementService,
     private wallCollisionService: WallCollisionService,
-    private cvContentService: CvContentService
+    private cvContentService: CvContentService,
+    private playerService: PlayerService
   ) {
     super({ key: 'sceneCV' });
   }
@@ -37,6 +39,9 @@ export class SceneCVService extends Phaser.Scene {
     this.load.image('eniLogo', 'assets/logo/ecoleeni-logo.jpg');
     this.load.image('allplanLogo', 'assets/logo/logo-allplan.png');
     this.load.image('afpaLogo', 'assets/logo/Logo-AFPA.png');
+
+    //load an invisible sprite for the hitbox detection for the change of scene
+    this.load.image('invisibleSprite', 'assets/game/hitbox.png');
   }
 
   create() {
@@ -47,20 +52,14 @@ export class SceneCVService extends Phaser.Scene {
     const initialPlayerX = 473 * this.scaleOfTheGame; // Set your desired initial X position
     const initialPlayerY = 420 * this.scaleOfTheGame; // Set your desired initial Y position
 
-    this.player = this.physics.add.sprite(
+    this.player = this.playerService.createPlayer(
+      this.player,
+      this,
+      this.scaleOfTheGame,
       initialPlayerX,
       initialPlayerY,
-      'linkDefault',
       'walkingTop/frame0001'
     );
-    this.player.setScale(this.scaleOfTheGame);
-    this.player.setSize(10, 10); // Dimensions of hitbox
-    this.player.setOffset(5, 9); //offset of the hitbox
-
-    this.cameras.main.startFollow(this.player);
-
-    // Initialize players animation
-    this.movementService.initializeMoveAnimation(this.anims);
 
     // load the background collision map
     this.wallCollisionService.loadWorldCollisions(
@@ -77,12 +76,41 @@ export class SceneCVService extends Phaser.Scene {
 
     // Load and display the content of the CV frames
     this.cvContentService.loadTexts(this, this.scaleOfTheGame);
+
+    // Create hitbox for scene transition using an invisible sprite
+    const exitHitbox = this.physics.add.sprite(
+      464 * this.scaleOfTheGame,
+      448 * this.scaleOfTheGame,
+      'invisibleSprite'
+    );
+    exitHitbox.setOrigin(0, 0); // Position by the top-left corner
+    exitHitbox.displayWidth = 16 * this.scaleOfTheGame; // Set width
+    exitHitbox.displayHeight = 16 * this.scaleOfTheGame; // Set height
+    exitHitbox.setVisible(false); // Make the sprite invisible
+    exitHitbox.body.immovable = true; // Make the hitbox immovable
+    exitHitbox.body.allowGravity = false; // Disable gravity for the hitbox
+
+    this.physics.add.collider(
+      this.player,
+      exitHitbox,
+      (player, hitbox) =>
+        this.onExitHitboxCollision(
+          player as Phaser.Physics.Arcade.Sprite,
+          hitbox as Phaser.Physics.Arcade.Sprite
+        ),
+      undefined,
+      this
+    );
   }
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
-
-
+  onExitHitboxCollision(
+    player: Phaser.Physics.Arcade.Sprite,
+    hitbox: Phaser.Physics.Arcade.Sprite
+  ) {
+    this.scene.start('sceneWorld');
+  }
 }

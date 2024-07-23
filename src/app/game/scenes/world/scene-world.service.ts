@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { WallCollisionService } from '../../core/wall-collision.service';
+import { PlayerService } from '../../core/player.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class SceneWorldService extends Phaser.Scene{
-
+export class SceneWorldService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = 2;
 
-  constructor (private movementService: MovementService, private wallCollisionService: WallCollisionService)
-  {
-      super({ key: 'sceneWorld' });
+  constructor(
+    private movementService: MovementService,
+    private wallCollisionService: WallCollisionService,
+    private playerService: PlayerService
+  ) {
+    super({ key: 'sceneWorld' });
   }
 
   preload() {
@@ -24,7 +27,13 @@ export class SceneWorldService extends Phaser.Scene{
       'assets/game/Links_Default.json'
     );
     //load the collision between the background and the player
-    this.load.json('KoholintCollisionBackgroundData', 'assets/game/Koholint_collision_background.json'); //background collision map file
+    this.load.json(
+      'KoholintCollisionBackgroundData',
+      'assets/game/Koholint_collision_background.json'
+    ); //background collision map file
+
+    //load an invisible sprite for the hitbox detection for the change of scene
+    this.load.image('invisibleSprite', 'assets/game/hitbox.png');
   }
 
   create() {
@@ -32,34 +41,31 @@ export class SceneWorldService extends Phaser.Scene{
     this.background.setOrigin(0, 0); // Origin top left
     this.background.setScale(this.scaleOfTheGame);
 
-    const initialPlayerX = 408*this.scaleOfTheGame; // Set your desired initial X position
-    const initialPlayerY = 1378*this.scaleOfTheGame; // Set your desired initial Y position
+    const initialPlayerX = 408 * this.scaleOfTheGame; // Set your desired initial X position
+    const initialPlayerY = 1378 * this.scaleOfTheGame; // Set your desired initial Y position
 
-    this.player = this.physics.add.sprite(
+    this.player = this.playerService.createPlayer(
+      this.player,
+      this,
+      this.scaleOfTheGame,
       initialPlayerX,
       initialPlayerY,
-      'linkDefault',
       'walkingRight/frame0001'
     );
-    this.player.setScale(this.scaleOfTheGame);
-    this.player.setSize(10, 10); // Dimensions of hitbox
-    this.player.setOffset(5, 9); //offset of the hitbox
-
-    this.cameras.main.startFollow(this.player);
-
-    // Initialize players animation
-    this.movementService.initializeMoveAnimation(this.anims);
 
     // load the background collision map
-    this.wallCollisionService.loadWorldCollisions(this, this.scaleOfTheGame, this.player, 'worldBackground');
+    this.wallCollisionService.loadWorldCollisions(
+      this,
+      this.scaleOfTheGame,
+      this.player,
+      'KoholintCollisionBackgroundData'
+    );
 
     // Initialize keyboard inputs
     if (this.input.keyboard) {
       this.movementService.initializeKeyboardInput(this.input);
     }
   }
-
-
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
