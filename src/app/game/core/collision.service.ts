@@ -53,14 +53,18 @@ export class CollisionService {
     scene: Phaser.Scene,
     scaleOfTheGame: number,
     player: Phaser.Physics.Arcade.Sprite,
-    startXPosition: number,
-    startYPosition: number
+    nameOfTheSpriteCollision: string,
+    sceneToLoad: string,
+    xOfHitbox: number,
+    yOfHitbox: number,
+    startXPosition?: number,
+    startYPosition?: number
   ) {
     // Create hitbox for scene transition using an invisible sprite
     const exitHitbox = scene.physics.add.sprite(
-      464 * scaleOfTheGame,
-      448 * scaleOfTheGame,
-      'invisibleSprite'
+      xOfHitbox * scaleOfTheGame,
+      yOfHitbox * scaleOfTheGame,
+      nameOfTheSpriteCollision
     );
     exitHitbox.setOrigin(0, 0); // Position by the top-left corner
     exitHitbox.displayWidth = 16 * scaleOfTheGame; // Set width
@@ -75,7 +79,7 @@ export class CollisionService {
       exitHitbox,
       () => {
         const landingCoordinates = { x: startXPosition, y: startYPosition };
-        scene.scene.start('sceneWorld', landingCoordinates);
+        scene.scene.start(sceneToLoad, landingCoordinates);
       },
       undefined,
       scene

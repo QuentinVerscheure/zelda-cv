@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Phaser from 'phaser';
-import { SceneCVService } from '../scenes/cv/scene-cv.service';
+import { SceneCVService } from '../scenes/cvHouse/scene-cv.service';
 import { SceneWorldService } from '../scenes/world/scene-world.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class CoreComponent implements OnInit {
       type: Phaser.AUTO,
       width: 1600,
       height: 1000,
-      scene: [this.sceneCV, this.sceneWorld],
+      scene: [this.sceneWorld, this.sceneCV],
       physics: {
         default: 'arcade',
         arcade: {

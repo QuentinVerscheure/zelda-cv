@@ -78,6 +78,10 @@ export class SceneCVService extends Phaser.Scene {
       this,
       this.scaleOfTheGame,
       this.player,
+      'invisibleSprite',
+      'sceneWorld',
+      464,
+      448,
       553,
       1253
     );
@@ -85,13 +89,5 @@ export class SceneCVService extends Phaser.Scene {
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
-  }
-
-  onExitHitboxCollision(
-    player: Phaser.Physics.Arcade.Sprite,
-    hitbox: Phaser.Physics.Arcade.Sprite
-  ) {
-    const landingCoordinates = { x: 553, y: 1253 };
-    this.scene.start('sceneWorld', landingCoordinates);
   }
 }
