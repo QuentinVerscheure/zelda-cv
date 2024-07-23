@@ -1,5 +1,5 @@
 /**
- * Represents the properties of the collision objects constituting the background of the map
+ * Represents the properties of the information to display in the CvScene
  */
 export interface CvContent {
   cv: [

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
-import { WallCollisionService } from '../../core/wall-collision.service';
+import { CollisionService } from '../../core/collision.service';
 import { CvContent } from '../../../models/Cv_content.enum';
 import { CvContentService } from './cvContent.service';
 import { PlayerService } from '../../core/player.service';
@@ -15,7 +15,7 @@ export class SceneCVService extends Phaser.Scene {
 
   constructor(
     private movementService: MovementService,
-    private wallCollisionService: WallCollisionService,
+    private collisionService: CollisionService,
     private cvContentService: CvContentService,
     private playerService: PlayerService
   ) {
@@ -61,45 +61,25 @@ export class SceneCVService extends Phaser.Scene {
       'walkingTop/frame0001'
     );
 
-    // load the background collision map
-    this.wallCollisionService.loadWorldCollisions(
+    this.collisionService.createWorldCollisions(
       this,
       this.scaleOfTheGame,
       this.player,
       'CVCollisionBackgroundData'
     );
 
-    // Initialize keyboard inputs
     if (this.input.keyboard) {
       this.movementService.initializeKeyboardInput(this.input);
     }
 
-    // Load and display the content of the CV frames
     this.cvContentService.loadTexts(this, this.scaleOfTheGame);
 
-    // Create hitbox for scene transition using an invisible sprite
-    const exitHitbox = this.physics.add.sprite(
-      464 * this.scaleOfTheGame,
-      448 * this.scaleOfTheGame,
-      'invisibleSprite'
-    );
-    exitHitbox.setOrigin(0, 0); // Position by the top-left corner
-    exitHitbox.displayWidth = 16 * this.scaleOfTheGame; // Set width
-    exitHitbox.displayHeight = 16 * this.scaleOfTheGame; // Set height
-    exitHitbox.setVisible(false); // Make the sprite invisible
-    exitHitbox.body.immovable = true; // Make the hitbox immovable
-    exitHitbox.body.allowGravity = false; // Disable gravity for the hitbox
-
-    this.physics.add.collider(
+    this.collisionService.createSceneTransitionCollision(
+      this,
+      this.scaleOfTheGame,
       this.player,
-      exitHitbox,
-      (player, hitbox) =>
-        this.onExitHitboxCollision(
-          player as Phaser.Physics.Arcade.Sprite,
-          hitbox as Phaser.Physics.Arcade.Sprite
-        ),
-      undefined,
-      this
+      553,
+      1253
     );
   }
 
@@ -111,6 +91,7 @@ export class SceneCVService extends Phaser.Scene {
     player: Phaser.Physics.Arcade.Sprite,
     hitbox: Phaser.Physics.Arcade.Sprite
   ) {
-    this.scene.start('sceneWorld');
+    const landingCoordinates = { x: 553, y: 1253 };
+    this.scene.start('sceneWorld', landingCoordinates);
   }
 }

@@ -15,7 +15,7 @@ export class MovementService {
   };
 
   /**
-   * initialize the input
+   * initialize the keyboard input
    */
   initializeKeyboardInput(input: Phaser.Input.InputPlugin) {
     if (input.keyboard) {

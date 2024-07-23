@@ -47,6 +47,9 @@ export class CvContentService {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   *  Load and display the content of the CV frames
+   */
   loadTexts(scene: Phaser.Scene, scaleOfTheGame: number): void {
     this.getCvContent().subscribe((data: CvContent) => {
       this.cvContent = data;
