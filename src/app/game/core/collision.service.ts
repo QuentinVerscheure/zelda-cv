@@ -57,8 +57,8 @@ export class CollisionService {
     sceneToLoad: string,
     xOfHitbox: number,
     yOfHitbox: number,
-    startXPosition?: number,
-    startYPosition?: number
+    startXPositionInNewScene?: number,
+    startYPositionInNewScene?: number
   ) {
     // Create hitbox for scene transition using an invisible sprite
     const exitHitbox = scene.physics.add.sprite(
@@ -78,7 +78,7 @@ export class CollisionService {
       player,
       exitHitbox,
       () => {
-        const landingCoordinates = { x: startXPosition, y: startYPosition };
+        const landingCoordinates = { x: startXPositionInNewScene, y: startYPositionInNewScene };
         scene.scene.start(sceneToLoad, landingCoordinates);
       },
       undefined,

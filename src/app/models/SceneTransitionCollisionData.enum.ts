@@ -2,8 +2,10 @@
  * Represents the properties needed for create the scene transition
  */
 export type SceneTransitionCollisionData = [
-  string, // nameOfTheSpriteCollision
+  string, // name of the sprite collision
   string, // sceneToLoad
-  number, // startXPosition
-  number  // startYPosition
+  number, // X Position of hitbox
+  number,  // Y Position of hitbox
+  number?, // start X position in new scene
+  number?  // start Y position in new scene
 ];
