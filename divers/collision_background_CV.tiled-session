@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tiled_collision_background_CV.json",
+    "activeFile": "",
     "expandedProjectPaths": [
         "."
     ],
@@ -23,7 +23,6 @@
     "map.tileWidth": 16,
     "map.width": 59,
     "openFiles": [
-        "Tiled_collision_background_CV.json"
     ],
     "project": "collision_background_CV.tiled-project",
     "recentFiles": [

@@ -41,7 +41,7 @@ export class SceneCVService extends Phaser.Scene {
     this.load.image('afpaLogo', 'assets/logo/Logo-AFPA.png');
 
     //load an invisible sprite for the hitbox detection for the change of scene
-    this.load.image('invisibleSprite', 'assets/game/hitbox.png');
+    this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
   }
 
   create() {
@@ -52,6 +52,8 @@ export class SceneCVService extends Phaser.Scene {
     const initialPlayerX = 473 * this.scaleOfTheGame; // Set your desired initial X position
     const initialPlayerY = 420 * this.scaleOfTheGame; // Set your desired initial Y position
 
+    this.cvContentService.loadTexts(this, this.scaleOfTheGame);
+    
     this.player = this.playerService.createPlayer(
       this.player,
       this,
@@ -72,13 +74,11 @@ export class SceneCVService extends Phaser.Scene {
       this.movementService.initializeKeyboardInput(this.input);
     }
 
-    this.cvContentService.loadTexts(this, this.scaleOfTheGame);
-
     this.collisionService.createSceneTransitionCollision(
       this,
       this.scaleOfTheGame,
       this.player,
-      'invisibleSprite',
+      'sceneTransitionSprite',
       'sceneWorld',
       464,
       448,

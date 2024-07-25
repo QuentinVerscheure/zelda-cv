@@ -6,7 +6,7 @@ import { PlayerService } from '../../core/player.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ScenePlayerService extends Phaser.Scene {
+export class SceneGuestBookService1 extends Phaser.Scene {
 
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
@@ -17,11 +17,11 @@ export class ScenePlayerService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService
   ) {
-    super({ key: 'scenePlayerHouse' });
+    super({ key: 'sceneGuestBook1' });
   }
 
   preload() {
-    this.load.image('Player_background', 'assets/game/Player_House_background.png');
+    this.load.image('Guest_Book_background', 'assets/game/Guest_Book_House_1.png');
     this.load.atlas(
       'linkDefault',
       'assets/game/Links_Default.png',
@@ -29,21 +29,27 @@ export class ScenePlayerService extends Phaser.Scene {
     );
     //load the collision between the background and the player
     this.load.json(
-      'playerCollisionBackgroundData',
-      'assets/game/player_house_collision_background.json'
+      'guestBookCollisionBackgroundData',
+      'assets/game/guest_book_house_1_collision_background.json'
     );
 
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
+    this.load.image('sceneTransitionSprite2', 'assets/game/hitbox.png');
   }
 
-  create() {
-    this.background = this.add.image(0, 0, 'Player_background');
+  create(data: { x: number; y: number; firstAnimationFrame: string }) {
+    this.background = this.add.image(0, 0, 'Guest_Book_background');
     this.background.setOrigin(0, 0); // Origin top left
     this.background.setScale(this.scaleOfTheGame);
 
-    const initialPlayerX = 209 * this.scaleOfTheGame; // Set your desired initial X position
-    const initialPlayerY = 214 * this.scaleOfTheGame; // Set your desired initial Y position
+    //coordonate depanding of the scene transition
+    const initialPlayerX =
+      data?.x * this.scaleOfTheGame || 88 * this.scaleOfTheGame;
+    const initialPlayerY =
+      data?.y * this.scaleOfTheGame || 104 * this.scaleOfTheGame;
+    const firstAnimationFrame =
+      data?.firstAnimationFrame || 'walkingTop/frame0001';
 
     this.player = this.playerService.createPlayer(
       this.player,
@@ -51,14 +57,14 @@ export class ScenePlayerService extends Phaser.Scene {
       this.scaleOfTheGame,
       initialPlayerX,
       initialPlayerY,
-      'walkingTop/frame0001'
+      firstAnimationFrame
     );
 
     this.collisionService.createWorldCollisions(
       this,
       this.scaleOfTheGame,
       this.player,
-      'playerCollisionBackgroundData'
+      'guestBookCollisionBackgroundData'
     );
 
     if (this.input.keyboard) {
@@ -71,10 +77,22 @@ export class ScenePlayerService extends Phaser.Scene {
       this.player,
       'sceneTransitionSprite',
       'sceneWorld',
-      200,
-      235,
-      409,
-      1364
+      80,
+      120,
+      233,
+      1507
+    );
+
+    this.collisionService.createSceneTransitionCollision(
+      this,
+      this.scaleOfTheGame,
+      this.player,
+      'sceneTransitionSprite',
+      'sceneGuestBook2',
+      80,
+      0,
+      224,
+      1482
     );
   }
 

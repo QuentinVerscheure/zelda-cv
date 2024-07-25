@@ -1,0 +1,33 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Tiled_collision_background_phone_house.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "Tiled_collision_background_phone_house.tmx": {
+            "scale": 3.33984375,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 96.11228070175437,
+                "y": 127.85029239766082
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/zelda-cv/src/assets/game",
+    "map.height": 16,
+    "map.lastUsedExportFilter": "Fichiers de carte JSON (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 12,
+    "openFiles": [
+        "Tiled_collision_background_phone_house.tmx"
+    ],
+    "project": "phone_house.tiled-project",
+    "recentFiles": [
+        "Tiled_collision_background_phone_house.tmx"
+    ]
+}

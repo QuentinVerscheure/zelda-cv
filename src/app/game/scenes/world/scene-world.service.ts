@@ -61,7 +61,7 @@ export class SceneWorldService extends Phaser.Scene {
       this.scaleOfTheGame,
       initialPlayerX,
       initialPlayerY,
-      'walkingRight/frame0001'
+      'walkingDown/frame0001'
     );
 
     // load the background collision map
@@ -79,15 +79,16 @@ export class SceneWorldService extends Phaser.Scene {
 
     // create scene transition collision
     let sceneTransitionCollisionData: SceneTransitionCollisionData[] = [
+      //[nameOfTheSpriteCollision, sceneToLoad, xOfHitbox, yOfHitbox, startXPositionInNewScene?, startYPositionInNewScene?] 
       ['creditHouse', 'sceneCredit', 400, 1082],
       ['creditHouse', 'sceneCredit', 432, 1082],
       ['cvHouse', 'sceneCV', 543, 1226],
-      ['playerHouse', 'scenePlayerHouse', 399, 1338],
-      ['linkHouse', 'sceneLien', 240, 1322],
+      ['playerHouse', 'scenePlayerHouse', 400, 1338],
+      ['linkHouse', 'sceneLink', 240, 1322],
       ['variousHouse', 'sceneDivers', 208, 1322],
       ['portfolioHouse', 'scenePortfolio', 560, 1466],
       ['contactHouse', 'sceneContact', 400, 1466],
-      ['guestBookHouse', 'sceneGuestBook', 224, 1482],
+      ['guestBookHouse', 'sceneGuestBook1', 224, 1482],
     ];
 
     for (const data of sceneTransitionCollisionData) {
