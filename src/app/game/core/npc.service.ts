@@ -6,53 +6,67 @@ import { Injectable } from '@angular/core';
 export class NpcService {
   constructor() {}
 
+  /**
+   * Create a no-moving, no-physics NPC.
+   *
+   * @param scene - Scene where the NPC will be
+   * @param scaleOfTheGame - Scale of the scene
+   * @param initialNpcX - Position x of the NPC
+   * @param initialNpcY - Position y of the NPC
+   * @param textureKey - Texture key for the NPC
+   * 
+   * @returns The NPC sprite
+   */
   createNpc(
     scene: Phaser.Scene,
     scaleOfTheGame: number,
     initialNpcX: number,
     initialNpcY: number,
+    textureKey: string,
   ) {
-    const npc = scene.physics.add.sprite(
+    const npc = scene.add.sprite(
       initialNpcX,
       initialNpcY,
-      'LinkHouseNpc', // Texture key for the NPC
-      'standing/frame0001' // Initial frame
+      textureKey,
+      'npcAnimation1/frame0001'
     );
     npc.setScale(scaleOfTheGame);
 
     scene.anims.create({
-      key: 'npc_standing',
-      frames: scene.anims.generateFrameNames('LinkHouseNpc', {
+      key: 'npcAnimation1',
+      frames: scene.anims.generateFrameNames(textureKey, {
         start: 1,
         end: 2,
-        prefix: 'standing/frame000',
+        prefix: 'npcAnimation1/frame000',
         suffix: '',
+        zeroPad: 1
       }),
-      frameRate: 0.5, // 1 frame per second
+      frameRate: 0.5, 
       repeat: -1, // loop indefinitely
     });
 
     scene.anims.create({
-      key: 'npc_angry',
-      frames: scene.anims.generateFrameNames('LinkHouseNpc', {
+      key: 'npcAnimation2',
+      frames: scene.anims.generateFrameNames(textureKey, {
         start: 1,
         end: 2,
-        prefix: 'angry/frame000',
+        prefix: 'npcAnimation2/frame000',
         suffix: '',
+        zeroPad: 1
       }),
       frameRate: 1, // 1 frame per second
       repeat: 0, // play once
     });
 
     // Start the standing animation
-    npc.play('npc_standing');
+    npc.play('npcAnimation1');
 
     scene.time.addEvent({
       delay: 10000, // 10 seconds
       callback: () => {
-        npc.play('npc_angry', true);
+        npc.play('npcAnimation2', true);
         npc.once('animationcomplete', () => {
-          npc.play('npc_standing', true);
+          npc.play('npcAnimation1', true);
         });
       },
       loop: true,

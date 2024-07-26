@@ -10,7 +10,7 @@
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "standing/frame0001",
+					"filename": "npcAnimation1/frame0001",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -31,7 +31,7 @@
 					}
 				},
                 {
-					"filename": "standing/frame0002",
+					"filename": "npcAnimation1/frame0002",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -52,7 +52,7 @@
 					}
 				},
                 {
-					"filename": "angry/frame0001",
+					"filename": "npcAnimation2/frame0001",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -73,7 +73,7 @@
 					}
 				},
 				{
-					"filename": "angry/frame0002",
+					"filename": "npcAnimation2/frame0002",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {

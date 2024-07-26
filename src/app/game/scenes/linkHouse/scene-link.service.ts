@@ -75,6 +75,7 @@ export class SceneLinkService extends Phaser.Scene {
       this.scaleOfTheGame,
       25 * this.scaleOfTheGame,
       68 * this.scaleOfTheGame,
+      'LinkHouseNpc',
     );
 
     this.collisionService.createWorldCollisions(
