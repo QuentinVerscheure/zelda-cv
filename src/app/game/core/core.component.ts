@@ -13,7 +13,7 @@ import { ScenePlayerService } from '../scenes/playerHouse/scene-player.service';
   standalone: true,
   templateUrl: './core.component.html',
   styleUrls: ['./core.component.scss'],
-  providers: [SceneCVService],
+  providers: [],
   
 })
 export class CoreComponent implements OnInit {
@@ -34,14 +34,14 @@ export class CoreComponent implements OnInit {
       width: 1600,
       height: 1000,
       scene: [
-        // this.sceneContact,
+        this.sceneLink,
         this.sceneWorld, //1st scene will be load at the start of the game
         this.sceneContact,
         this.sceneCV,
         this.sceneGuestBook1,
         this.sceneGuestBook2,
         this.scenePlayerHouse,
-        this.sceneLink
+        // this.sceneLink
       ],
       physics: {
         default: 'arcade',

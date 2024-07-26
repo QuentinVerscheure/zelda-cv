@@ -1,0 +1,103 @@
+{
+	"textures": [
+		{
+			"image": "Link_House_npc.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 37,
+				"h": 50
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "standing/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 18                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 18
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 16,
+						"h": 18
+					}
+				},
+                {
+					"filename": "standing/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 18                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 16,
+						"h": 18
+					},
+					"frame": {
+						"x": 20,
+						"y": 1,
+						"w": 16,
+						"h": 18
+					}
+				},
+                {
+					"filename": "angry/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 23                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": -6,
+						"w": 16,
+						"h": 23
+					},
+					"frame": {
+						"x": 1,
+						"y": 23,
+						"w": 16,
+						"h": 23
+					}
+				},
+				{
+					"filename": "angry/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 23                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": -6,
+						"w": 16,
+						"h": 23
+					},
+					"frame": {
+						"x": 20,
+						"y": 23,
+						"w": 16,
+						"h": 23
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"version": "1.0",
+		"size": {"w":37,"h":50}
+	}
+}

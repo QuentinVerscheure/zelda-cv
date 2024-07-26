@@ -25,7 +25,7 @@ export class SceneContactService extends Phaser.Scene {
       'assets/game/Phone_House_Background.png'
     );
 
-    this.load.html('contactForm', './contactForm.html');
+    this.load.html('contactForm', 'assets/html/contact-form.html');
 
     //load the collision between the background and the player
     this.load.json(
@@ -83,9 +83,20 @@ export class SceneContactService extends Phaser.Scene {
       1490
     );
 
-    const contactForm = this.add.dom(400, 600).createFromCache('contactForm');
+    const formHtml = `
+    <div class="login" id="contactForm">
+      <form>
+        <input type="email" placeholder="votre email" id="email" name="email" />
+        <input type="text" placeholder="Objet du mail" id="object" name="object" />
+        <textarea placeholder="Objet du mail" id="bodyOfMail" name="bodyOfMail" cols="40" rows="5"></textarea>
+        <input type="submit" value="send" name="Envoyer" />
+      </form>
+    </div>
+  `;
 
-    contactForm.setPerspective(800);
+    const contactForm = this.add.dom(100, 100, 'div', formHtml);
+console.log(contactForm);
+contactForm.setScale(1).setOrigin(0.5, 0.5); // Adjust scaling and origin
 
     contactForm.addListener('click');
 
