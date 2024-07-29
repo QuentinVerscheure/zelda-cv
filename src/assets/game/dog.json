@@ -1,0 +1,61 @@
+{
+	"textures": [
+		{
+			"image": "dog.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 35,
+				"h": 13
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "npcAnimation1/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 15,
+						"h": 13                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 13
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 15,
+						"h": 13
+					}
+				},
+                {
+					"filename": "npcAnimation1/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 13                         
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 0,
+						"w": 16,
+						"h": 13
+					},
+					"frame": {
+						"x": 19,
+						"y": 0,
+						"w": 16,
+						"h": 13
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"version": "1.0",
+		"size": {"w":30,"h":16}
+	}
+}

@@ -16,6 +16,7 @@ export class NpcService {
    * @param textureKey - the name of the npc
    * @param player - the player object for collisions
    * @param secondAnimation - does the npc have a 2nd animation?
+   * @param animationTimer - duration of the animation  (1 = 1 frame per second)
    * @param jsonNameForNpcText? - if npc have text, name of the json for the text
    */
   public createNpc(
@@ -26,14 +27,9 @@ export class NpcService {
     textureKey: string,
     player: Phaser.Physics.Arcade.Sprite,
     secondAnimation: boolean,
+    animationTimer: number,
     jsonNameForNpcText?: string
   ) {
-    scene.load.atlas(
-      textureKey,
-      'assets/game/library_woman.png',
-      'assets/game/library_woman.json'
-    );
-
     if (jsonNameForNpcText) {
       scene.load.json(
         jsonNameForNpcText,
@@ -50,7 +46,8 @@ export class NpcService {
         textureKey,
         player,
         secondAnimation,
-        jsonNameForNpcText
+        animationTimer,
+        jsonNameForNpcText        
       );
     });
 
@@ -65,6 +62,7 @@ export class NpcService {
     textureKey: string,
     player: Phaser.Physics.Arcade.Sprite,
     secondAnimation: boolean,
+    animationTimer: number,
     jsonNameForNpcText?: string
   ) {
     // create the NPC
@@ -89,7 +87,7 @@ export class NpcService {
         suffix: '',
         zeroPad: 1,
       }),
-      frameRate: 0.5,
+      frameRate: animationTimer,
       repeat: -1, // loop indefinitely
     });
 

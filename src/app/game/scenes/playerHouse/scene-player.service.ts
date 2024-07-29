@@ -97,6 +97,7 @@ export class ScenePlayerService extends Phaser.Scene {
       'youngMan',
       this.player,
       false,
+      0.5,
       'young_man_text'
     );
   }

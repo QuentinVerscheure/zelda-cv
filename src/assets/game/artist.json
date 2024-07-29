@@ -1,0 +1,61 @@
+{
+	"textures": [
+		{
+			"image": "artist.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 73,
+				"h": 18
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "npcAnimation1/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 33,
+						"h": 18                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 33,
+						"h": 18
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 33,
+						"h": 18
+					}
+				},
+                {
+					"filename": "npcAnimation1/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 34,
+						"h": 18                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 35,
+						"h": 18
+					},
+					"frame": {
+						"x": 38,
+						"y": 0,
+						"w": 35,
+						"h": 18
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"version": "1.0",
+		"size": {"w":30,"h":16}
+	}
+}

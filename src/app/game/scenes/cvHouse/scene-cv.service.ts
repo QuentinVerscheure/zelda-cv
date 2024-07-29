@@ -104,6 +104,7 @@ export class SceneCVService extends Phaser.Scene {
       'library_woman',
       this.player,
       true,
+      0.25,
       'library_woman_text'
     );
   }

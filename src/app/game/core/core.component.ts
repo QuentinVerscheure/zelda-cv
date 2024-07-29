@@ -34,9 +34,9 @@ export class CoreComponent implements OnInit {
       width: 1600,
       height: 1000,
       scene: [
-        // this.sceneLink,
+        this.sceneWorld,
         this.scenePlayerHouse,//1st scene will be load at the start of the game
-        this.sceneWorld, 
+        // this.sceneWorld, 
         this.sceneContact,
         this.sceneCV,
         this.sceneGuestBook1,

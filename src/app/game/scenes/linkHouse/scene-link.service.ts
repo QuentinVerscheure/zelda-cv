@@ -24,6 +24,7 @@ export class SceneLinkService extends Phaser.Scene {
 
   preload() {
     this.load.image('link_background', 'assets/game/Link_House_Background.png');
+
     //player
     this.load.atlas(
       'linkDefault',
@@ -39,7 +40,6 @@ export class SceneLinkService extends Phaser.Scene {
     );
 
     //load the collision between the background and the player
-    //the npc are considered like background because they aren't moving
     this.load.json(
       'linkCollisionBackgroundData',
       'assets/game/Link_House_collision_Background.json'
@@ -77,7 +77,8 @@ export class SceneLinkService extends Phaser.Scene {
       68,
       'LinkHouseNpc',
       this.player,
-      true
+      true,
+      0.5
     );
 
     this.collisionService.createWorldCollisions(
