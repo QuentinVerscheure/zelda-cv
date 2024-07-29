@@ -25,8 +25,6 @@ export class SceneContactService extends Phaser.Scene {
       'assets/game/Phone_House_Background.png'
     );
 
-    this.load.html('contactForm', 'assets/html/contact-form.html');
-
     //load the collision between the background and the player
     this.load.json(
       'phoneHouseCollisionBackgroundData',
@@ -35,6 +33,8 @@ export class SceneContactService extends Phaser.Scene {
 
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
+
+    this.load.image('openBook', 'assets/game/open_book.png');
 
     this.load.atlas(
       'linkDefault',
@@ -83,48 +83,31 @@ export class SceneContactService extends Phaser.Scene {
       1490
     );
 
-    const formHtml = `
-    <div class="login" id="contactForm">
-      <form>
-        <input type="email" placeholder="votre email" id="email" name="email" />
-        <input type="text" placeholder="Objet du mail" id="object" name="object" />
-        <textarea placeholder="Objet du mail" id="bodyOfMail" name="bodyOfMail" cols="40" rows="5"></textarea>
-        <input type="submit" value="send" name="Envoyer" />
-      </form>
-    </div>
-  `;
-
-    const contactForm = this.add.dom(100, 100, 'div', formHtml);
-console.log(contactForm);
-contactForm.setScale(1).setOrigin(0.5, 0.5); // Adjust scaling and origin
-
-    contactForm.addListener('click');
-
-    contactForm.on('click', function (event: { target: { name: string } }) {
-      if (event.target.name === 'loginButton') {
-        const inputEmail = contactForm.getChildByName('email') as HTMLInputElement;
-        const inputObject = contactForm.getChildByName('object') as HTMLInputElement;
-        const inputBodyOfMail = contactForm.getChildByName('bodyOfMail') as HTMLTextAreaElement;
-
-        //  Have they entered anything?
-        if (
-          inputEmail != null &&
-          inputObject != null &&
-          inputBodyOfMail != null &&
-          inputEmail.value !== '' &&
-          inputObject.value !== '' &&
-          inputBodyOfMail.value !== ''
-        ) {
-          //  Turn off the click events
-          contactForm.removeListener('click');
-
-        } else {
-        }
-      }
-    });
+    //create the clickable book who display the contact form
+    const openBook = this.createClickableBook(95, 90, this.scaleOfTheGame, this.player);
+    
   }
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+  }
+
+  createClickableBook(x: number, y: number, scaleOfTheGame: number, player: Phaser.Physics.Arcade.Sprite) {
+    const openBook = this.physics.add.sprite(
+      scaleOfTheGame * x,
+      scaleOfTheGame * y,
+      'openBook'
+    );
+    openBook.setScale(scaleOfTheGame);
+    openBook.setInteractive({ useHandCursor: true });
+    openBook.body.immovable = true;
+
+    openBook.on('pointerdown', () => {
+      console.log('ouvre le formulaire');
+    });
+
+    this.physics.add.collider(player, openBook);
+
+    return openBook;
   }
 }

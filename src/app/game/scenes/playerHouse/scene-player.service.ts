@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
+import { NpcService } from '../../core/npc.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ScenePlayerService extends Phaser.Scene {
-
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = 4;
@@ -15,13 +15,17 @@ export class ScenePlayerService extends Phaser.Scene {
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private npcService: NpcService
   ) {
     super({ key: 'scenePlayerHouse' });
   }
 
   preload() {
-    this.load.image('Player_background', 'assets/game/Player_House_background.png');
+    this.load.image(
+      'Player_background',
+      'assets/game/Player_House_background.png'
+    );
     this.load.atlas(
       'linkDefault',
       'assets/game/Links_Default.png',
@@ -35,6 +39,14 @@ export class ScenePlayerService extends Phaser.Scene {
 
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
+
+    this.load.atlas(
+      'youngMan',
+      'assets/game/young_man.png',
+      'assets/game/young_man.json'
+    );
+
+    this.load.text('fontCSS', '/assets/fonts/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf');
   }
 
   create() {
@@ -75,6 +87,17 @@ export class ScenePlayerService extends Phaser.Scene {
       235,
       409,
       1364
+    );
+
+    const Npc = this.npcService.createNpc(
+      this,
+      this.scaleOfTheGame,
+      170,
+      165,
+      'youngMan',
+      this.player,
+      false,
+      'young_man_text'
     );
   }
 

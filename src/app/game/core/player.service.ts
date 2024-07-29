@@ -22,7 +22,7 @@ export class PlayerService {
       fisrtSprite
     );
     player.setScale(scaleOfTheGame);
-    player.setSize(10, 10); // Dimensions of hitbox
+    player.setSize(10, 10); //Dimensions of hitbox
     player.setOffset(5, 9); //offset of the hitbox
 
     scene.cameras.main.startFollow(player);

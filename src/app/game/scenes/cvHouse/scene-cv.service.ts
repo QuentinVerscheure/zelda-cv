@@ -4,6 +4,7 @@ import { CollisionService } from '../../core/collision.service';
 import { CvContent } from '../../../models/Cv_content.enum';
 import { CvContentService } from './cvContent.service';
 import { PlayerService } from '../../core/player.service';
+import { NpcService } from '../../core/npc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,18 +18,15 @@ export class SceneCVService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private cvContentService: CvContentService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private npcService: NpcService
   ) {
     super({ key: 'sceneCV' });
   }
 
   preload() {
     this.load.image('cv_background', 'assets/game/CV_house_background.png');
-    this.load.atlas(
-      'linkDefault',
-      'assets/game/Links_Default.png',
-      'assets/game/Links_Default.json'
-    );
+
     //load the collision between the background and the player
     this.load.json(
       'CVCollisionBackgroundData',
@@ -42,6 +40,18 @@ export class SceneCVService extends Phaser.Scene {
 
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
+
+    this.load.atlas(
+      'library_woman',
+      'assets/game/library_woman.png',
+      'assets/game/library_woman.json'
+    );
+
+    this.load.atlas(
+      'linkDefault',
+      'assets/game/Links_Default.png',
+      'assets/game/Links_Default.json'
+    );
   }
 
   create() {
@@ -84,6 +94,17 @@ export class SceneCVService extends Phaser.Scene {
       448,
       553,
       1253
+    );
+
+    const Npc = this.npcService.createNpc(
+      this,
+      this.scaleOfTheGame,
+      680,
+      380,
+      'library_woman',
+      this.player,
+      true,
+      'library_woman_text'
     );
   }
 

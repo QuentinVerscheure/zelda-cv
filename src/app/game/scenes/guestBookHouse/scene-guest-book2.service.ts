@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
+import { guestBookCommentary } from '../../../models/guestBookCommentary.enum';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SceneGuestBookService2 extends Phaser.Scene {
-
+  private infiniteBackground!: Phaser.GameObjects.TileSprite;
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = 4;
@@ -21,7 +22,14 @@ export class SceneGuestBookService2 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('Guest_Book_background2', 'assets/game/Guest_Book_House_2.png');
+    this.load.image(
+      'Guest_Book_infinit_background2',
+      'assets/game/Guest_Book_House_3.png'
+    );
+    this.load.image(
+      'Guest_Book_background2',
+      'assets/game/Guest_Book_House_2.png'
+    );
     this.load.atlas(
       'linkDefault',
       'assets/game/Links_Default.png',
@@ -38,12 +46,23 @@ export class SceneGuestBookService2 extends Phaser.Scene {
   }
 
   create() {
-    this.background = this.add.image(0, 0, 'Guest_Book_background2');
-    this.background.setOrigin(0, 0); // Origin top left
-    this.background.setScale(this.scaleOfTheGame);
+    this.infiniteBackground = this.add
+      .tileSprite(
+        0,
+        0,
+        this.scale.width,
+        this.scale.height,
+        'Guest_Book_infinit_background2'
+      )
+      .setScale(this.scaleOfTheGame);
 
-    const initialPlayerX = 56 * this.scaleOfTheGame; // Set your desired initial X position
-    const initialPlayerY = 70 * this.scaleOfTheGame; // Set your desired initial Y position
+    this.background = this.add
+      .image(0, 0, 'Guest_Book_background2')
+      .setOrigin(0, 0)
+      .setScale(this.scaleOfTheGame);
+
+    const initialPlayerX = 56 * this.scaleOfTheGame;
+    const initialPlayerY = 70 * this.scaleOfTheGame;
 
     this.player = this.playerService.createPlayer(
       this.player,
@@ -82,4 +101,36 @@ export class SceneGuestBookService2 extends Phaser.Scene {
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
+
+  private mockMessage : guestBookCommentary[] =
+  [
+    {
+      user: 'test1',
+      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in tincidunt odio. Vivamus id justo sed ante viverra cursus. Etiam eget finibus quam. Proin vulputate dictum feugiat. Int',
+      date: new Date('2022-11-05T10:30:00'),
+      x: 100,
+      y: 100
+    },
+    {
+      user: 'test2',
+      message: 'm mollis. Etiam purus quam, porta eu sodales hendrerit, imperdiet eget purus. Vivamus tempor metus ut ante malesuada, eu malesuada nibh vehicula. Aliquam pulvinar quis tellus ac facilisis. Quisque fringilla porta lobortis. Vestibulum vitae urna tempor, viverra leo at, molestie ma',
+      date: new Date('2023-12-11T10:30:00'),
+      x: 200,
+      y: 200
+    },
+    {
+      user: 'test3',
+      message: 'd non faucibus purus. Etiam dignissim libero sed lacinia pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut pellentesque ligula, id aliquet nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a viverra turpis, eu finibus neque. Integer tincidunt tortor nibh, sit amet fringilla dui pulvinar non. Orci varius natoque penatibus et magnis dis parturient monte',
+      date: new Date('2024-06-30T10:30:00'),
+      x: 300,
+      y: 300
+    },
+    {
+      user: 'test4',
+      message: 'rnare dapibus. In feugiat eget lorem at loborti',
+      date: new Date('2023-12-25T10:30:00'),
+      x: 400,
+      y: 400
+    },
+  ] 
 }

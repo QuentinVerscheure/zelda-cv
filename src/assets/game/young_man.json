@@ -1,0 +1,61 @@
+{
+	"textures": [
+		{
+			"image": "Link_House_npc.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 30,
+				"h": 16
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "npcAnimation1/frame0001",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 12,
+						"h": 16                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 16
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 16
+					}
+				},
+                {
+					"filename": "npcAnimation1/frame0002",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 12,
+						"h": 16                         
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 12,
+						"h": 16
+					},
+					"frame": {
+						"x": 18,
+						"y": 0,
+						"w": 12,
+						"h": 16
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"version": "1.0",
+		"size": {"w":30,"h":16}
+	}
+}
