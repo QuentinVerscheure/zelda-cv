@@ -96,13 +96,43 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       20,
       'walkingDown/frame0001'
     );
+
+    this.displayComments();
   }
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
-  private mockMessage : guestBookCommentary[] =
+  displayComments() {
+    this.mockMessages.forEach((message) => {
+      const formattedText = `${message.user} - (${message.date.toLocaleDateString()})\n\n${message.message}`;
+  
+      const text = this.add.text(
+        message.x * this.scaleOfTheGame,
+        message.y * this.scaleOfTheGame,
+        formattedText,
+        {
+          fontFamily: 'Pixelify_Sans',
+          fontSize: '16px',
+          color: '#000000',
+          backgroundColor: '#ded4d4',
+          padding: { x: 10, y: 5 },
+          wordWrap: { width: 300 },
+          align: 'left',
+        }
+      );
+  
+      text.setOrigin(0, 0);
+      text.setDepth(1); 
+    });
+  }
+
+  createComment(){
+    
+  }
+
+  private mockMessages : guestBookCommentary[] =
   [
     {
       user: 'test1',

@@ -34,13 +34,13 @@ export class CoreComponent implements OnInit {
       width: 1600,
       height: 1000,
       scene: [
-        this.sceneWorld,
+        this.sceneGuestBook2,
         this.scenePlayerHouse,//1st scene will be load at the start of the game
-        // this.sceneWorld, 
+        this.sceneWorld, 
         this.sceneContact,
         this.sceneCV,
         this.sceneGuestBook1,
-        this.sceneGuestBook2,
+        // this.sceneGuestBook2,
         this.sceneLink
       ],
       physics: {

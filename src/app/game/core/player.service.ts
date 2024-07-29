@@ -24,6 +24,7 @@ export class PlayerService {
     player.setScale(scaleOfTheGame);
     player.setSize(10, 10); //Dimensions of hitbox
     player.setOffset(5, 9); //offset of the hitbox
+    player.setDepth(10);//set depth so the player walk infront of the text insteed of behind
 
     scene.cameras.main.startFollow(player);
 
