@@ -3,8 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tiled_collision_background.tmx",
+    "activeFile": "Tiled_collision_background_guest_house_2.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "Tiled_collision_background.tmx": {
@@ -15,12 +16,20 @@
                 "y": 1416
             }
         },
+        "Tiled_collision_background_guest_house_2.tmx": {
+            "scale": 4,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 109,
+                "y": 58.75
+            }
+        },
         "Tiled_collision_background_link_house.tmx": {
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
                 "x": 152,
-                "y": 119.75
+                "y": 119.5
             }
         }
     },
@@ -33,11 +42,13 @@
     "map.width": 19,
     "openFiles": [
         "Tiled_collision_background_link_house.tmx",
-        "Tiled_collision_background.tmx"
+        "Tiled_collision_background.tmx",
+        "Tiled_collision_background_guest_house_2.tmx"
     ],
     "project": "1.tiled-project",
     "recentFiles": [
         "Tiled_collision_background_link_house.tmx",
-        "Tiled_collision_background.tmx"
+        "Tiled_collision_background.tmx",
+        "Tiled_collision_background_guest_house_2.tmx"
     ]
 }

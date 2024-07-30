@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
-import { guestBookCommentary } from '../../../models/guestBookCommentary.enum';
+import { CommentService } from './comment.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +11,14 @@ export class SceneGuestBookService2 extends Phaser.Scene {
   private infiniteBackground!: Phaser.GameObjects.TileSprite;
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
+  
   private scaleOfTheGame: number = 4;
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private commentService: CommentService
   ) {
     super({ key: 'sceneGuestBook2' });
   }
@@ -41,6 +43,8 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       'assets/game/guest_house_2_collision_background.json'
     );
 
+    this.load.image('openBook', 'assets/game/open_book.png');
+
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
   }
@@ -61,8 +65,8 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       .setOrigin(0, 0)
       .setScale(this.scaleOfTheGame);
 
-    const initialPlayerX = 56 * this.scaleOfTheGame;
-    const initialPlayerY = 70 * this.scaleOfTheGame;
+    const initialPlayerX = 104 * this.scaleOfTheGame;
+    const initialPlayerY = 102 * this.scaleOfTheGame;
 
     this.player = this.playerService.createPlayer(
       this.player,
@@ -90,77 +94,23 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       this.player,
       'sceneTransitionSprite',
       'sceneGuestBook1',
-      48,
-      40,
+      96,
+      72,
       88,
       20,
       'walkingDown/frame0001'
     );
 
-    this.displayComments();
+           //create the clickable book who display the comment form
+       const openBook = this.commentService.createClickableBook(104, 150, this.scaleOfTheGame, this.player, this);
   }
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.commentService.displayComments(this.scaleOfTheGame, this);
   }
 
-  displayComments() {
-    this.mockMessages.forEach((message) => {
-      const formattedText = `${message.user} - (${message.date.toLocaleDateString()})\n\n${message.message}`;
-  
-      const text = this.add.text(
-        message.x * this.scaleOfTheGame,
-        message.y * this.scaleOfTheGame,
-        formattedText,
-        {
-          fontFamily: 'Pixelify_Sans',
-          fontSize: '16px',
-          color: '#000000',
-          backgroundColor: '#ded4d4',
-          padding: { x: 10, y: 5 },
-          wordWrap: { width: 300 },
-          align: 'left',
-        }
-      );
-  
-      text.setOrigin(0, 0);
-      text.setDepth(1); 
-    });
+  getScaleOfTheGame(){
+    return this.scaleOfTheGame;
   }
-
-  createComment(){
-    
-  }
-
-  private mockMessages : guestBookCommentary[] =
-  [
-    {
-      user: 'test1',
-      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in tincidunt odio. Vivamus id justo sed ante viverra cursus. Etiam eget finibus quam. Proin vulputate dictum feugiat. Int',
-      date: new Date('2022-11-05T10:30:00'),
-      x: 100,
-      y: 100
-    },
-    {
-      user: 'test2',
-      message: 'm mollis. Etiam purus quam, porta eu sodales hendrerit, imperdiet eget purus. Vivamus tempor metus ut ante malesuada, eu malesuada nibh vehicula. Aliquam pulvinar quis tellus ac facilisis. Quisque fringilla porta lobortis. Vestibulum vitae urna tempor, viverra leo at, molestie ma',
-      date: new Date('2023-12-11T10:30:00'),
-      x: 200,
-      y: 200
-    },
-    {
-      user: 'test3',
-      message: 'd non faucibus purus. Etiam dignissim libero sed lacinia pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut pellentesque ligula, id aliquet nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a viverra turpis, eu finibus neque. Integer tincidunt tortor nibh, sit amet fringilla dui pulvinar non. Orci varius natoque penatibus et magnis dis parturient monte',
-      date: new Date('2024-06-30T10:30:00'),
-      x: 300,
-      y: 300
-    },
-    {
-      user: 'test4',
-      message: 'rnare dapibus. In feugiat eget lorem at loborti',
-      date: new Date('2023-12-25T10:30:00'),
-      x: 400,
-      y: 400
-    },
-  ] 
 }

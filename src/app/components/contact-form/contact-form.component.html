@@ -1,0 +1,10 @@
+<form id="messageForm" (ngSubmit)="onSubmit()">
+  <span class="closeButton" (click)="hideForm()">&times;</span>
+  <div>
+    <textarea id="message" placeholder="Ecrivez votre message ici"></textarea>
+  </div>
+
+  <button type="submit" [disabled]="messageForm.invalid">
+    Créer le message
+  </button>
+</form>

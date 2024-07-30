@@ -29,18 +29,22 @@ export class CoreComponent implements OnInit {
     private scenePlayerHouse: ScenePlayerService,
     private sceneLink: SceneLinkService
   ) {
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
     this.config = {
       type: Phaser.AUTO,
-      width: 1600,
-      height: 1000,
+      width: width,
+      height: height,
       scene: [
-        this.sceneGuestBook2,
+        this.sceneGuestBook1,
         this.scenePlayerHouse,//1st scene will be load at the start of the game
         this.sceneWorld, 
         this.sceneContact,
         this.sceneCV,
-        this.sceneGuestBook1,
-        // this.sceneGuestBook2,
+        // this.sceneGuestBook1,
+        this.sceneGuestBook2,
         this.sceneLink
       ],
       physics: {

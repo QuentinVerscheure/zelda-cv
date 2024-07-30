@@ -1,0 +1,67 @@
+<div class="menu-container">
+  <div class="burger-menu" [class.active]="menuOpen" (click)="toggleMenu()">
+    &#9776;
+    <!-- Hamburger icon -->
+  </div>
+  <div class="menu-content" [class.active]="menuOpen">
+    <span class="closeButton" [class.active]="menuOpen" (click)="toggleMenu()"
+      >&times;</span
+    >
+    <!-- Close icon -->
+    <h1>Verscheure Quentin®</h1>
+    <h3>Quêtes:</h3>
+    <ul>
+      <li id="cVHouse" class="done">
+        <a>Parler au dev pour découvrir son monde</a>
+      </li>
+      <li id="cVHouse">
+        <a>Visiter la CV House</a>
+        <ul>
+          <li>Télécharger le CV</li>
+        </ul>
+      </li>
+      <li id="portfolioHouse"><a>Découvrir la portfolio House</a></li>
+      <li id="linkHouse">
+        <a>Aller à la link house</a>
+        <ul>
+          <li>Cliquer sur un lien</li>
+        </ul>
+      </li>
+      <li id="contactHouse">
+        <a>Trouver la phone house</a>
+        <ul>
+          <li>Contacter le dev</li>
+        </ul>
+      </li>
+      <li id="guestBookHouse">
+        <a>Enqueter sur le livre d'or </a>
+        <ul>
+          <li>Déposer un commentaire</li>
+        </ul>
+      </li>
+      <li id="creditHouse"><a>Voir les credits</a></li>
+    </ul>
+    <hr />
+    <form (ngSubmit)="onSubmit()">
+      <label for="pseudo">Pseudo:</label>
+      <input
+        placeholder="votre pseudo, ex: link"
+        id="pseudo"
+        name="pseudo"
+        [(ngModel)]="pseudo"
+        required
+      />
+      <label for="password">Mot de passe:</label>
+      <input
+        placeholder="votre mot de passe"
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="password"
+        required
+      />
+      <button type="submit">Sauvegarder</button>
+      <button type="submit">Charger</button>
+    </form>
+  </div>
+</div>

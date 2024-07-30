@@ -1,0 +1,19 @@
+<form
+  id="messageForm"
+  #loginForm="ngForm"
+  (ngSubmit)="onSubmit(loginForm)"
+  class="hidden"
+>
+  <span class="closeButton" (click)="hideForm()">&times;</span>
+  <div>
+    <textarea
+      type="text"
+      name="message"
+      id="message"
+      placeholder="Ecrivez votre message ici"
+      ngModel
+      required
+    ></textarea>
+  </div>
+  <button type="submit" [disabled]="!loginForm.valid">Créer le message</button>
+</form>
