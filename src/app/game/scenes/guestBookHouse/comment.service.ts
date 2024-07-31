@@ -149,10 +149,7 @@ export class CommentService {
 
     // Check overlap with the restricted zone
     const restrictedZone = new Phaser.Geom.Rectangle(
-      -100 * scaleOfTheGame,
-      -100 * scaleOfTheGame,
-      200 * scaleOfTheGame,
-      200 * scaleOfTheGame
+      -10*scaleOfTheGame, -10*scaleOfTheGame, 228*scaleOfTheGame, 132*scaleOfTheGame
     );
     if (
       Phaser.Geom.Intersects.RectangleToRectangle(
