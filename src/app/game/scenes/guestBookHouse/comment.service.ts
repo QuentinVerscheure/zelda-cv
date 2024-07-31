@@ -6,11 +6,6 @@ import { guestBookCommentary } from '../../../models/guestBookCommentary.enum';
 })
 export class CommentService {
   private commentOverlapping: boolean = false;
-  private containers: {
-    container: Phaser.GameObjects.Container;
-    width: number;
-    height: number;
-  }[] = [];
 
   constructor() {}
 
@@ -92,6 +87,16 @@ export class CommentService {
     borderGraphics.strokeRect(0, 0, fixedWidth, fixedHeight); // size of the box
     container.add(borderGraphics);
 
+    // Add trash icon for deleting the comment
+    const trashIcon = scene.add.image(fixedWidth - 20, 20, 'trashIcon').setScale(scaleOfTheGame/2);
+    trashIcon.setInteractive({ useHandCursor: true });
+    container.add(trashIcon);
+
+    // Event to delete the comment
+    trashIcon.on('pointerdown', () => {
+      container.destroy();
+    });
+
     text.setOrigin(0, 0);
     text.setDepth(1);
 
@@ -113,8 +118,6 @@ export class CommentService {
         }
       );
     }
-
-    this.containers.push({ container, width: fixedWidth, height: fixedHeight });
   }
 
   createBackgroundGraphics(
@@ -145,7 +148,12 @@ export class CommentService {
     );
 
     // Check overlap with the restricted zone
-    const restrictedZone = new Phaser.Geom.Rectangle(-10*scaleOfTheGame, -10*scaleOfTheGame, 228*scaleOfTheGame, 132*scaleOfTheGame);
+    const restrictedZone = new Phaser.Geom.Rectangle(
+      -100 * scaleOfTheGame,
+      -100 * scaleOfTheGame,
+      200 * scaleOfTheGame,
+      200 * scaleOfTheGame
+    );
     if (
       Phaser.Geom.Intersects.RectangleToRectangle(
         containerBounds,
@@ -154,26 +162,6 @@ export class CommentService {
     ) {
       this.commentOverlapping = true;
     }
-
-    // Check overlap with other comments
-    this.containers.forEach((other) => {
-      if (other.container !== container) {
-        const otherBounds = new Phaser.Geom.Rectangle(
-          other.container.x,
-          other.container.y,
-          other.width,
-          other.height
-        );
-        if (
-          Phaser.Geom.Intersects.RectangleToRectangle(
-            containerBounds,
-            otherBounds
-          )
-        ) {
-          this.commentOverlapping = true;
-        }
-      }
-    });
 
     this.updateCommentAppearance(container, width, height);
   }

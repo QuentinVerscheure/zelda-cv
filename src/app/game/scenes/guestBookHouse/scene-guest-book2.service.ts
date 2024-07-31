@@ -32,6 +32,10 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       'Guest_Book_background2',
       'assets/game/Guest_Book_House_2.png'
     );
+    this.load.image(
+      'trashIcon',
+      'assets/game/trash.png'
+    );
     this.load.atlas(
       'linkDefault',
       'assets/game/Links_Default.png',
