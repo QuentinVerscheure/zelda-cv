@@ -12,4 +12,5 @@ export interface guestBookCommentary {
   date: Date;
   x: number;
   y: number;
+  newComment?: boolean;
 }

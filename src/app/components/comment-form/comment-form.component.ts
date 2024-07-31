@@ -18,13 +18,13 @@ export class CommentFormComponent {
   ) {}
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
     let message: guestBookCommentary = {
       user: 'newUser',
       message: form.value.message,
       date: new Date(),
       x: 38,
       y: 34,
+      newComment: true
     };
 
     this.commentService.createComment(
@@ -32,9 +32,10 @@ export class CommentFormComponent {
       this.sceneGuestBookService2.getScaleOfTheGame(),
       this.sceneGuestBookService2
     );
+    this.hideForm();
   }
 
-  //showForm in comment.service
+  //showForm() in comment.service
   hideForm() {
     const form = document.getElementById('messageForm');
     if (form) {
