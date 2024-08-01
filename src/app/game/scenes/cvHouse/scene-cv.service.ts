@@ -63,7 +63,7 @@ export class SceneCVService extends Phaser.Scene {
     const initialPlayerY = 420 * this.scaleOfTheGame; // Set your desired initial Y position
 
     this.cvContentService.loadTexts(this, this.scaleOfTheGame);
-    
+
     this.player = this.playerService.createPlayer(
       this.player,
       this,
@@ -96,7 +96,7 @@ export class SceneCVService extends Phaser.Scene {
       1253
     );
 
-    const Npc = this.npcService.createNpc(
+    this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
       680,
@@ -107,6 +107,24 @@ export class SceneCVService extends Phaser.Scene {
       0.25,
       'library_woman_text'
     );
+
+    const downloadCVButton = this.add.rectangle(
+      472 * this.scaleOfTheGame,
+      24 * this.scaleOfTheGame,
+      16 * this.scaleOfTheGame,
+      16 * this.scaleOfTheGame,
+      0x0000ff,
+      0 //set 0.5 to seen the hitbox
+    );
+    downloadCVButton.setInteractive();
+    downloadCVButton.on('pointerdown', () => {
+      const a = document.createElement('a');
+      a.href = 'assets/docs/CV.Verscheure.pdf';
+      a.download = 'CV.Verscheure.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
   }
 
   override update() {

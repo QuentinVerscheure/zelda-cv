@@ -40,14 +40,15 @@ export class CoreComponent implements OnInit {
       width: width,
       height: height,
       scene: [
-        this.sceneVarious,
+        this.sceneCV,
         this.scenePlayerHouse,//1st scene will be load at the start of the game
         this.sceneWorld, 
         this.sceneContact,
-        this.sceneCV,
+        // this.sceneCV,
         this.sceneGuestBook1,
         this.sceneGuestBook2,
-        this.sceneLink
+        this.sceneLink,
+        this.sceneVarious,
       ],
       physics: {
         default: 'arcade',
