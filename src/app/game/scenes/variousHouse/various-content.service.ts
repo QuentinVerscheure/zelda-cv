@@ -41,12 +41,12 @@ export class VariousContentService {
   createBox(scene: Phaser.Scene, scaleOfTheGame: number): void {
     const textStyle = {
       fontFamily: 'Pixelify_Sans',
-      fontSize: 16,
+      fontSize: 4 * scaleOfTheGame,
       color: '#000000',
     };
     const boldTextStyle = {
       fontFamily: 'PixelifySans-Bold',
-      fontSize: 20,
+      fontSize: 5 * scaleOfTheGame,
       color: '#000000',
     };
 
@@ -82,7 +82,7 @@ export class VariousContentService {
       'phone'
     );
     phone.setOrigin(0, 0); 
-    phone.displayHeight = 50; 
+    phone.displayHeight = 12.5 * scaleOfTheGame; 
     phone.scaleX = phone.scaleY;
 
     scene.add.text(
@@ -98,7 +98,7 @@ export class VariousContentService {
       'mail'
     );
     mail.setOrigin(0, 0); 
-    mail.displayHeight = 35; 
+    mail.displayHeight = 8.75 * scaleOfTheGame; 
     mail.scaleX = mail.scaleY;
 
     scene.add.text(
@@ -154,7 +154,7 @@ export class VariousContentService {
       'mobility'
     );
     mobility.setOrigin(0, 0); 
-    mobility.displayHeight = 100; 
+    mobility.displayHeight = 25 * scaleOfTheGame; 
     mobility.scaleX = mobility.scaleY;
 
     scene.add.text(
@@ -185,7 +185,7 @@ export class VariousContentService {
       'computer'
     );
     computer.setOrigin(0, 0); 
-    computer.displayHeight = 70; 
+    computer.displayHeight = 17.5 * scaleOfTheGame; 
     computer.scaleX = computer.scaleY;
 
     const threeD = scene.add.image(
@@ -194,7 +194,7 @@ export class VariousContentService {
       '3d'
     );
     threeD.setOrigin(0, 0); 
-    threeD.displayHeight = 50; 
+    threeD.displayHeight = 12.5 * scaleOfTheGame; 
     threeD.scaleX = threeD.scaleY;
 
     const science = scene.add.image(
@@ -203,7 +203,7 @@ export class VariousContentService {
       'science'
     );
     science.setOrigin(0, 0); 
-    science.displayHeight = 80; 
+    science.displayHeight = 20 * scaleOfTheGame; 
     science.scaleX = science.scaleY;
 
     scene.add.text(
@@ -250,7 +250,7 @@ export class VariousContentService {
       'french_flag'
     );
     frenchFlag.setOrigin(0, 0); 
-    frenchFlag.displayHeight = 40; 
+    frenchFlag.displayHeight = 10 * scaleOfTheGame; 
     frenchFlag.scaleX = frenchFlag.scaleY;
 
     const englishFlag = scene.add.image(
@@ -259,7 +259,7 @@ export class VariousContentService {
       'english_flag'
     );
     englishFlag.setOrigin(0, 0); 
-    englishFlag.displayHeight = 40; 
+    englishFlag.displayHeight = 10 * scaleOfTheGame; 
     englishFlag.scaleX = frenchFlag.scaleY;
 
     scene.add.text(
