@@ -7,6 +7,7 @@ import { SceneGuestBookService1 } from '../scenes/guestBookHouse/scene-guest-boo
 import { SceneGuestBookService2 } from '../scenes/guestBookHouse/scene-guest-book2.service';
 import { SceneLinkService } from '../scenes/linkHouse/scene-link.service';
 import { ScenePlayerService } from '../scenes/playerHouse/scene-player.service';
+import { SceneVariousService } from '../scenes/variousHouse/scene-various.service';
 
 @Component({
   selector: 'app-game',
@@ -27,7 +28,8 @@ export class CoreComponent implements OnInit {
     private sceneGuestBook1: SceneGuestBookService1,
     private sceneGuestBook2: SceneGuestBookService2,
     private scenePlayerHouse: ScenePlayerService,
-    private sceneLink: SceneLinkService
+    private sceneLink: SceneLinkService,
+    private sceneVarious: SceneVariousService
   ) {
 
     const width = window.innerWidth;
@@ -38,13 +40,13 @@ export class CoreComponent implements OnInit {
       width: width,
       height: height,
       scene: [
-        this.sceneGuestBook2,
+        this.sceneVarious,
         this.scenePlayerHouse,//1st scene will be load at the start of the game
         this.sceneWorld, 
         this.sceneContact,
         this.sceneCV,
         this.sceneGuestBook1,
-        // this.sceneGuestBook2,
+        this.sceneGuestBook2,
         this.sceneLink
       ],
       physics: {

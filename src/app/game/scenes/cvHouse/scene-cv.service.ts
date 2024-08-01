@@ -25,7 +25,7 @@ export class SceneCVService extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('cv_background', 'assets/game/CV_house_background.png');
+    this.load.image('cvBackground', 'assets/game/CV_house_background.png');
 
     //load the collision between the background and the player
     this.load.json(
@@ -55,7 +55,7 @@ export class SceneCVService extends Phaser.Scene {
   }
 
   create() {
-    this.background = this.add.image(0, 0, 'cv_background');
+    this.background = this.add.image(0, 0, 'cvBackground');
     this.background.setOrigin(0, 0); // Origin top left
     this.background.setScale(this.scaleOfTheGame);
 
@@ -81,7 +81,7 @@ export class SceneCVService extends Phaser.Scene {
     );
 
     if (this.input.keyboard) {
-      this.movementService.initializeKeyboardInput(this.input);
+      MovementService.initializeKeyboardInput(this.input);
     }
 
     this.collisionService.createSceneTransitionCollision(
@@ -110,6 +110,6 @@ export class SceneCVService extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    MovementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 }

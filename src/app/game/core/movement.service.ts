@@ -5,23 +5,22 @@ import * as Phaser from 'phaser';
   providedIn: 'root'
 })
 export class MovementService {
-
-  cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  keys!: {
-    Z: Phaser.Input.Keyboard.Key;
-    Q: Phaser.Input.Keyboard.Key;
-    S: Phaser.Input.Keyboard.Key;
-    D: Phaser.Input.Keyboard.Key;
-  };
+  private static cursors: Phaser.Types.Input.Keyboard.CursorKeys | null = null;
+  private static keys: {
+    Z: Phaser.Input.Keyboard.Key | null;
+    Q: Phaser.Input.Keyboard.Key | null;
+    S: Phaser.Input.Keyboard.Key | null;
+    D: Phaser.Input.Keyboard.Key | null;
+  } = { Z: null, Q: null, S: null, D: null };
 
   /**
-   * initialize the keyboard input
+   * Initialize the keyboard input
    */
-  initializeKeyboardInput(input: Phaser.Input.InputPlugin) {
+  static initializeKeyboardInput(input: Phaser.Input.InputPlugin) {
     if (input.keyboard) {
-      this.cursors = input.keyboard.createCursorKeys();
-      //mobility inpout
-      this.keys = input.keyboard.addKeys('Z,Q,S,D') as {
+      MovementService.cursors = input.keyboard.createCursorKeys();
+      // Mobility input
+      MovementService.keys = input.keyboard.addKeys('Z,Q,S,D') as {
         Z: Phaser.Input.Keyboard.Key;
         Q: Phaser.Input.Keyboard.Key;
         S: Phaser.Input.Keyboard.Key;
@@ -31,9 +30,9 @@ export class MovementService {
   }
 
   /**
-   * create the animation for the moves of the players
+   * Create the animation for the moves of the players
    */
-  initializeMoveAnimation(anims: Phaser.Animations.AnimationManager) {
+  static initializeMoveAnimation(anims: Phaser.Animations.AnimationManager) {
     const animations = [
       { key: 'walkingRight', prefix: 'walkingRight/frame' },
       { key: 'walkingLeft', prefix: 'walkingLeft/frame' },
@@ -42,61 +41,63 @@ export class MovementService {
     ];
 
     animations.forEach((anim) => {
-      anims.create({
-        key: anim.key,
-        frames: anims.generateFrameNames('linkDefault', {
-          prefix: anim.prefix,
-          start: 1,
-          end: 2,
-          zeroPad: 4,
-        }),
-        frameRate: 4,
-        repeat: -1,
-      });
+      if (!anims.exists(anim.key)) {
+        anims.create({
+          key: anim.key,
+          frames: anims.generateFrameNames('linkDefault', {
+            prefix: anim.prefix,
+            start: 1,
+            end: 2,
+            zeroPad: 4,
+          }),
+          frameRate: 4,
+          repeat: -1,
+        });
+      }
     });
   }
 
   /**
-   * do the action associate to a spécific input
+   * Do the action associate to a specific input
    */
-  movePlayer(
+  static movePlayer(
     player: Phaser.Physics.Arcade.Sprite, scaleOfTheGame: number
   ) {
-    let isMoving = false; //use for stopping the animation after the release of the key
-    let direction = ''; //use for chosing the frame of the statit player asset
+    let isMoving = false; // Use for stopping the animation after the release of the key
+    let direction = ''; // Use for choosing the frame of the static player asset
 
-    if (this.cursors.left.isDown || this.keys.Q.isDown) {
-      player.setVelocityX(-80*scaleOfTheGame);
+    if (MovementService.cursors?.left.isDown || MovementService.keys.Q?.isDown) {
+      player.setVelocityX(-80 * scaleOfTheGame);
       isMoving = true;
       direction = 'left';
-    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
-      player.setVelocityX(+80*scaleOfTheGame);
+    } else if (MovementService.cursors?.right.isDown || MovementService.keys.D?.isDown) {
+      player.setVelocityX(80 * scaleOfTheGame);
       isMoving = true;
       direction = 'right';
-    } else{
+    } else {
       player.setVelocityX(0);
     }
 
-    if (this.cursors.up.isDown || this.keys.Z.isDown) {
-      player.setVelocityY(-80*scaleOfTheGame);
+    if (MovementService.cursors?.up.isDown || MovementService.keys.Z?.isDown) {
+      player.setVelocityY(-80 * scaleOfTheGame);
       isMoving = true;
       direction = 'top';
-    } else if (this.cursors.down.isDown || this.keys.S.isDown) {
-      player.setVelocityY(+80*scaleOfTheGame);
+    } else if (MovementService.cursors?.down.isDown || MovementService.keys.S?.isDown) {
+      player.setVelocityY(80 * scaleOfTheGame);
       isMoving = true;
       direction = 'down';
-    } else{
+    } else {
       player.setVelocityY(0);
     }
 
-    //disciociate move and animation for the diagonale case
-    if (this.cursors.left.isDown || this.keys.Q.isDown) {
+    // Dissociate move and animation for the diagonal case
+    if (MovementService.cursors?.left.isDown || MovementService.keys.Q?.isDown) {
       player.play('walkingLeft', true);
-    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
+    } else if (MovementService.cursors?.right.isDown || MovementService.keys.D?.isDown) {
       player.play('walkingRight', true);
-    } else if (this.cursors.up.isDown || this.keys.Z.isDown) {
+    } else if (MovementService.cursors?.up.isDown || MovementService.keys.Z?.isDown) {
       player.play('walkingTop', true);
-    } else if (this.cursors.down.isDown || this.keys.S.isDown) {
+    } else if (MovementService.cursors?.down.isDown || MovementService.keys.S?.isDown) {
       player.play('walkingDown', true);
     }
 

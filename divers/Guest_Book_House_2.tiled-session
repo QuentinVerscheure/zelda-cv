@@ -3,9 +3,8 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Guest_Book_House_2.tiled-project",
+    "activeFile": "various_collision_background.tmx",
     "expandedProjectPaths": [
-        "."
     ],
     "fileStates": {
         "Guest_Book_House_2.tiled-project": {
@@ -31,20 +30,29 @@
                 "x": 118.33333333333334,
                 "y": 59.66666666666666
             }
+        },
+        "various_collision_background.tmx": {
+            "scale": 2.4604999999999997,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 199.95935785409472,
+                "y": 136.15118878276775
+            }
         }
     },
     "last.exportedFilePath": "C:/zelda-cv/src/assets/game",
-    "map.height": 7,
+    "map.height": 17,
     "map.lastUsedExportFilter": "Fichiers de carte JSON (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 13,
+    "map.width": 25,
     "openFiles": [
-        "Guest_Book_House_2.tiled-project"
+        "various_collision_background.tmx"
     ],
     "project": "Guest_Book_House_2.tiled-project",
     "recentFiles": [
+        "various_collision_background.tmx",
         "Guest_Book_House_2.tiled-project",
         "Tiled_collision_background_guest_house_1.tmx",
         "Tiled_collision_background_guest_house_2.tmx"

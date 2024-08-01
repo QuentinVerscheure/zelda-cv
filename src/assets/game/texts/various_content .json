@@ -1,0 +1,71 @@
+{
+  "cv": [
+    {
+    },
+    {
+      "title1": "Expériences Professionnelles:",
+      "subTitle1": "Allplan France",
+      "date": "avr. 2016 - août 2021 · (5 ans) ",
+      "logo": "allplanLogo",
+      "text" : "Consultant technique Allplan France, cadre niv VII",
+      "list": [
+        { "text": "Expert technique : Expertise concernant les besoins du client et force de proposition sur les méthodes d’optimisations du dessin technique" },
+        { "text": "Formateur technique - logiciel de CAO Allplan : Conception et animation de sessions de formation sur le logiciel Allplan." },
+        { "text": "Avant-vente : Assistance à la présentation du logiciel Allplan lors des phases d’avant-vente" }
+      ]
+    },
+    {
+      "title1": "Formation:",
+      "subTitle1": "Formation Web et Web mobile",
+      "logo": "afpaLogo",
+      "date": "nov. 2021 – juill. 2022· (8 mois)",
+      "text" : "Afpa - formation certifiante (diplôme niveau 3 (bac+2))",
+      "list": [
+        { "text": "Programmation orientée objet (POO)" },
+        { "text": "Analyse et conception" },
+        { "text": "Création de maquettes" },
+        { "text": "SQL, création/modification de BDD" },
+        { "text": "JS" },
+        { "text": "PHP" }
+      ]
+    },
+    {
+    },
+    {
+    },
+    {
+      "title1": "Expériences Professionnelles:",
+      "subTitle1": "Alternance : VirageGroup",
+      "date": "sept. 2022 - juill. 2024 · (2 ans) ",
+      "logo": "virageLogo",
+      "text" : "Virage group est un editeur de solution SASS de pilotage de portefeuille projets et plans stratégiques. Lors de mon alternance",
+      "list": [
+        { "text": "Backend : JAVA avec framework Spring et ORM Hibernate" },
+        { "text": "Frontend: Angular avec bibliothèque NgRx" },
+        { "text": "DB : SQL Server, Postgre SQL, Oracle ElasticSearch" },
+        { "text": "Test unitaire front et back + test end to end" }
+      ]
+    },
+    {
+      "title1": "Formation:",
+      "subTitle1": "Concepteur Développeur D'applications",
+      "logo": "eniLogo",
+      "date": "sept. 2022 - juill. 2024 (2 ans)",
+      "text" : "ENI - formation en alternance certifiante (diplôme niveau 6 (bac+4))",
+      "list": [
+        { "text": "Programmation orientée objet (POO)" },
+        { "text": "Analyse et conception" },
+        { "text": "Conduite et Gestion de projets" },
+        { "text": "SQL, création/modification de BDD" },
+        { "text": "Java SE, Java Enterprise Edition" },
+        { "text": "JS, Framework Angular" },
+        { "text": "ASP.NET" },
+        { "text": "PHP, Framework Symfony" },
+        { "text": "Apache" },
+        { "text": "Android, Xamarin, Ionic" }
+      ]
+    },
+    {
+    }
+  ]
+}

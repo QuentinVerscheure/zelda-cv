@@ -123,7 +123,7 @@ export class SceneWorldService extends Phaser.Scene {
 
     // Initialize keyboard inputs
     if (this.input.keyboard) {
-      this.movementService.initializeKeyboardInput(this.input);
+      MovementService.initializeKeyboardInput(this.input);
     }
 
     // create scene transition collision
@@ -134,7 +134,7 @@ export class SceneWorldService extends Phaser.Scene {
       ['cvHouse', 'sceneCV', 543, 1226],
       ['playerHouse', 'scenePlayerHouse', 400, 1338],
       ['linkHouse', 'sceneLink', 240, 1322],
-      ['variousHouse', 'sceneDivers', 208, 1322],
+      ['variousHouse', 'sceneVarious', 208, 1322],
       ['portfolioHouse', 'scenePortfolio', 560, 1466],
       ['contactHouse', 'sceneContact', 400, 1466],
       ['guestBookHouse', 'sceneGuestBook1', 224, 1482],
@@ -245,6 +245,6 @@ export class SceneWorldService extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    MovementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 }

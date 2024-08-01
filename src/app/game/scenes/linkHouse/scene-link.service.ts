@@ -89,7 +89,7 @@ export class SceneLinkService extends Phaser.Scene {
     );
 
     if (this.input.keyboard) {
-      this.movementService.initializeKeyboardInput(this.input);
+      MovementService.initializeKeyboardInput(this.input);
     }
 
     this.collisionService.createSceneTransitionCollision(
@@ -110,7 +110,7 @@ export class SceneLinkService extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    MovementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
   createPicture(x: number, y: number, scale: number, picture: string, url:string, scaleOfTheGame:number){
