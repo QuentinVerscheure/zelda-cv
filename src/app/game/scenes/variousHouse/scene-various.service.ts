@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CollisionService } from '../../core/collision.service';
 import { MovementService } from '../../core/movement.service';
 import { PlayerService } from '../../core/player.service';
+import { VariousContentService } from './various-content.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class SceneVariousService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
+    private variousContentService: VariousContentService,
   ) {
     super({ key: 'sceneVarious' });
   }
@@ -34,6 +36,8 @@ export class SceneVariousService extends Phaser.Scene {
     this.load.image('english_flag', 'assets/game/english_flag.png');
     this.load.image('french_flag', 'assets/game/french_flag.png');
     this.load.image('mobility', 'assets/game/mobility.png');
+    this.load.image('phone', 'assets/logo/phone.png');
+    this.load.image('mail', 'assets/logo/mail.png');
 
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
@@ -86,6 +90,9 @@ export class SceneVariousService extends Phaser.Scene {
       217,
       1350
     );
+
+    this.variousContentService.createBox(this, this.scaleOfTheGame);
+
   }
 
   override update() {
