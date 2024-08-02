@@ -3,6 +3,7 @@ import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
+import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,15 +15,17 @@ export class SceneLinkService extends Phaser.Scene {
   private scaleOfTheGame: number = 4;
 
   constructor(
-    private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private npcService: NpcService
+    private npcService: NpcService,
+    private validAchievementService: ValidAchievementService,
   ) {
     super({ key: 'sceneLink' });
   }
 
   preload() {
+    this.validAchievementService.ValidAchievement("linkHouse")
+
     this.load.image('link_background', 'assets/game/Link_House_Background.png');
 
     //player
@@ -120,6 +123,7 @@ export class SceneLinkService extends Phaser.Scene {
     pictureSprite.setInteractive({ useHandCursor: true });
 
     pictureSprite.on('pointerdown', () => {
+      this.validAchievementService.ValidAchievement("linkCklicked")
       window.open(url, '_blank');
     });
   }

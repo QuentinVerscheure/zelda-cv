@@ -3,6 +3,7 @@ import { CollisionService } from '../../core/collision.service';
 import { MovementService } from '../../core/movement.service';
 import { PlayerService } from '../../core/player.service';
 import { VariousContentService } from './various-content.service';
+import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,15 @@ export class SceneVariousService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private variousContentService: VariousContentService,
+    private validAchievementService: ValidAchievementService,
   ) {
     super({ key: 'sceneVarious' });
   }
 
   preload() {
+
+    this.validAchievementService.ValidAchievement("variousHouse")
+
     this.load.image('various_house_background', 'assets/game/various_house.png');
 
     //load the collision between the background and the player

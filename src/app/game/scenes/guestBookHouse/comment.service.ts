@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { guestBookCommentary } from '../../../models/guestBookCommentary.enum';
+import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import { guestBookCommentary } from '../../../models/guestBookCommentary.enum';
 export class CommentService {
   private commentOverlapping: boolean = false;
 
-  constructor() {}
+  constructor(private validAchievementService: ValidAchievementService) {}
 
   displayComments(scaleOfTheGame: number, scene: Phaser.Scene) {
     this.mockMessages.forEach((message) => {
@@ -32,6 +33,7 @@ export class CommentService {
     openBook.body.immovable = true;
 
     openBook.on('pointerdown', () => {
+      this.validAchievementService.ValidAchievement("postComment");
       this.showForm();
     });
 
@@ -197,8 +199,8 @@ export class CommentService {
       message:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in tincidunt odio. Vivamus id justo sed ante viverra cursus. Etiam eget finibus quam. Proin vulputate dictum feugiat. Int',
       date: new Date('2022-11-05T10:30:00'),
-      x: -100,
-      y: 200,
+      x: -70,
+      y: 150,
     },
     {
       user: 'test2',
@@ -206,22 +208,22 @@ export class CommentService {
         'm mollis. Etiam purus quam, porta eu sodales hendrerit, imperdiet eget purus. Vivamus tempor metus ut ante malesuada, eu malesuada nibh vehicula. Aliquam pulvinar quis tellus ac facilisis. Quisque fringilla porta lobortis. Vestibulum vitae urna tempor, viverra leo at, molestie ma',
       date: new Date('2023-12-11T10:30:00'),
       x: 200,
-      y: 200,
+      y: 150,
     },
     {
       user: 'test3',
       message:
         'd non faucibus purus. Etiam dignissim libero sed lacinia pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut pellentesque ligula, id aliquet nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a viverra turpis, eu finibus neque. Integer tincidunt tortor nibh, sit amet fringilla dui pulvinar non. Orci varius natoque penatibus et magnis dis parturient monte',
       date: new Date('2024-06-30T10:30:00'),
-      x: 300,
-      y: 300,
+      x: 250,
+      y: 50,
     },
     {
       user: 'test4',
       message: 'rnare dapibus. In feugiat eget lorem at loborti',
       date: new Date('2023-12-25T10:30:00'),
-      x: 400,
-      y: 400,
+      x: 0,
+      y: 200,
     },
   ];
 }

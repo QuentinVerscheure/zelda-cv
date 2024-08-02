@@ -5,6 +5,7 @@ import { CvContent } from '../../../models/Cv_content.enum';
 import { CvContentService } from './cvContent.service';
 import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
+import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +20,15 @@ export class SceneCVService extends Phaser.Scene {
     private collisionService: CollisionService,
     private cvContentService: CvContentService,
     private playerService: PlayerService,
-    private npcService: NpcService
+    private npcService: NpcService,
+    private validAchievementService: ValidAchievementService,
   ) {
     super({ key: 'sceneCV' });
   }
 
   preload() {
+    this.validAchievementService.ValidAchievement("cvHouse")
+
     this.load.image('cvBackground', 'assets/game/CV_house_background.png');
 
     //load the collision between the background and the player
@@ -116,8 +120,11 @@ export class SceneCVService extends Phaser.Scene {
       0x0000ff,
       0 //set 0.5 to seen the hitbox
     );
-    downloadCVButton.setInteractive();
+
+    //icon to dowload the CV
+    downloadCVButton.setInteractive({ useHandCursor: true });
     downloadCVButton.on('pointerdown', () => {
+      this.validAchievementService.ValidAchievement("cvHouseDownload")
       const a = document.createElement('a');
       a.href = 'assets/docs/CV.Verscheure.pdf';
       a.download = 'CV.Verscheure.pdf';

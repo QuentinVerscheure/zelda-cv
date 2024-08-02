@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
+import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +16,15 @@ export class SceneGuestBookService1 extends Phaser.Scene {
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private validAchievementService: ValidAchievementService,
   ) {
     super({ key: 'sceneGuestBook1' });
   }
 
   preload() {
+    this.validAchievementService.ValidAchievement("guestBookHouse")
+
     this.load.image('Guest_Book_background', 'assets/game/Guest_Book_House_1.png');
     this.load.atlas(
       'linkDefault',

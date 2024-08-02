@@ -1,0 +1,33 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Tiled_collision_background_credit.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "Tiled_collision_background_credit.tmx": {
+            "scale": 3.0756249999999996,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 159.96748628327578,
+                "y": 128.1040438935176
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/zelda-cv/src/assets/game",
+    "map.height": 16,
+    "map.lastUsedExportFilter": "Tous les Fichiers (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 20,
+    "openFiles": [
+        "Tiled_collision_background_credit.tmx"
+    ],
+    "project": "credit_collision_background.tiled-project",
+    "recentFiles": [
+        "Tiled_collision_background_credit.tmx"
+    ]
+}

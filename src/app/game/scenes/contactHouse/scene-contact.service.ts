@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
+import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +15,15 @@ export class SceneContactService extends Phaser.Scene {
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private validAchievementService: ValidAchievementService,
   ) {
     super({ key: 'sceneContact' });
   }
 
   preload() {
+    this.validAchievementService.ValidAchievement("contactHouse")
+    
     this.load.image(
       'phoneHouse_background',
       'assets/game/Phone_House_Background.png'
