@@ -6,10 +6,9 @@ import { NpcService } from '../../core/npc.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SceneLinkService extends Phaser.Scene {
-
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = 4;
@@ -18,13 +17,13 @@ export class SceneLinkService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService,
+    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'sceneLink' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement("linkHouse")
+    this.validAchievementService.ValidAchievement('linkHouse');
 
     this.load.image('link_background', 'assets/game/Link_House_Background.png');
 
@@ -91,9 +90,7 @@ export class SceneLinkService extends Phaser.Scene {
       'linkCollisionBackgroundData'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -107,23 +104,55 @@ export class SceneLinkService extends Phaser.Scene {
       1345
     );
 
-    this.createPicture(68, 60, 0.07, 'gitHub', 'https://github.com/QuentinVerscheure', this.scaleOfTheGame);
-    this.createPicture(45, 60, 0.3, 'linkedin', 'https://www.linkedin.com/in/quentin-verscheure-b7b4b09b/l', this.scaleOfTheGame);
-    this.createPicture(55, 45, 0.15, 'codepen', 'https://codepen.io/Verscheure-Quentin', this.scaleOfTheGame);
+    this.createPicture(
+      68,
+      60,
+      0.07,
+      'gitHub',
+      'https://github.com/QuentinVerscheure',
+      this.scaleOfTheGame
+    );
+    this.createPicture(
+      45,
+      60,
+      0.3,
+      'linkedin',
+      'https://www.linkedin.com/in/quentin-verscheure-b7b4b09b/l',
+      this.scaleOfTheGame
+    );
+    this.createPicture(
+      55,
+      45,
+      0.15,
+      'codepen',
+      'https://codepen.io/Verscheure-Quentin',
+      this.scaleOfTheGame
+    );
   }
 
   override update() {
     MovementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
-  createPicture(x: number, y: number, scale: number, picture: string, url:string, scaleOfTheGame:number){
-    const pictureSprite = this.add.image(scaleOfTheGame*x, scaleOfTheGame*y, picture);
-    pictureSprite.setScale(scale*scaleOfTheGame);
+  createPicture(
+    x: number,
+    y: number,
+    scale: number,
+    picture: string,
+    url: string,
+    scaleOfTheGame: number
+  ) {
+    const pictureSprite = this.add.image(
+      scaleOfTheGame * x,
+      scaleOfTheGame * y,
+      picture
+    );
+    pictureSprite.setScale(scale * scaleOfTheGame);
 
     pictureSprite.setInteractive({ useHandCursor: true });
 
     pictureSprite.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement("linkCklicked")
+      this.validAchievementService.ValidAchievement('linkCklicked');
       window.open(url, '_blank');
     });
   }

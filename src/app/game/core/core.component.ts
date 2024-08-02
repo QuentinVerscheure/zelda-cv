@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Phaser from 'phaser';
+import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
 import { SceneCVService } from '../scenes/cvHouse/scene-cv.service';
 import { SceneWorldService } from '../scenes/world/scene-world.service';
 import { SceneContactService } from '../scenes/contactHouse/scene-contact.service';
@@ -16,7 +17,6 @@ import { SceneCreditService } from '../scenes/creditHouse/scene-credit.service';
   templateUrl: './core.component.html',
   styleUrls: ['./core.component.scss'],
   providers: [],
-  
 })
 export class CoreComponent implements OnInit {
   private phaserGame!: Phaser.Game;
@@ -31,9 +31,8 @@ export class CoreComponent implements OnInit {
     private scenePlayerHouse: ScenePlayerService,
     private sceneLink: SceneLinkService,
     private sceneVarious: SceneVariousService,
-    private sceneCreditService: SceneCreditService,
+    private sceneCreditService: SceneCreditService
   ) {
-
     const width = window.innerWidth;
     const height = window.innerHeight;
 
@@ -41,18 +40,31 @@ export class CoreComponent implements OnInit {
       type: Phaser.AUTO,
       width: width,
       height: height,
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
       scene: [
-        this.sceneCreditService,
-        this.scenePlayerHouse,//1st scene will be load at the start of the game
-        this.sceneWorld, 
+        this.scenePlayerHouse, //1st scene will be load at the start of the game
+        this.sceneWorld,
         this.sceneContact,
         this.sceneCV,
         this.sceneGuestBook1,
         this.sceneGuestBook2,
         this.sceneLink,
         this.sceneVarious,
-        // this.sceneCreditService,
+        this.sceneCreditService,
       ],
+      plugins: {
+        global: [
+          {
+            key: 'rexVirtualJoystick',
+            plugin: VirtualJoystickPlugin,
+            start: true
+          }
+        ]
+      },
+      pixelArt: true, // Enable pixel art mode
       physics: {
         default: 'arcade',
         arcade: {

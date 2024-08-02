@@ -18,13 +18,13 @@ export class ScenePlayerService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService,
+    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'scenePlayerHouse' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement("playerHouse")
+    this.validAchievementService.ValidAchievement('playerHouse');
 
     this.load.image(
       'Player_background',
@@ -50,7 +50,10 @@ export class ScenePlayerService extends Phaser.Scene {
       'assets/game/young_man.json'
     );
 
-    this.load.text('fontCSS', '/assets/fonts/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf');
+    this.load.text(
+      'fontCSS',
+      '/assets/fonts/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf'
+    );
   }
 
   create() {
@@ -77,9 +80,7 @@ export class ScenePlayerService extends Phaser.Scene {
       'playerCollisionBackgroundData'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,

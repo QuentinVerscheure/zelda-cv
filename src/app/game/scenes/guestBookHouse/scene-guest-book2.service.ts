@@ -11,7 +11,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
   private infiniteBackground!: Phaser.GameObjects.TileSprite;
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
-  
+
   private scaleOfTheGame: number = 4;
 
   constructor(
@@ -32,10 +32,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       'Guest_Book_background2',
       'assets/game/Guest_Book_House_2.png'
     );
-    this.load.image(
-      'trashIcon',
-      'assets/game/trash.png'
-    );
+    this.load.image('trashIcon', 'assets/game/trash.png');
     this.load.atlas(
       'linkDefault',
       'assets/game/Links_Default.png',
@@ -88,9 +85,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       'guestBookCollisionBackgroundData2'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -105,8 +100,14 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       'walkingDown/frame0001'
     );
 
-           //create the clickable book who display the comment form
-       const openBook = this.commentService.createClickableBook(104, 150, this.scaleOfTheGame, this.player, this);
+    //create the clickable book who display the comment form
+    const openBook = this.commentService.createClickableBook(
+      104,
+      150,
+      this.scaleOfTheGame,
+      this.player,
+      this
+    );
   }
 
   override update() {
@@ -114,7 +115,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
     this.commentService.displayComments(this.scaleOfTheGame, this);
   }
 
-  getScaleOfTheGame(){
+  getScaleOfTheGame() {
     return this.scaleOfTheGame;
   }
 }

@@ -16,14 +16,14 @@ export class SceneContactService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService,
+    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'sceneContact' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement("contactHouse")
-    
+    this.validAchievementService.ValidAchievement('contactHouse');
+
     this.load.image(
       'phoneHouse_background',
       'assets/game/Phone_House_Background.png'
@@ -71,9 +71,7 @@ export class SceneContactService extends Phaser.Scene {
       'phoneHouseCollisionBackgroundData'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -88,15 +86,24 @@ export class SceneContactService extends Phaser.Scene {
     );
 
     //create the clickable book who display the contact form
-    const openBook = this.createClickableBook(95, 90, this.scaleOfTheGame, this.player);
-    
+    const openBook = this.createClickableBook(
+      95,
+      90,
+      this.scaleOfTheGame,
+      this.player
+    );
   }
 
   override update() {
     MovementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
-  createClickableBook(x: number, y: number, scaleOfTheGame: number, player: Phaser.Physics.Arcade.Sprite) {
+  createClickableBook(
+    x: number,
+    y: number,
+    scaleOfTheGame: number,
+    player: Phaser.Physics.Arcade.Sprite
+  ) {
     const openBook = this.physics.add.sprite(
       scaleOfTheGame * x,
       scaleOfTheGame * y,

@@ -6,7 +6,7 @@ import { VariousContentService } from './various-content.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SceneVariousService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
@@ -18,16 +18,18 @@ export class SceneVariousService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private variousContentService: VariousContentService,
-    private validAchievementService: ValidAchievementService,
+    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'sceneVarious' });
   }
 
   preload() {
+    this.validAchievementService.ValidAchievement('variousHouse');
 
-    this.validAchievementService.ValidAchievement("variousHouse")
-
-    this.load.image('various_house_background', 'assets/game/various_house.png');
+    this.load.image(
+      'various_house_background',
+      'assets/game/various_house.png'
+    );
 
     //load the collision between the background and the player
     this.load.json(
@@ -63,7 +65,7 @@ export class SceneVariousService extends Phaser.Scene {
     const initialPlayerY = 250 * this.scaleOfTheGame; // Set your desired initial Y position
 
     // this.variousContentService.loadTexts(this, this.scaleOfTheGame);
-    
+
     this.player = this.playerService.createPlayer(
       this.player,
       this,
@@ -80,9 +82,7 @@ export class SceneVariousService extends Phaser.Scene {
       'variousCollisionBackground'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -97,7 +97,6 @@ export class SceneVariousService extends Phaser.Scene {
     );
 
     this.variousContentService.createBox(this, this.scaleOfTheGame);
-
   }
 
   override update() {

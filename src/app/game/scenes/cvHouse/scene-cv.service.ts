@@ -21,13 +21,13 @@ export class SceneCVService extends Phaser.Scene {
     private cvContentService: CvContentService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService,
+    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'sceneCV' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement("cvHouse")
+    this.validAchievementService.ValidAchievement('cvHouse');
 
     this.load.image('cvBackground', 'assets/game/CV_house_background.png');
 
@@ -84,9 +84,7 @@ export class SceneCVService extends Phaser.Scene {
       'CVCollisionBackgroundData'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -124,7 +122,7 @@ export class SceneCVService extends Phaser.Scene {
     //icon to dowload the CV
     downloadCVButton.setInteractive({ useHandCursor: true });
     downloadCVButton.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement("cvHouseDownload")
+      this.validAchievementService.ValidAchievement('cvHouseDownload');
       const a = document.createElement('a');
       a.href = 'assets/docs/CV.Verscheure.pdf';
       a.download = 'CV.Verscheure.pdf';

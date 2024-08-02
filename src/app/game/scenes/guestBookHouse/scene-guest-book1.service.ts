@@ -5,10 +5,9 @@ import { PlayerService } from '../../core/player.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SceneGuestBookService1 extends Phaser.Scene {
-
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = 4;
@@ -17,15 +16,18 @@ export class SceneGuestBookService1 extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService,
+    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'sceneGuestBook1' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement("guestBookHouse")
+    this.validAchievementService.ValidAchievement('guestBookHouse');
 
-    this.load.image('Guest_Book_background', 'assets/game/Guest_Book_House_1.png');
+    this.load.image(
+      'Guest_Book_background',
+      'assets/game/Guest_Book_House_1.png'
+    );
     this.load.atlas(
       'linkDefault',
       'assets/game/Links_Default.png',
@@ -71,9 +73,7 @@ export class SceneGuestBookService1 extends Phaser.Scene {
       'guestBookCollisionBackgroundData'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,

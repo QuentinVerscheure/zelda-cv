@@ -74,9 +74,7 @@ export class SceneCreditService extends Phaser.Scene {
       'creditCollisionBackgroundData'
     );
 
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -257,7 +255,7 @@ export class SceneCreditService extends Phaser.Scene {
         rippedCredits[index].name,
         rippedCredits[index].url
       );
-      y=y+6;
+      y = y + 6;
     }
   }
 

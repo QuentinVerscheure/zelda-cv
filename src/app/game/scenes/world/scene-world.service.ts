@@ -41,21 +41,13 @@ export class SceneWorldService extends Phaser.Scene {
       'assets/game/artist.png',
       'assets/game/artist.json'
     );
-    this.load.atlas(
-      'chick',
-      'assets/game/chick.png',
-      'assets/game/chick.json'
-    );
+    this.load.atlas('chick', 'assets/game/chick.png', 'assets/game/chick.json');
     this.load.atlas(
       'chicken',
       'assets/game/chicken.png',
       'assets/game/chicken.json'
     );
-    this.load.atlas(
-      'dog',
-      'assets/game/dog.png',
-      'assets/game/dog.json'
-    );
+    this.load.atlas('dog', 'assets/game/dog.png', 'assets/game/dog.json');
     this.load.atlas(
       'farmer',
       'assets/game/farmer.png',
@@ -122,9 +114,7 @@ export class SceneWorldService extends Phaser.Scene {
     );
 
     // Initialize keyboard inputs
-    if (this.input.keyboard) {
-      MovementService.initializeKeyboardInput(this.input);
-    }
+    MovementService.initializeInput(this);
 
     // create scene transition collision
     let sceneTransitionCollisionData: SceneTransitionCollisionData[] = [

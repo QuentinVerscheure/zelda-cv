@@ -23,6 +23,7 @@
     "@ngrx/store": "^18.0.1",
     "@ngrx/store-devtools": "^18.0.1",
     "phaser": "^3.80.1",
+    "phaser3-rex-plugins": "^1.80.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
