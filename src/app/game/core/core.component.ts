@@ -76,5 +76,6 @@ export class CoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.phaserGame = new Phaser.Game(this.config);
+    this.phaserGame.scene.start('scenePlayerHouse');
   }
 }

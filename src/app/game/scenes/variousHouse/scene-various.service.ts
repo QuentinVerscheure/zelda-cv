@@ -4,6 +4,7 @@ import { MovementService } from '../../core/movement.service';
 import { PlayerService } from '../../core/player.service';
 import { VariousContentService } from './various-content.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
+import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { ValidAchievementService } from '../../core/valid-achievement.service';
 export class SceneVariousService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
-  private scaleOfTheGame: number = 4;
+  private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
 
   constructor(
     private movementService: MovementService,

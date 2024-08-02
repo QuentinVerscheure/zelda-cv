@@ -4,6 +4,7 @@ import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
 import { SceneTransitionCollisionData } from '../../../models/SceneTransitionCollisionData.enum';
 import { NpcService } from '../../core/npc.service';
+import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { NpcService } from '../../core/npc.service';
 export class SceneWorldService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
-  private scaleOfTheGame: number = 2;
+  private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame()/2;
 
   constructor(
     private movementService: MovementService,

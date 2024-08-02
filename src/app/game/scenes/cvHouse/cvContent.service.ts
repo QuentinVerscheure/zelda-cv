@@ -73,13 +73,13 @@ export class CvContentService {
 
     const textStyle = {
       fontFamily: 'Pixelify_Sans',
-      fontSize: 16,
+      fontSize: 4 * scaleOfTheGame,
       color: '#000000',
-      wordWrap: { width: 380, useAdvancedWrap: true },
+      wordWrap: { width: 95 * scaleOfTheGame, useAdvancedWrap: true },
     };
     const boldTextStyle = {
       fontFamily: 'PixelifySans-Bold',
-      fontSize: 16,
+      fontSize: 4* scaleOfTheGame,
       color: '#000000',
     };
 
@@ -88,22 +88,22 @@ export class CvContentService {
       const x = this.frameCoordinates[sectionIndex].x * scaleOfTheGame;
 
       if (section.title1) {
-        scene.add.text(x + 10, y + 10, section.title1, boldTextStyle);
+        scene.add.text(x + (2.5*scaleOfTheGame), y + (2.5*scaleOfTheGame), section.title1, boldTextStyle);
       }
       if (section.subTitle1) {
-        scene.add.text(x + 25, y + 30, section.subTitle1, textStyle);
+        scene.add.text(x + (6.25*scaleOfTheGame), y + (7.5*scaleOfTheGame), section.subTitle1, textStyle);
       }
       if (section.date) {
-        scene.add.text(x + 25, y + 50, section.date, textStyle);
+        scene.add.text(x + (6.25*scaleOfTheGame), y + (12.5*scaleOfTheGame), section.date, textStyle);
       }
 
       //display the logo
-      const logo = scene.add.image(x + 25, y + 80, section.logo);
+      const logo = scene.add.image(x + (6.25*scaleOfTheGame), y + (20*scaleOfTheGame), section.logo);
       logo.setOrigin(0, 0); // Positionner par le bord gauche
-      logo.displayHeight = 50; // Taille fixe en longueur
+      logo.displayHeight = (12.5*scaleOfTheGame); // Taille fixe en longueur
       logo.scaleX = logo.scaleY; // Laisser libre en largeur
 
-      scene.add.text(x + 25, y + 50, section.date, textStyle);
+      scene.add.text(x + (6.25*scaleOfTheGame), y + (12.5*scaleOfTheGame), section.date, textStyle);
 
       //display text + all list.text
       let combinedText = section.text ? section.text + '\n\n' : '';
@@ -115,7 +115,7 @@ export class CvContentService {
       }
 
       if (combinedText) {
-        scene.add.text(x + 10, y + 150, combinedText, textStyle);
+        scene.add.text(x + (2.5*scaleOfTheGame), y + (37.5*scaleOfTheGame), combinedText, textStyle);
       }
     });
   }
