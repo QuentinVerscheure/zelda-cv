@@ -1,26 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { VariousContentConfig } from '../../../models/various_Box.enum';
 
-interface BoxElement {
-  type: 'text' | 'image';
-  text?: string;
-  key?: string;
-  xOffset: number;
-  yOffset: number;
-  height?: number;
-}
-
-interface Box {
-  title: string;
-  x: number;
-  y: number;
-  elements: BoxElement[];
-}
-
-interface VariousContentConfig {
-  boxes: Box[];
-}
 
 @Injectable({
   providedIn: 'root',
@@ -39,18 +21,20 @@ export class VariousContentService {
       fontFamily: 'Pixelify_Sans',
       fontSize: 4 * scaleOfTheGame,
       color: '#000000',
+      wordWrap: { width: 60 * scaleOfTheGame } // Adjust this value according to your needs
     };
     const boldTextStyle = {
       fontFamily: 'PixelifySans-Bold',
       fontSize: 5 * scaleOfTheGame,
       color: '#000000',
+      wordWrap: { width: 60 * scaleOfTheGame } // Same for bold text
     };
-
+  
     // Creation of titles and elements based on JSON data
     config.boxes.forEach((box) => {
       const x = box.x * scaleOfTheGame;
       const y = box.y * scaleOfTheGame;
-
+  
       if (box.title) {
         scene.add.rectangle(
           x + (39.6 * scaleOfTheGame),
@@ -59,7 +43,7 @@ export class VariousContentService {
           8 * scaleOfTheGame,
           0xffffff
         );
-
+  
         scene.add.text(
           x + 10 * scaleOfTheGame,
           y + 10 * scaleOfTheGame,
@@ -67,7 +51,7 @@ export class VariousContentService {
           boldTextStyle
         );
       }
-
+  
       box.elements.forEach((element) => {
         if (element.type === 'text') {
           scene.add.text(
@@ -89,4 +73,5 @@ export class VariousContentService {
       });
     });
   }
+  
 }
