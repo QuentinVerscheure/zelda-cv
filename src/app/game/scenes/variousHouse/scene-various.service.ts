@@ -97,7 +97,9 @@ export class SceneVariousService extends Phaser.Scene {
       1350
     );
 
-    this.variousContentService.createBox(this, this.scaleOfTheGame);
+    this.variousContentService.getContentConfig().subscribe(config => {
+      this.variousContentService.createBox(this, this.scaleOfTheGame, config);
+    });
   }
 
   override update() {
