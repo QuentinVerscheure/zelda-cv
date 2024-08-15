@@ -6,7 +6,7 @@ import { ValidAchievementService } from '../../core/valid-achievement.service';
   providedIn: 'root',
 })
 export class CommentService {
-  private commentOverlapping: boolean = false;
+  private commentContainers: Phaser.GameObjects.Container[] = [];
 
   constructor(private validAchievementService: ValidAchievementService) {}
 
@@ -33,7 +33,7 @@ export class CommentService {
     openBook.body.immovable = true;
 
     openBook.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement("postComment");
+      this.validAchievementService.ValidAchievement('postComment');
       this.showForm();
     });
 
@@ -54,13 +54,11 @@ export class CommentService {
     const fixedWidth = 131 * scaleOfTheGame;
     const fixedHeight = 44 * scaleOfTheGame;
 
-    // create the box for the text
     const container = scene.add.container(
       message.x * scaleOfTheGame,
       message.y * scaleOfTheGame
     );
 
-    // create the background graphics
     const backgroundGraphics = this.createBackgroundGraphics(
       scene,
       fixedWidth,
@@ -83,27 +81,24 @@ export class CommentService {
 
     container.add(text);
 
-    // create the border graphics
     const borderGraphics = scene.add.graphics();
     borderGraphics.lineStyle(3, 0x333333, 1);
-    borderGraphics.strokeRect(0, 0, fixedWidth, fixedHeight); // size of the box
+    borderGraphics.strokeRect(0, 0, fixedWidth, fixedHeight);
     container.add(borderGraphics);
 
-    // Add trash icon for deleting the comment
-    const trashIcon = scene.add.image(fixedWidth - 20, 20, 'trashIcon').setScale(scaleOfTheGame/2);
+    const trashIcon = scene.add.image(fixedWidth - 20, 20, 'trashIcon').setScale(scaleOfTheGame / 2);
     trashIcon.setInteractive({ useHandCursor: true });
     container.add(trashIcon);
 
-    // Event to delete the comment
     trashIcon.on('pointerdown', () => {
       container.destroy();
+      this.commentContainers = this.commentContainers.filter(c => c !== container);
     });
 
     text.setOrigin(0, 0);
     text.setDepth(1);
 
     if (message.newComment) {
-      // Enable dragging for the container
       container.setInteractive(
         new Phaser.Geom.Rectangle(0, 0, fixedWidth, fixedHeight),
         Phaser.Geom.Rectangle.Contains
@@ -116,10 +111,12 @@ export class CommentService {
         (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
           container.x = dragX;
           container.y = dragY;
-          this.checkOverlap(container, fixedWidth, fixedHeight, scene, scaleOfTheGame);
+          this.checkOverlap(container, fixedWidth, fixedHeight, scaleOfTheGame);
         }
       );
     }
+
+    this.commentContainers.push(container);
   }
 
   createBackgroundGraphics(
@@ -134,14 +131,13 @@ export class CommentService {
     return graphics;
   }
 
+
   checkOverlap(
     container: Phaser.GameObjects.Container,
     width: number,
     height: number,
-    scene: Phaser.Scene,
     scaleOfTheGame: number
   ) {
-    this.commentOverlapping = false;
     const containerBounds = new Phaser.Geom.Rectangle(
       container.x,
       container.y,
@@ -149,43 +145,57 @@ export class CommentService {
       height
     );
 
-    // Check overlap with the restricted zone
-    const restrictedZone = new Phaser.Geom.Rectangle(
-      -10*scaleOfTheGame, -10*scaleOfTheGame, 228*scaleOfTheGame, 132*scaleOfTheGame
-    );
-    if (
-      Phaser.Geom.Intersects.RectangleToRectangle(
-        containerBounds,
-        restrictedZone
-      )
-    ) {
-      this.commentOverlapping = true;
-    }
+    let isOverlapping = false;
 
-    this.updateCommentAppearance(container, width, height);
+        // Check overlap with the central restricted zone
+        const restrictedZone = new Phaser.Geom.Rectangle(
+          -10*scaleOfTheGame, -10*scaleOfTheGame, 228*scaleOfTheGame, 132*scaleOfTheGame
+        );
+        if (
+          Phaser.Geom.Intersects.RectangleToRectangle(
+            containerBounds,
+            restrictedZone
+          )
+        ) {
+          isOverlapping = true;
+        }
+
+    this.commentContainers.forEach(otherContainer => {
+      if (otherContainer === container) return; // Ignore self
+
+      const otherBounds = new Phaser.Geom.Rectangle(
+        otherContainer.x,
+        otherContainer.y,
+        width,
+        height
+      );
+
+      if (Phaser.Geom.Intersects.RectangleToRectangle(containerBounds, otherBounds)) {
+        isOverlapping = true;
+      }
+    });
+
+    this.updateCommentAppearance(container, width, height, isOverlapping);
   }
 
   updateCommentAppearance(
     container: Phaser.GameObjects.Container,
     width: number,
-    height: number
+    height: number,
+    isOverlapping: boolean
   ) {
-    const backgroundGraphics = container.getAt(
-      0
-    ) as Phaser.GameObjects.Graphics;
-
+    const backgroundGraphics = container.getAt(0) as Phaser.GameObjects.Graphics;
     backgroundGraphics.clear();
-    if (this.commentOverlapping) {
+
+    if (isOverlapping) {
       backgroundGraphics.fillStyle(0xff9999, 1); // Red color for overlap
     } else {
       backgroundGraphics.fillStyle(0xcccccc, 1); // Default color
     }
+
     backgroundGraphics.fillRect(0, 0, width, height);
   }
 
-  moveComment() {}
-
-  //hideForm() in comment-form.component
   showForm() {
     const form = document.getElementById('messageForm');
     if (form) {
