@@ -115,11 +115,19 @@ export class SceneContactService extends Phaser.Scene {
     openBook.body.immovable = true;
 
     openBook.on('pointerdown', () => {
-      console.log('ouvre le formulaire');
+      this.validAchievementService.ValidAchievement('contactMe');
+      this.showForm()
     });
 
     this.physics.add.collider(player, openBook);
 
     return openBook;
+  }
+
+  showForm(){
+    const form = document.getElementById('contact-container');
+    if (form) {
+      form.classList.remove('hidden');
+    }
   }
 }

@@ -1,10 +1,21 @@
-<form id="messageForm" (ngSubmit)="onSubmit()">
-  <span class="closeButton" (click)="hideForm()">&times;</span>
-  <div>
-    <textarea id="message" placeholder="Ecrivez votre message ici"></textarea>
-  </div>
+<div id="contact-container" class="hidden">
+<!-- Close icon -->
+<h1>Contact</h1>
+  <form id="messageForm" (ngSubmit)="onSubmit()">
+    <span class="closeButton" (click)="hideForm()">&times;</span>
+    <div>
+      <label for="nom">Nom:</label>
+      <input type="text" id="nom" name="nom" placeholder="Entrez votre nom:">
 
-  <button type="submit" [disabled]="messageForm.invalid">
-    Créer le message
-  </button>
-</form>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Entrez votre email:">
+
+      <label class="notImplemented" for="message">Envoie de message impossible pour le moment, WIP</label>
+      <textarea id="message" placeholder="Ecrivez votre message ici"></textarea>
+    </div>
+  
+    <button type="submit" [disabled]="messageForm.invalid">
+      Envoyer le message
+    </button>
+  </form>
+</div>

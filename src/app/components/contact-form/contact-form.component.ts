@@ -14,6 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class ContactFormComponent {
   messageForm: FormGroup;
+  pseudo = '';
+  password = '';
 
   constructor(private fb: FormBuilder) {
     this.messageForm = this.fb.group({
@@ -31,7 +33,7 @@ export class ContactFormComponent {
   }
 
   hideForm() {
-    const form = document.getElementById('messageForm');
+    const form = document.getElementById('contact-container');
     if (form) {
       form.classList.add('hidden');
     }

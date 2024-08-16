@@ -1,39 +1,38 @@
 #messageForm {
+  font-family: Pixelify_Sans;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+
+  textarea {
     font-family: Pixelify_Sans;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    resize: none;
     width: 100%;
-    max-width: 400px;
-  
-    textarea {
-      font-family: Pixelify_Sans;
-      resize: none;
-      width: 100%;
-      height: 200px;
-      margin-top: 20px;
-    }
-  
-    button {
-      font-family: Pixelify_Sans;
-      margin-top: 10px;
-    }
-  
-    .closeButton {
-      font-size: 40px;
-      position: absolute;
-      top: 0;
-      right: 10px;
-      cursor: pointer;
-    }
+    height: 200px;
+    margin-top: 20px;
   }
-  .hidden {
-      display: none;
-    }
-  
+
+  button {
+    font-family: Pixelify_Sans;
+    margin-top: 10px;
+  }
+
+  .closeButton {
+    font-size: 40px;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    cursor: pointer;
+  }
+}
+.hidden {
+  display: none;
+}
