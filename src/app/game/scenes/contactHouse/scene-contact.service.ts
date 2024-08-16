@@ -39,7 +39,7 @@ export class SceneContactService extends Phaser.Scene {
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
 
-    this.load.image('openBook', 'assets/game/open_book.png');
+    this.load.image('message', 'assets/game/message.png');
 
     this.load.atlas(
       'linkDefault',
@@ -108,7 +108,7 @@ export class SceneContactService extends Phaser.Scene {
     const openBook = this.physics.add.sprite(
       scaleOfTheGame * x,
       scaleOfTheGame * y,
-      'openBook'
+      'message'
     );
     openBook.setScale(scaleOfTheGame);
     openBook.setInteractive({ useHandCursor: true });
