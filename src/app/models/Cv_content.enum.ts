@@ -4,12 +4,13 @@
 export interface CvContent {
   cv: [
     {
-      title1: string;
-      subTitle1: string;
-      logo: string;
-      date: string;
-      text: string;
-      list: [
+      title1?: string;
+      subTitle1?: string;
+      picture?: string;
+      pictureUrl?: string;
+      date?: string;
+      text?: string;
+      list?: [
         {
           text: string;
         }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
-import { CvContent } from '../../../models/Cv_content.enum';
 import { CvContentService } from './cvContent.service';
 import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
@@ -38,11 +37,6 @@ export class SceneCVService extends Phaser.Scene {
       'assets/game/CV_collision_background.json'
     );
 
-    this.load.image('virageLogo', 'assets/logo/Logo_Virage.png');
-    this.load.image('eniLogo', 'assets/logo/ecoleeni-logo.jpg');
-    this.load.image('allplanLogo', 'assets/logo/logo-allplan.png');
-    this.load.image('afpaLogo', 'assets/logo/Logo-AFPA.png');
-
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
 
@@ -57,6 +51,8 @@ export class SceneCVService extends Phaser.Scene {
       'assets/game/Links_Default.png',
       'assets/game/Links_Default.json'
     );
+
+    this.cvContentService.loadYaml(this);
   }
 
   create() {
@@ -66,8 +62,6 @@ export class SceneCVService extends Phaser.Scene {
 
     const initialPlayerX = 473 * this.scaleOfTheGame; // Set your desired initial X position
     const initialPlayerY = 420 * this.scaleOfTheGame; // Set your desired initial Y position
-
-    this.cvContentService.loadTexts(this, this.scaleOfTheGame);
 
     this.player = this.playerService.createPlayer(
       this.player,
@@ -131,6 +125,8 @@ export class SceneCVService extends Phaser.Scene {
       a.click();
       document.body.removeChild(a);
     });
+
+    this.cvContentService.displayTexts(this, this.scaleOfTheGame);
   }
 
   override update() {

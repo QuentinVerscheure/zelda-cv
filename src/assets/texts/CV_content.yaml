@@ -1,0 +1,65 @@
+# Every line are optional. You can delete or modify them as you want
+# You can let empty a frame if needed. There a 8 frame, from top left to bottom right
+# 1 2 3 4
+# 5 6 7 8
+
+cv:
+  - {}
+  - 
+    title1: "Expériences Professionnelles:" #main title in bold
+    subTitle1: "Allplan France" 
+    date: "avr. 2016 - août 2021 · (5 ans)" #string
+    picture: "allplanLogo" #a name for the picture
+    pictureUrl: "assets/logo/logo-allplan.png" #the url of the picture
+    text: "Consultant technique Allplan France, cadre niv VII"
+    list: #a  bullet list (max +-10 or the text will go out of the box)
+      - text: "Expert technique : Expertise concernant les besoins du client et force de proposition sur les méthodes d’optimisations du dessin technique"
+      - text: "Formateur technique - logiciel de CAO Allplan : Conception et animation de sessions de formation sur le logiciel Allplan."
+      - text: "Avant-vente : Assistance à la présentation du logiciel Allplan lors des phases d’avant-vente"
+  - 
+    title1: "Formation:"
+    subTitle1: "Formation Web et Web mobile"
+    picture: "afpaLogo"
+    pictureUrl: "assets/logo/Logo-AFPA.png"
+    date: "nov. 2021 – juill. 2022· (8 mois)"
+    text: "Afpa - formation certifiante (diplôme niveau 3 (bac+2))"
+    list:
+      - text: "Programmation orientée objet (POO)"
+      - text: "Analyse et conception"
+      - text: "Création de maquettes"
+      - text: "SQL, création/modification de BDD"
+      - text: "JS"
+      - text: "PHP"
+  - {}
+  - {}
+  - 
+    title1: "Expériences Professionnelles:"
+    subTitle1: "Alternance : VirageGroup"
+    date: "sept. 2022 - juill. 2024 · (2 ans)"
+    picture: "virageLogo"
+    pictureUrl: "assets/logo/Logo_Virage.png"
+    text: "Virage group est un éditeur de solution SASS de pilotage de portefeuille projets et plans stratégiques. Lors de mon alternance"
+    list:
+      - text: "Backend : JAVA avec framework Spring et ORM Hibernate"
+      - text: "Frontend: Angular avec bibliothèque NgRx"
+      - text: "DB : SQL Server, Postgre SQL, Oracle ElasticSearch"
+      - text: "Test unitaire front et back + test end to end"
+  - 
+    title1: "Formation:"
+    subTitle1: "Concepteur Développeur D'applications"
+    picture: "eniLogo"
+    pictureUrl: "assets/logo/ecoleeni-logo.jpg"
+    date: "sept. 2022 - juill. 2024 (2 ans)"
+    text: "ENI - formation en alternance certifiante (diplôme niveau 6 (bac+4))"
+    list:
+      - text: "Programmation orientée objet (POO)"
+      - text: "Analyse et conception"
+      - text: "Conduite et Gestion de projets"
+      - text: "SQL, création/modification de BDD"
+      - text: "Java SE, Java Enterprise Edition"
+      - text: "JS, Framework Angular"
+      - text: "ASP.NET"
+      - text: "PHP, Framework Symfony"
+      - text: "Apache"
+      - text: "Android, Xamarin, Ionic"
+  - {}
