@@ -6,6 +6,7 @@ export interface BoxElement {
   type: 'text' | 'image';
   text?: string;
   key?: string;
+  pictureUrl?: string;
   xOffset: number;
   yOffset: number;
   height?: number;

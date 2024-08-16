@@ -2,6 +2,7 @@
 # You can let empty a frame if needed. There a 8 frame, from top left to bottom right
 # 1 2 3 4
 # 5 6 7 8
+#to change a picture, paste the file into the asset folder and change his url in "pictureUrl"
 
 cv:
   - {}

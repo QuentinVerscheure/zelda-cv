@@ -38,14 +38,7 @@ export class SceneVariousService extends Phaser.Scene {
       'assets/game/various_collision_background.json'
     );
 
-    this.load.image('science', 'assets/game/science.png');
-    this.load.image('3d', 'assets/game/3d.png');
-    this.load.image('computer', 'assets/game/computer.png');
-    this.load.image('english_flag', 'assets/game/english_flag.png');
-    this.load.image('french_flag', 'assets/game/french_flag.png');
-    this.load.image('mobility', 'assets/game/mobility.png');
-    this.load.image('phone', 'assets/logo/phone.png');
-    this.load.image('mail', 'assets/logo/mail.png');
+    // this.load.image('english_flag', 'assets/game/english_flag.png');
 
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
@@ -55,6 +48,16 @@ export class SceneVariousService extends Phaser.Scene {
       'assets/game/Links_Default.png',
       'assets/game/Links_Default.json'
     );
+    this.variousContentService.getContentConfig().subscribe((config) => {
+      config.boxes.forEach((box) => {
+        box.elements.forEach((element) => {
+          if (element.type === 'image' && element.pictureUrl && element.key) {
+            // Charger l'image en utilisant la clé et l'URL spécifiées dans le YAML
+            this.load.image(element.key, element.pictureUrl);
+          }
+        });
+      });
+    });
   }
 
   create() {
@@ -97,9 +100,7 @@ export class SceneVariousService extends Phaser.Scene {
       1350
     );
 
-    this.variousContentService.getContentConfig().subscribe(config => {
-      this.variousContentService.createBox(this, this.scaleOfTheGame, config);
-    });
+    this.variousContentService.createBox(this, this.scaleOfTheGame);
   }
 
   override update() {

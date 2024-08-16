@@ -34,8 +34,6 @@ export class CvContentService {
       this.cvContent = datas;
       this.cvContent.cv.forEach((section) => {
         if (section.picture && section.pictureUrl) {
-          console.log(section.picture);
-          console.log(section.pictureUrl);
           scene.load.image(section.picture, section.pictureUrl);
         }
       })
