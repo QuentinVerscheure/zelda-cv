@@ -6,6 +6,8 @@ import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { CvData } from '../../../models/cvData.enum';
+import { HousesDataService } from '../../core/houses-data.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,7 @@ export class SceneCVService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  private cvData: CvData | undefined;
 
   constructor(
     private movementService: MovementService,
@@ -21,7 +24,8 @@ export class SceneCVService extends Phaser.Scene {
     private cvContentService: CvContentService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService
+    private validAchievementService: ValidAchievementService,
+    private housesDataService: HousesDataService
   ) {
     super({ key: 'sceneCV' });
   }
@@ -52,7 +56,13 @@ export class SceneCVService extends Phaser.Scene {
       'assets/game/Links_Default.json'
     );
 
-    this.cvContentService.loadPicture(this);
+    // Load pictures use for the CV content
+    this.cvData = this.housesDataService.getCvData();
+    if (this.cvData) {
+      this.cvContentService.loadPicture(this, this.cvData);
+    } else {
+      console.log('error, cvData not load from file');
+    }
   }
 
   create() {
@@ -126,7 +136,15 @@ export class SceneCVService extends Phaser.Scene {
       document.body.removeChild(a);
     });
 
-    this.cvContentService.displayTexts(this, this.scaleOfTheGame);
+    if (this.cvData) {
+      this.cvContentService.displayTexts(
+        this,
+        this.scaleOfTheGame,
+        this.cvData
+      );
+    } else {
+      console.log('error, cvData not load from file')
+    }
   }
 
   override update() {

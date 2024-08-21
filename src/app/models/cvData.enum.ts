@@ -1,7 +1,7 @@
 /**
  * Represents the properties of the information to display in the CvScene
  */
-export interface CvContent {
+export interface CvData {
   cv: [
     {
       title1?: string;

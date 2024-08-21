@@ -1,30 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { VariousContentConfig } from '../../../models/various_Box.enum';
-import * as yaml from 'js-yaml';
+import { VariousContentConfig } from '../../../models/various_Data.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VariousContentService {
-  private configUrl = 'assets/texts/various_content.yaml';
-  private config: VariousContentConfig | undefined;
 
-  constructor(private http: HttpClient) {}
-
-  getContentConfig(): Observable<VariousContentConfig> {
-    return this.http.get(this.configUrl, { responseType: 'text' }).pipe(
-      map((yamlText: string) => {
-        this.config = yaml.load(yamlText) as VariousContentConfig;
-        return this.config;
-      })
-    );
-  }
+  constructor() {}
 
 
-  createBox(scene: Phaser.Scene, scaleOfTheGame: number): void {
+  createBox(scene: Phaser.Scene, scaleOfTheGame: number, variousData: VariousContentConfig): void {
     const textStyle = {
       fontFamily: 'Pixelify_Sans',
       fontSize: 4 * scaleOfTheGame,
@@ -39,8 +24,8 @@ export class VariousContentService {
     };
 
     // Creation of titles and elements based on YAML data
-    if (this.config) {
-      this.config.boxes.forEach((box) => {
+    if (variousData) {
+      variousData.boxes.forEach((box) => {
         const x = box.x * scaleOfTheGame;
         const y = box.y * scaleOfTheGame;
 

@@ -2,7 +2,7 @@
  * Represents the properties of the information to display in the various house
  */
 
-export interface BoxElement {
+export interface BoxData {
   type: 'text' | 'image';
   text?: string;
   key?: string;
@@ -16,7 +16,7 @@ export interface Box {
   title: string;
   x: number;
   y: number;
-  elements: BoxElement[];
+  elements: BoxData[];
 }
 
 export interface VariousContentConfig {

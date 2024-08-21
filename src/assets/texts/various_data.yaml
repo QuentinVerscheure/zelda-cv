@@ -1,0 +1,137 @@
+boxes:
+  - title: "Contact" #Title of the box, feel free to change
+    x: 33 #coordinate of the box, DO NOT CHANGE
+    y: 32
+    elements: 
+      - type: "image"
+        key: "phone" #if type:"image", give a name
+        pictureUrl: "assets/logo/phone.png" #if type:"image", give the url of the picture
+        xOffset: 10 #an elemnts in your box, you have to place them with x and y from the top left of the box
+        yOffset: 20
+        height: 12.5 #size of the element
+      - type: "text"
+        text: "06 26 93 22 20"
+        xOffset: 25
+        yOffset: 25
+      - type: "image"
+        key: "mail"
+        pictureUrl: "assets/logo/mail.png"
+        xOffset: 10
+        yOffset: 35
+        height: 8.75
+      - type: "text"
+        text: "quentin.verscheure"
+        xOffset: 25
+        yOffset: 35
+      - type: "text"
+        text: "@gmail.com"
+        xOffset: 25
+        yOffset: 40
+  - title: ""
+    x: 161
+    y: 32
+    elements: []
+  - title: "compétences diverses"
+    x: 289
+    y: 32
+    elements:
+      - type: "text"
+        text: "- formation et consulting"
+        xOffset: 10
+        yOffset: 20
+      - type: "text"
+        text: "- dessin technique du batiment (BIM)"
+        xOffset: 13
+        yOffset: 25
+      - type: "text"
+        text: "- modelisation 3D"
+        xOffset: 10
+        yOffset: 35
+  - title: "mobilité"
+    x: 33
+    y: 160
+    elements:
+      - type: "image"
+        key: "mobility"
+        pictureUrl: "assets/game/mobility.png"
+        xOffset: 10
+        yOffset: 20
+        height: 25
+      - type: "text"
+        text: "Permit B"
+        xOffset: 15
+        yOffset: 50
+      - type: "text"
+        text: "Non véhiculé"
+        xOffset: 15
+        yOffset: 55
+      - type: "text"
+        text: "mobilité: Nantes"
+        xOffset: 15
+        yOffset: 60
+  - title: "passion et intérêt"
+    x: 161
+    y: 160
+    elements:
+      - type: "image"
+        key: "computer"
+        pictureUrl: "assets/game/computer.png"
+        xOffset: 59
+        yOffset: 17
+        height: 17.5
+      - type: "image"
+        key: "3d"
+        pictureUrl: "assets/game/3d.png"
+        xOffset: 15
+        yOffset: 50
+        height: 12.5
+      - type: "image"
+        key: "science"
+        pictureUrl: "assets/game/science.png"
+        xOffset: 35
+        yOffset: 50
+        height: 20
+      - type: "text"
+        text: "decouverte et création"
+        xOffset: 10
+        yOffset: 20
+      - type: "text"
+        text: "informatique"
+        xOffset: 10
+        yOffset: 25
+      - type: "text"
+        text: "jeux video et e-sport"
+        xOffset: 10
+        yOffset: 30
+      - type: "text"
+        text: "modelisation et impression 3d"
+        xOffset: 10
+        yOffset: 35
+      - type: "text"
+        text: "bande dessinée"
+        xOffset: 10
+        yOffset: 40
+  - title: "langues"
+    x: 289
+    y: 160
+    elements:
+      - type: "image"
+        key: "french_flag"
+        pictureUrl: "assets/game/french_flag.png"
+        xOffset: 10
+        yOffset: 20
+        height: 10
+      - type: "image"
+        key: "english_flag"
+        pictureUrl: "assets/game/english_flag.png"
+        xOffset: 10
+        yOffset: 35
+        height: 10
+      - type: "text"
+        text: "Langue natale"
+        xOffset: 27
+        yOffset: 22
+      - type: "text"
+        text: "niveau B1+"
+        xOffset: 27
+        yOffset: 38

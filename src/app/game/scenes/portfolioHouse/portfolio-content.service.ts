@@ -1,18 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import * as yaml from 'js-yaml';
 import {
   Picture,
   PortfolioData,
-} from '../../../models/portfolioContent.enum';
+} from '../../../models/portfolioData.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PortfolioContentService {
-  private portfolioUrl = 'assets/texts/portfolio_content.yaml'; // URL to the YAML file
   private maxwidth: number = 100;
 
   //frame coordinate from top left to bottom right
@@ -25,18 +20,7 @@ export class PortfolioContentService {
     { x: 304, y: 128 },
   ];
 
-  constructor(private http: HttpClient) {}
-
-  /**
-   * Fetches the portfolio content from the YAML file.
-   */
-  getPortfolioContent(): Observable<PortfolioData> {
-    return this.http.get(this.portfolioUrl, { responseType: 'text' }).pipe(
-      map((yamlText: string) => {
-        return yaml.load(yamlText) as PortfolioData;
-      })
-    );
-  }
+  constructor() {}
 
   /**
    * Load picture in portfolioContent

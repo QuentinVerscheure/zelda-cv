@@ -5,7 +5,8 @@ import { PlayerService } from '../../core/player.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { PortfolioContentService } from './portfolio-content.service';
-import { PortfolioData } from '../../../models/portfolioContent.enum';
+import { PortfolioData } from '../../../models/portfolioData.enum';
+import { HousesDataService } from '../../core/houses-data.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,8 @@ export class ScenePortfolioService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private validAchievementService: ValidAchievementService,
-    private portfolioContentService: PortfolioContentService
+    private portfolioContentService: PortfolioContentService,
+    private housesDataService: HousesDataService
   ) {
     super({ key: 'scenePortfolio1' });
   }
@@ -54,15 +56,13 @@ export class ScenePortfolioService extends Phaser.Scene {
 
     this.load.image('keyBlock', 'assets/game/key_block.png');
 
-    // Fetch portfolio content and load pictures
-    this.portfolioContentService
-      .getPortfolioContent()
-      .subscribe((datas: PortfolioData) => {
-        // Load pictures in the preload phase
-        this.portfolioContentService.loadPicture(this, datas);
-        // Store portfolio content to use it in the create() method
-        this.portfolioData = datas;
-      });
+    // Load pictures use in the portfolio content
+    this.portfolioData = this.housesDataService.getPortfolioData();
+    if (this.portfolioData) {
+      this.portfolioContentService.loadPicture(this, this.portfolioData);
+    } else {
+      console.log('error, portfolioData not load from file');
+    }
   }
 
   create(data: { x: number; y: number; firstAnimationFrame: string }) {
@@ -178,25 +178,21 @@ export class ScenePortfolioService extends Phaser.Scene {
       );
     });
 
-    this.load.on('complete', () => {
-      // Once all assets are loaded, display the portfolio and create key blocks
-      if (this.portfolioData) {
-        this.portfolioContentService.displayPortfolio(
-          this,
-          this.scaleOfTheGame,
-          this.portfolioData
-        );
-        this.portfolioContentService.createKeyBlock(
-          this,
-          this.scaleOfTheGame,
-          this.player,
-          this.portfolioData
-        );
-      }
-    });
-
-    // Start loading assets
-    this.load.start();
+    if (this.portfolioData) {
+      this.portfolioContentService.displayPortfolio(
+        this,
+        this.scaleOfTheGame,
+        this.portfolioData
+      );
+      this.portfolioContentService.createKeyBlock(
+        this,
+        this.scaleOfTheGame,
+        this.player,
+        this.portfolioData
+      );
+    } else {
+      console.log('error, portfolioData not load from file');
+    }
   }
 
   override update() {

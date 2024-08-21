@@ -12,6 +12,7 @@ import { SceneVariousService } from '../scenes/variousHouse/scene-various.servic
 import { SceneCreditService } from '../scenes/creditHouse/scene-credit.service';
 import { ScenePortfolioService } from '../scenes/portfolioHouse/scene-portfolio.service';
 import { ScenePortfolio2Service } from '../scenes/portfolioHouse/scene-portfolio2.service';
+import { HousesDataService } from './houses-data.service';
 
 @Component({
   selector: 'app-game',
@@ -36,6 +37,7 @@ export class CoreComponent implements OnInit {
     private sceneCreditService: SceneCreditService,
     private scenePortfolioService: ScenePortfolioService,
     private scenePortfolio2Service: ScenePortfolio2Service,
+    private housesDataService: HousesDataService
   ) {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -67,9 +69,9 @@ export class CoreComponent implements OnInit {
           {
             key: 'rexVirtualJoystick',
             plugin: VirtualJoystickPlugin,
-            start: true
-          }
-        ]
+            start: true,
+          },
+        ],
       },
       pixelArt: true, // Enable pixel art mode
       physics: {
@@ -82,6 +84,9 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //preload config file for avoiding bug with asynchonus data with the preload() and create() working way of phaser.
+    this.housesDataService.loadHousesData();
+
     this.phaserGame = new Phaser.Game(this.config);
   }
 }

@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CvContent } from '../../../models/cvContent.enum';
-import { map } from 'rxjs/operators';
-import * as yaml from 'js-yaml';
+import { CvData } from '../../../models/cvData.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CvContentService {
-  private cvContentUrl: string = 'assets/texts/CV_content.yaml';
-  private cvContent: CvContent | undefined;
-
   //frame coordinate from top left to bottom right
   private frameCoordinates = [
     { x: 112, y: 48 },
@@ -24,37 +18,24 @@ export class CvContentService {
     { x: 736, y: 272 },
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   /**
    *  Load picture in cvContent
    */
-  loadPicture(scene: Phaser.Scene,): void {
-    this.getCvContent().subscribe((datas: CvContent) => {
-      this.cvContent = datas;
-      this.cvContent.cv.forEach((section) => {
-        if (section.picture && section.pictureUrl) {
-          scene.load.image(section.picture, section.pictureUrl);
-        }
-      })
+  loadPicture(scene: Phaser.Scene, cvData: CvData): void {
+    cvData.cv.forEach((section) => {
+      if (section.picture && section.pictureUrl) {
+        scene.load.image(section.picture, section.pictureUrl);
+      }
     });
-  }
-
-  getCvContent(): Observable<CvContent> {
-    return this.http
-      .get(this.cvContentUrl, { responseType: 'text' })
-      .pipe(map((yamlContent: string) => yaml.load(yamlContent) as CvContent));
   }
 
   displayTexts(
     scene: Phaser.Scene,
-    scaleOfTheGame: number
+    scaleOfTheGame: number,
+    cvData: CvData
   ): void {
-    if (!this.cvContent) {
-      console.log('no cvContent loaded');
-      return; // Ensure texts are loaded before trying to display them
-    }
-
     const textStyle = {
       fontFamily: 'Pixelify_Sans',
       fontSize: 4 * scaleOfTheGame,
@@ -67,7 +48,7 @@ export class CvContentService {
       color: '#000000',
     };
 
-    this.cvContent.cv.forEach((section, sectionIndex) => {
+    cvData.cv.forEach((section, sectionIndex) => {
       const y = this.frameCoordinates[sectionIndex].y * scaleOfTheGame;
       const x = this.frameCoordinates[sectionIndex].x * scaleOfTheGame;
 

@@ -12,13 +12,14 @@ import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 export class SceneWorldService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
-  private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame()/2;
+  private scaleOfTheGame: number =
+    ScaleOfTheGameService.getScaleOfTheGame() / 2;
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private npcService: NpcService
+    private npcService: NpcService,
   ) {
     super({ key: 'sceneWorld' });
   }
@@ -84,12 +85,11 @@ export class SceneWorldService extends Phaser.Scene {
       'variousHouse',
       'portfolioHouse',
       'contactHouse',
-      'guestBookHouse'
+      'guestBookHouse',
     ];
-    houseNames.forEach(house => {
+    houseNames.forEach((house) => {
       this.load.image(house, 'assets/game/hitbox.png');
     });
-    
   }
 
   create(data: { x: number; y: number }) {
@@ -244,4 +244,5 @@ export class SceneWorldService extends Phaser.Scene {
   override update() {
     MovementService.movePlayer(this.player, this.scaleOfTheGame);
   }
+
 }
