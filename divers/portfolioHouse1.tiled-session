@@ -1,0 +1,33 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Tiled_collision_background_portfolio_house.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "Tiled_collision_background_portfolio_house.tmx": {
+            "scale": 1,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 355,
+                "y": 377
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/zelda-cv/src/assets/game",
+    "map.height": 59,
+    "map.lastUsedExportFilter": "Tous les Fichiers (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 31,
+    "openFiles": [
+        "Tiled_collision_background_portfolio_house.tmx"
+    ],
+    "project": "portfolioHouse1.tiled-project",
+    "recentFiles": [
+        "Tiled_collision_background_portfolio_house.tmx"
+    ]
+}

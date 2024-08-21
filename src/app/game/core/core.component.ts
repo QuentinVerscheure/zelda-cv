@@ -10,6 +10,8 @@ import { SceneLinkService } from '../scenes/linkHouse/scene-link.service';
 import { ScenePlayerService } from '../scenes/playerHouse/scene-player.service';
 import { SceneVariousService } from '../scenes/variousHouse/scene-various.service';
 import { SceneCreditService } from '../scenes/creditHouse/scene-credit.service';
+import { ScenePortfolioService } from '../scenes/portfolioHouse/scene-portfolio.service';
+import { ScenePortfolio2Service } from '../scenes/portfolioHouse/scene-portfolio2.service';
 
 @Component({
   selector: 'app-game',
@@ -31,7 +33,9 @@ export class CoreComponent implements OnInit {
     private scenePlayerHouse: ScenePlayerService,
     private sceneLink: SceneLinkService,
     private sceneVarious: SceneVariousService,
-    private sceneCreditService: SceneCreditService
+    private sceneCreditService: SceneCreditService,
+    private scenePortfolioService: ScenePortfolioService,
+    private scenePortfolio2Service: ScenePortfolio2Service,
   ) {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -45,6 +49,7 @@ export class CoreComponent implements OnInit {
         autoCenter: Phaser.Scale.CENTER_BOTH,
       },
       scene: [
+        this.scenePortfolioService,
         this.scenePlayerHouse, //1st scene will be load at the start of the game
         this.sceneWorld,
         this.sceneContact,
@@ -54,6 +59,8 @@ export class CoreComponent implements OnInit {
         this.sceneLink,
         this.sceneVarious,
         this.sceneCreditService,
+        // this.scenePortfolioService,
+        this.scenePortfolio2Service,
       ],
       plugins: {
         global: [
@@ -68,7 +75,7 @@ export class CoreComponent implements OnInit {
       physics: {
         default: 'arcade',
         arcade: {
-          debug: false,
+          debug: true,
         },
       },
     };
@@ -76,6 +83,5 @@ export class CoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.phaserGame = new Phaser.Game(this.config);
-    this.phaserGame.scene.start('scenePlayerHouse');
   }
 }

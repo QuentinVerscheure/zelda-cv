@@ -76,14 +76,20 @@ export class SceneWorldService extends Phaser.Scene {
     );
 
     //load an invisible sprite for the hitbox detection for the change of scene
-    this.load.image('creditHouse', 'assets/game/hitbox.png');
-    this.load.image('cvHouse', 'assets/game/hitbox.png');
-    this.load.image('playerHouse', 'assets/game/hitbox.png');
-    this.load.image('linkHouse', 'assets/game/hitbox.png');
-    this.load.image('variousHouse', 'assets/game/hitbox.png');
-    this.load.image('portfolioHouse', 'assets/game/hitbox.png');
-    this.load.image('contactHouse', 'assets/game/hitbox.png');
-    this.load.image('guestBookHouse', 'assets/game/hitbox.png');
+    const houseNames = [
+      'creditHouse',
+      'cvHouse',
+      'playerHouse',
+      'linkHouse',
+      'variousHouse',
+      'portfolioHouse',
+      'contactHouse',
+      'guestBookHouse'
+    ];
+    houseNames.forEach(house => {
+      this.load.image(house, 'assets/game/hitbox.png');
+    });
+    
   }
 
   create(data: { x: number; y: number }) {
@@ -126,7 +132,7 @@ export class SceneWorldService extends Phaser.Scene {
       ['playerHouse', 'scenePlayerHouse', 400, 1338],
       ['linkHouse', 'sceneLink', 240, 1322],
       ['variousHouse', 'sceneVarious', 208, 1322],
-      ['portfolioHouse', 'scenePortfolio', 560, 1466],
+      ['portfolioHouse', 'scenePortfolio1', 560, 1466],
       ['contactHouse', 'sceneContact', 400, 1466],
       ['guestBookHouse', 'sceneGuestBook1', 224, 1482],
     ];

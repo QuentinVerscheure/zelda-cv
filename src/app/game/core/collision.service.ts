@@ -35,7 +35,7 @@ export class CollisionService {
           obj.width * scaleOfTheGame,
           obj.height * scaleOfTheGame,
           0xff0000,
-          0//0.5 for seen the hitbox
+          0.5//0.5 for seen the hitbox
         );
         scene.physics.add.existing(collisionObject);
         const collisionBody =

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CvContent } from '../../../models/Cv_content.enum';
+import { CvContent } from '../../../models/cvContent.enum';
 import { map } from 'rxjs/operators';
 import * as yaml from 'js-yaml';
 
@@ -27,9 +27,9 @@ export class CvContentService {
   constructor(private http: HttpClient) {}
 
   /**
-   *  Load and display the content of the CV frames
+   *  Load picture in cvContent
    */
-  loadYaml(scene: Phaser.Scene,): void {
+  loadPicture(scene: Phaser.Scene,): void {
     this.getCvContent().subscribe((datas: CvContent) => {
       this.cvContent = datas;
       this.cvContent.cv.forEach((section) => {

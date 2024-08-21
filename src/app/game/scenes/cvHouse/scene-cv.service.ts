@@ -52,7 +52,7 @@ export class SceneCVService extends Phaser.Scene {
       'assets/game/Links_Default.json'
     );
 
-    this.cvContentService.loadYaml(this);
+    this.cvContentService.loadPicture(this);
   }
 
   create() {

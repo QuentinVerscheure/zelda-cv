@@ -1,0 +1,34 @@
+portfolio:
+  - 
+    title1: "Expériences Professionnelles:Expériences Professionnelles:" # main title in bold
+    subTitle1: "Allplan France" 
+    date: "avr. 2016 - août 2021 · (5 ans)" # string
+    picture: 
+      pictureName: "allplanLogo" # a name for the picture
+      pictureUrl: "assets/logo/logo-allplan.png" # the url of the picture
+      pictureSize: 20 # size of the picture
+    main:
+      - text: "Expert technique : Expertise concernant les besoins du client et force de proposition sur les méthodes d’optimisations du dessin technique"
+      - text: "Formateur technique - logiciel de CAO Allplan : Conception et animation de sessions de formation sur le logiciel Allplan."
+      - picture: 
+          pictureName: "allplanLogo" # a name for the picture
+          pictureUrl: "assets/logo/logo-allplan.png" # the url of the picture
+          pictureSize: 20 # size of the picture
+      - text: "Avant-vente : Assistance à la présentation du logiciel Allplan lors des phases d’avant-vente"
+
+  - 
+    title1: "Expériences Professionnelles:" # main title in bold
+    subTitle1: "Allplan France" 
+    date: "avr. 2016 - août 2021 · (5 ans)" # string
+    picture: 
+      pictureName: "allplanLogo" # a name for the picture
+      pictureUrl: "assets/logo/logo-allplan.png" # the url of the picture
+      pictureSize: 20 # size of the picture
+    main:
+      - text: "Expert technique : Expertise concernant les besoins du client et force de proposition sur les méthodes d’optimisations du dessin technique"
+      - text: "Formateur technique - logiciel de CAO Allplan : Conception et animation de sessions de formation sur le logiciel Allplan."
+      - text: "Avant-vente : Assistance à la présentation du logiciel Allplan lors des phases d’avant-vente"
+  - {}
+  - {}
+  - {}
+  - {}
