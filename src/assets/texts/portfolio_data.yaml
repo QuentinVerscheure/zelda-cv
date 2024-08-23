@@ -1,35 +1,35 @@
 portfolio:
   - 
-    title1: "Zelda CV:" # main title in bold
-    subTitle1: "Un cv en ligne sur la thématique du jeu link's awakening." 
-    date: "Aout 2024" # string
+    title1: "CV Zelda" # Main title in bold
+    subTitle1: "Un CV en ligne sur le thème de *Link's Awakening*." 
+    date: "Août 2024" # String
     main:
       - picture: 
-          pictureName: "zelda_cv" # a name for the picture
-          pictureUrl: "assets/pictures/zelda_cv.png" # the url of the picture
-          pictureSize: 45 # size of the picture
-      - text: "Ce cv reprend les grandes thématiques d'un cv classique mais sous un contexte original tournant autour du media videoludique"
-      - text: "Ce projet est en cour de développement. Pour le moment, la partie front est avancée à 80%."
-      - text: "Les prochains axes de développement seront un back-end en Java, Hibernate, Spring permettant à l'utilisateur de s'authentifier, un CRUD des messages du livre d'or, un système d'envoi de message au propriétaire du site ainsi qu'un système de visualisation des autres \"joueurs\" en temps réel sur l'écran de l'utilisateur."
-      - text: "Ce projet a été pensé pour être personnalisable et appropriable par n'importe quelle personne."
+          pictureName: "zelda_cv" # Name for the picture
+          pictureUrl: "assets/pictures/zelda_cv.png" # URL of the picture
+          pictureSize: 45 # Size of the picture
+      - text: "Ce CV reprend les principales caractéristiques d'un CV classique, mais dans un contexte original inspiré du média vidéoludique."
+      - text: "Le projet est en cours de développement. Actuellement, la partie front-end est achevée à 80%."
+      - text: "Les prochaines étapes de développement incluent la création d'un back-end en Java (Hibernate, Spring) permettant l'authentification, la gestion des messages du livre d'or, un système de mail au propriétaire du site, ainsi qu'une fonctionnalité de visualisation en temps réel des autres \"joueurs\" coté client."
+      - text: "Le projet a été conçu pour permettre à chaque utilisateur de personnaliser et d'adapter le site avec ses propres données."
       - picture: 
-          pictureName: "linkedin" # a name for the picture
-          pictureUrl: "assets/logo/GitHub-Logo.png" # the url of the picture
-          pictureSize: 13 # size of the picture
+          pictureName: "github" # Name for the picture
+          pictureUrl: "assets/logo/GitHub-Logo.png" # URL of the picture
+          pictureSize: 13 # Size of the picture
           pictureLink: "https://github.com/QuentinVerscheure/zelda-cv"
   - 
-    title1: "Suivi-ares:"
-    subTitle1: "projet de traitement et de visualition des logs de test end to end de ProjectMonitor." 
+    title1: "Suivi-Ares" 
+    subTitle1: "Projet de traitement et de visualisation des logs de test end-to-end de ProjectMonitor." 
     date: "2023"
     main:
       - picture: 
           pictureName: "suivi-ares"
           pictureUrl: "assets/pictures/suivi-ares.png"
           pictureSize: 40 
-      - text: "Suivi-ares est un projet interne à la société Virage Group destiné à gérer le stockage et la mise à disposition sur le long terme des logs de test end to end de la solution principale commercialisée par cette entreprise."
-      - text: "ElasticSearch fut choisi comme base de donnée pour ses qualités concernant le stockage et la gestion de grandes quantités de donnée non ordonnée."
-      - text: "Angular fut choisi comme framework front."
-      - text: "Ce projet fut présenté comme projet de soutenance. Pour plus de details, les documents de présentation sont disponibles en téléchargement."
+      - text: "Suivi-Ares est un projet interne de la société Virage Group, destiné à gérer le stockage et la mise à disposition à long terme des logs de test end-to-end pour la solution principale commercialisée par cette entreprise."
+      - text: "ElasticSearch a été choisi comme base de données en raison de ses capacités à gérer de grandes quantités de données non structurées."
+      - text: "Angular a été sélectionné comme framework front-end."
+      - text: "Ce projet a été présenté lors d'une soutenance. Pour plus de détails, les documents de présentation sont disponibles en téléchargement."
       - picture: 
           pictureName: "power-point"
           pictureUrl: "assets/logo/power-point.png"
@@ -42,18 +42,65 @@ portfolio:
           downloadLink: "assets/docs/dossierDeProjet.pdf"
     more:
       - type: "text"
-        xOffset: -50
-        yOffset: 130
+        xOffset: -80
+        yOffset: 135
         text: 
-          - "text1"
-          - "text2"
+          - "Page 1"
+          - "Historique des tests journaliers"
       - type: "image"
         picture: 
-          pictureName: "url"
-          pictureUrl: "assets/pictures/suivi-ares2.png"
-          pictureSize: 100
-        xOffset: -50
+          pictureName: "suivi-ares_page1"
+          pictureUrl: "assets/pictures/suivi-ares_page1.png"
+          pictureSize: 150
+        xOffset: -80
         yOffset: 150
+      - type: "text"
+        xOffset: -80
+        yOffset: 305
+        text: 
+          - "Statistiques de réussite des tests globales et par test disponibles sur la page."
+      - type: "text"
+        xOffset: -10
+        yOffset: 135
+        text: 
+          - "Page 2"
+          - "Détail d'un test"
+      - type: "image"
+        picture: 
+          pictureName: "suivi-ares_page2"
+          pictureUrl: "assets/pictures/suivi-ares_page2.png"
+          pictureSize: 150
+        xOffset: -10
+        yOffset: 150
+      - type: "text"
+        xOffset: -10
+        yOffset: 305
+        text: 
+          - "Commentaires par test."
+          - "% de réussite du test."
+          - "Statistiques sur les types d'erreurs (saisie manuelle)."
+          - "Recherche par mot-clé dans le test ou dans l'historique."
+      - type: "text"
+        xOffset: 60
+        yOffset: 135
+        text: 
+          - "Page 3"
+          - "Détail des logs"
+      - type: "image"
+        picture: 
+          pictureName: "suivi-ares_page3"
+          pictureUrl: "assets/pictures/suivi-ares_page3.png"
+          pictureSize: 150
+        xOffset: 60
+        yOffset: 150
+      - type: "text"
+        xOffset: 60
+        yOffset: 305
+        text: 
+          - "Détail d'un test."
+          - "Affichage d'une capture d'écran en cas d'erreur."
+          - "commentaire par détail."
+  - {}
   - {}
   - {}
   - {}
