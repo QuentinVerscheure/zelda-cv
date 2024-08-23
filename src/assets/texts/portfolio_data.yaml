@@ -1,34 +1,59 @@
 portfolio:
   - 
-    title1: "Expériences Professionnelles:Expériences Professionnelles:" # main title in bold
-    subTitle1: "Allplan France" 
-    date: "avr. 2016 - août 2021 · (5 ans)" # string
-    picture: 
-      pictureName: "allplanLogo" # a name for the picture
-      pictureUrl: "assets/logo/logo-allplan.png" # the url of the picture
-      pictureSize: 20 # size of the picture
+    title1: "Zelda CV:" # main title in bold
+    subTitle1: "Un cv en ligne sur la thématique du jeu link's awakening." 
+    date: "Aout 2024" # string
     main:
-      - text: "Expert technique : Expertise concernant les besoins du client et force de proposition sur les méthodes d’optimisations du dessin technique"
-      - text: "Formateur technique - logiciel de CAO Allplan : Conception et animation de sessions de formation sur le logiciel Allplan."
       - picture: 
-          pictureName: "allplanLogo" # a name for the picture
-          pictureUrl: "assets/logo/logo-allplan.png" # the url of the picture
-          pictureSize: 20 # size of the picture
-      - text: "Avant-vente : Assistance à la présentation du logiciel Allplan lors des phases d’avant-vente"
-
+          pictureName: "zelda_cv" # a name for the picture
+          pictureUrl: "assets/pictures/zelda_cv.png" # the url of the picture
+          pictureSize: 45 # size of the picture
+      - text: "Ce cv reprend les grandes thématiques d'un cv classique mais sous un contexte original tournant autour du media videoludique"
+      - text: "Ce projet est en cour de développement. Pour le moment, la partie front est avancée à 80%."
+      - text: "Les prochains axes de développement seront un back-end en Java, Hibernate, Spring permettant à l'utilisateur de s'authentifier, un CRUD des messages du livre d'or, un système d'envoi de message au propriétaire du site ainsi qu'un système de visualisation des autres \"joueurs\" en temps réel sur l'écran de l'utilisateur."
+      - text: "Ce projet a été pensé pour être personnalisable et appropriable par n'importe quelle personne."
+      - picture: 
+          pictureName: "linkedin" # a name for the picture
+          pictureUrl: "assets/logo/GitHub-Logo.png" # the url of the picture
+          pictureSize: 13 # size of the picture
+          pictureLink: "https://github.com/QuentinVerscheure/zelda-cv"
   - 
-    title1: "Expériences Professionnelles:" # main title in bold
-    subTitle1: "Allplan France" 
-    date: "avr. 2016 - août 2021 · (5 ans)" # string
-    picture: 
-      pictureName: "allplanLogo" # a name for the picture
-      pictureUrl: "assets/logo/logo-allplan.png" # the url of the picture
-      pictureSize: 20 # size of the picture
+    title1: "Suivi-ares:"
+    subTitle1: "projet de traitement et de visualition des logs de test end to end de ProjectMonitor." 
+    date: "2023"
     main:
-      - text: "Expert technique : Expertise concernant les besoins du client et force de proposition sur les méthodes d’optimisations du dessin technique"
-      - text: "Formateur technique - logiciel de CAO Allplan : Conception et animation de sessions de formation sur le logiciel Allplan."
-      - text: "Avant-vente : Assistance à la présentation du logiciel Allplan lors des phases d’avant-vente"
-  - {}
+      - picture: 
+          pictureName: "suivi-ares"
+          pictureUrl: "assets/pictures/suivi-ares.png"
+          pictureSize: 40 
+      - text: "Suivi-ares est un projet interne à la société Virage Group destiné à gérer le stockage et la mise à disposition sur le long terme des logs de test end to end de la solution principale commercialisée par cette entreprise."
+      - text: "ElasticSearch fut choisi comme base de donnée pour ses qualités concernant le stockage et la gestion de grandes quantités de donnée non ordonnée."
+      - text: "Angular fut choisi comme framework front."
+      - text: "Ce projet fut présenté comme projet de soutenance. Pour plus de details, les documents de présentation sont disponibles en téléchargement."
+      - picture: 
+          pictureName: "power-point"
+          pictureUrl: "assets/logo/power-point.png"
+          pictureSize: 10
+          downloadLink: "assets/docs/prez.pptx"
+      - picture: 
+          pictureName: "word"
+          pictureUrl: "assets/logo/word.png" 
+          pictureSize: 10 
+          downloadLink: "assets/docs/dossierDeProjet.pdf"
+    more:
+      - type: "text"
+        xOffset: -50
+        yOffset: 130
+        text: 
+          - "text1"
+          - "text2"
+      - type: "image"
+        picture: 
+          pictureName: "url"
+          pictureUrl: "assets/pictures/suivi-ares2.png"
+          pictureSize: 100
+        xOffset: -50
+        yOffset: 150
   - {}
   - {}
   - {}

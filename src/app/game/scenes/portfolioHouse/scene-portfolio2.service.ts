@@ -3,6 +3,12 @@ import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { HousesDataService } from '../../core/houses-data.service';
+import {
+  MoreElements,
+  portfolio2Data,
+} from '../../../models/portfolioData.enum';
+import { PortfolioContentService } from './portfolio-content.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,11 +17,14 @@ export class ScenePortfolio2Service extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  private moreElement: MoreElements[] | undefined;
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private housesDataService: HousesDataService,
+    private portfolioContentService: PortfolioContentService
   ) {
     super({ key: 'scenePortfolio2' });
   }
@@ -40,7 +49,7 @@ export class ScenePortfolio2Service extends Phaser.Scene {
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
   }
 
-  create(data: { x: number; y: number; firstAnimationFrame: string }) {
+  create(data: portfolio2Data) {
     this.background = this.add.image(0, 0, 'portfolioBackground');
     this.background.setOrigin(0, 0); // Origin top left
     this.background.setScale(this.scaleOfTheGame);
@@ -75,10 +84,35 @@ export class ScenePortfolio2Service extends Phaser.Scene {
       'scenePortfolio1',
       80,
       73,
-      data?.x || 249 * this.scaleOfTheGame, //return to the door the player use else return yo main door
-      data?.y || 910 * this.scaleOfTheGame,
-      data?.firstAnimationFrame
+      data?.portfolio1Information.x || 249 * this.scaleOfTheGame, //return to the door the player use else return yo main door
+      data?.portfolio1Information.y || 910 * this.scaleOfTheGame,
+      data?.portfolio1Information.firstAnimationFrame
     );
+
+    this.moreElement =
+      this.housesDataService.getPortfolioData()?.portfolio[
+        data.portfolio2Number
+      ].more;
+
+    // Load pictures use in the portfolio content in create() because preload() can't access data: portfolio2Data
+    if (this.moreElement) {
+      this.portfolioContentService.loadPicturePortfolio2(
+        this,
+        this.moreElement
+      );
+      this.load.start(); // Démarre le chargement des images spécifiques
+      this.load.once('complete', () => {
+        if (this.moreElement) {
+          this.portfolioContentService.displayPortfolio2(
+            this,
+            this.scaleOfTheGame,
+            this.moreElement
+          );
+        }
+      });
+    } else {
+      console.log('error, portfolioData not load from file');
+    }
   }
 
   override update() {

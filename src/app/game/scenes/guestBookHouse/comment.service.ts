@@ -215,7 +215,7 @@ export class CommentService {
     {
       user: 'test2',
       message:
-        'm mollis. Etiam purus quam, porta eu sodales hendrerit, imperdiet eget purus. Vivamus tempor metus ut ante malesuada, eu malesuada nibh vehicula. Aliquam pulvinar quis tellus ac facilisis. Quisque fringilla porta lobortis. Vestibulum vitae urna tempor, viverra leo at, molestie ma',
+        'Lorem ipsum odor amet, consectetuer adipiscing elit. Elementum vel eleifend vestibulum accumsan quisque urna tincidunt potenti. Nostra tristique eleifend class tortor enim integer taciti lacus. Conubia pretium velit montes odio amet inceptos sit vel. Iaculis arcu dolor netus ',
       date: new Date('2023-12-11T10:30:00'),
       x: 200,
       y: 150,
@@ -223,14 +223,14 @@ export class CommentService {
     {
       user: 'test3',
       message:
-        'd non faucibus purus. Etiam dignissim libero sed lacinia pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut pellentesque ligula, id aliquet nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a viverra turpis, eu finibus neque. Integer tincidunt tortor nibh, sit amet fringilla dui pulvinar non. Orci varius natoque penatibus et magnis dis parturient monte',
+        'Lorem ipsum odor amet, consectetuer adipiscing elit. Elementum vel eleifend vestibulum accumsan quisque urna tincidunt potenti. Nostra tristique eleifend class tortor enim integer taciti lacus. Conubia pretium velit montes odio amet inceptos sit vel. Iaculis arcu dolor netus vestibulum fermentum. Ornare libero convallis bibendum, praesent ',
       date: new Date('2024-06-30T10:30:00'),
       x: 250,
       y: 50,
     },
     {
       user: 'test4',
-      message: 'rnare dapibus. In feugiat eget lorem at loborti',
+      message: 'Lorem ipsum odor amet',
       date: new Date('2023-12-25T10:30:00'),
       x: 0,
       y: 200,

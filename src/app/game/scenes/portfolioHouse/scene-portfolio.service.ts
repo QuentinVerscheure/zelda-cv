@@ -5,7 +5,10 @@ import { PlayerService } from '../../core/player.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { PortfolioContentService } from './portfolio-content.service';
-import { PortfolioData } from '../../../models/portfolioData.enum';
+import {
+  portfolio2Data,
+  PortfolioDatas,
+} from '../../../models/portfolioData.enum';
 import { HousesDataService } from '../../core/houses-data.service';
 
 @Injectable({
@@ -15,7 +18,7 @@ export class ScenePortfolioService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
-  private portfolioData: PortfolioData | undefined;
+  private portfolioData: PortfolioDatas | undefined;
 
   constructor(
     private movementService: MovementService,
@@ -59,7 +62,10 @@ export class ScenePortfolioService extends Phaser.Scene {
     // Load pictures use in the portfolio content
     this.portfolioData = this.housesDataService.getPortfolioData();
     if (this.portfolioData) {
-      this.portfolioContentService.loadPicture(this, this.portfolioData);
+      this.portfolioContentService.loadPicturePortfolio1(
+        this,
+        this.portfolioData
+      );
     } else {
       console.log('error, portfolioData not load from file');
     }
@@ -98,14 +104,6 @@ export class ScenePortfolioService extends Phaser.Scene {
 
     //table of all transiton between scenes
     const transitions = [
-      {
-        sprite: 'sceneTransitionSprite1',
-        targetScene: 'sceneWorld',
-        x1: 240,
-        y1: 935,
-        x2: 568,
-        y2: 1491,
-      },
       {
         sprite: 'sceneTransitionSprite2',
         targetScene: 'scenePortfolio2',
@@ -161,32 +159,62 @@ export class ScenePortfolioService extends Phaser.Scene {
         firstAnimationFrame: 'walkingLeft/frame0001',
       },
     ];
+    //create  transition to scene world
+    this.collisionService.createSceneTransitionCollision(
+      this,
+      this.scaleOfTheGame,
+      this.player,
+      'sceneTransitionSprite',
+      'sceneWorld',
+      240,
+      935,
+      568,
+      1491
+    );
 
-    //create all transition between scenes
-    transitions.forEach((transition) => {
-      this.collisionService.createSceneTransitionCollision(
-        this,
-        this.scaleOfTheGame,
+    //create all transition from portfolio1 to portfolio2
+    transitions.forEach((transition, index) => {
+      // Create hitbox for scene transition using an invisible sprite
+      const exitHitbox = this.physics.add.sprite(
+        transition.x1 * this.scaleOfTheGame,
+        transition.y1 * this.scaleOfTheGame,
+        transition.sprite
+      );
+    
+      exitHitbox.setOrigin(0, 0); // Position by the top-left corner
+      exitHitbox.displayWidth = 16 * this.scaleOfTheGame; // Set width
+      exitHitbox.displayHeight = 16 * this.scaleOfTheGame; // Set height
+      exitHitbox.setVisible(false); // Make the sprite invisible
+      exitHitbox.body.immovable = true; // Make the hitbox immovable
+      exitHitbox.body.allowGravity = false; // Disable gravity for the hitbox
+    
+      // Define the data to pass to the next scene
+      const portfolio2Data: portfolio2Data = {
+        portfolio1Information: {
+          x: transition.x2,
+          y: transition.y2,
+          firstAnimationFrame: firstAnimationFrame, // Assurez-vous que cette variable est définie correctement
+        },
+        portfolio2Number: index, // Utilisez l'index pour identifier quel portfolio afficher
+      };
+    
+      // Add collider with callback for scene transition
+      this.physics.add.collider(
         this.player,
-        transition.sprite,
-        transition.targetScene,
-        transition.x1,
-        transition.y1,
-        transition.x2,
-        transition.y2,
-        transition.firstAnimationFrame
+        exitHitbox,
+        () => {
+          this.scene.start('scenePortfolio2', portfolio2Data); // Transition to the scene with data
+        },
+        undefined,
+        this
       );
     });
+    
 
     if (this.portfolioData) {
-      this.portfolioContentService.displayPortfolio(
-        this,
-        this.scaleOfTheGame,
-        this.portfolioData
-      );
+      this.portfolioContentService.displayPortfolio(this, this.portfolioData);
       this.portfolioContentService.createKeyBlock(
         this,
-        this.scaleOfTheGame,
         this.player,
         this.portfolioData
       );

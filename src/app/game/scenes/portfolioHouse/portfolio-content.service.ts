@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import {
+  MoreElements,
   Picture,
-  PortfolioData,
+  PortfolioDatas,
 } from '../../../models/portfolioData.enum';
+import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PortfolioContentService {
   private maxwidth: number = 100;
+  private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
 
   //frame coordinate from top left to bottom right
   private frameCoordinates = [
@@ -20,27 +23,103 @@ export class PortfolioContentService {
     { x: 304, y: 128 },
   ];
 
+  private textStyle = {
+    fontFamily: 'Pixelify_Sans',
+    fontSize: 4 * this.scaleOfTheGame,
+    color: '#000000',
+    wordWrap: {
+      width: this.maxwidth * this.scaleOfTheGame,
+      useAdvancedWrap: true,
+    },
+  };
+  private textStyleWhite = {
+    fontFamily: 'Pixelify_Sans',
+    fontSize: 4 * this.scaleOfTheGame,
+    color: '#FFFFFF',
+  };
+  private boldTextStyle = {
+    fontFamily: 'PixelifySans-Bold',
+    fontSize: 6 * this.scaleOfTheGame,
+    color: '#000000',
+  };
+
   constructor() {}
 
   /**
    * Load picture in portfolioContent
    */
-  loadPicture(scene: Phaser.Scene, PortfolioData: PortfolioData): void {
+  loadPicturePortfolio1(
+    scene: Phaser.Scene,
+    PortfolioData: PortfolioDatas
+  ): void {
     PortfolioData.portfolio.forEach((section) => {
-      // Load the main picture for the portfolio section
+      // Check if section has a picture before trying to load it
+      if (section) {
+        if (section.picture) {
+          scene.load.image(
+            section.picture.pictureName,
+            section.picture.pictureUrl
+          );
+        }
+
+        // Load pictures in the 'main' section if it exists
+        if (section.main) {
+          section.main.forEach((main) => {
+            if (this.isPicture(main) && main.picture) {
+              scene.load.image(
+                main.picture.pictureName,
+                main.picture.pictureUrl
+              );
+            }
+          });
+        }
+      }
+    });
+  }
+
+  /**
+   * Load picture in portfolioContent2
+   */
+  loadPicturePortfolio2(
+    scene: Phaser.Scene,
+    moreElement: MoreElements[]
+  ): void {
+    moreElement.forEach((section) => {
       if (section.picture) {
         scene.load.image(
           section.picture.pictureName,
           section.picture.pictureUrl
         );
       }
+    });
+  }
 
-      // Load pictures in the 'main' section if it exists
-      if (section.main) {
-        section.main.forEach((main) => {
-          if (this.isPicture(main)) {
-            scene.load.image(main.picture.pictureName, main.picture.pictureUrl);
-          }
+  /**
+   * Displays the portfolio2 content .
+   */
+  displayPortfolio2(
+    scene: Phaser.Scene,
+    scaleOfTheGame: number,
+    MoreElements: MoreElements[]
+  ): void {
+    MoreElements.forEach((moreElement) => {
+      let y = moreElement.yOffset * this.scaleOfTheGame;
+      const x = moreElement.xOffset * this.scaleOfTheGame;
+
+      if (moreElement.picture) {
+        const picture = scene.add.image(
+          x * this.scaleOfTheGame,
+          y,
+          moreElement.picture.pictureName
+        );
+        picture.setOrigin(0, 0); // Position by the left edge
+        picture.displayHeight =
+          moreElement.picture.pictureSize * this.scaleOfTheGame; // Fixed height
+        picture.scaleX = picture.scaleY; // Keep aspect ratio
+      } else if (moreElement.text) {
+        moreElement.text.forEach((text) => {
+          scene.add.text(x * this.scaleOfTheGame, y, text, this.textStyleWhite);
+          y += 5 * this.scaleOfTheGame;
         });
       }
     });
@@ -49,132 +128,127 @@ export class PortfolioContentService {
   /**
    * Displays the portfolio content on the scene.
    */
-  displayPortfolio(scene: Phaser.Scene, scaleOfTheGame: number, PortfolioData: PortfolioData): void {
+  displayPortfolio(scene: Phaser.Scene, PortfolioData: PortfolioDatas): void {
     if (!PortfolioData) {
       console.log('no cvContent loaded');
       return; // Ensure texts are loaded before trying to display them
     }
 
-    const textStyle = {
-      fontFamily: 'Pixelify_Sans',
-      fontSize: 4 * scaleOfTheGame,
-      color: '#000000',
-      wordWrap: {
-        width: this.maxwidth * scaleOfTheGame,
-        useAdvancedWrap: true,
-      },
-    };
-    const boldTextStyle = {
-      fontFamily: 'PixelifySans-Bold',
-      fontSize: 6 * scaleOfTheGame,
-      color: '#000000',
-    };
-
     PortfolioData.portfolio.forEach((section, sectionIndex) => {
-      const y = this.frameCoordinates[sectionIndex].y * scaleOfTheGame;
-      const x = this.frameCoordinates[sectionIndex].x * scaleOfTheGame;
+      if (section) {
+        const y = this.frameCoordinates[sectionIndex].y * this.scaleOfTheGame;
+        const x = this.frameCoordinates[sectionIndex].x * this.scaleOfTheGame;
 
-      let currentY = y;
+        let currentY = y;
 
-      // Add title1 if it exists
-      if (section.title1) {
-        const titleText = scene.add.text(
-          x + 2.5 * scaleOfTheGame,
-          currentY,
-          section.title1,
-          {
-            ...boldTextStyle,
-            wordWrap: {
-              width: this.maxwidth * scaleOfTheGame, // Set the maximum width for wrapping
-              useAdvancedWrap: true, // Enables advanced word wrapping
-            },
-          }
-        );
+        // Add title1 if it exists
+        if (section.title1) {
+          const titleText = scene.add.text(
+            x + 2.5 * this.scaleOfTheGame,
+            currentY,
+            section.title1,
+            {
+              ...this.boldTextStyle,
+              wordWrap: {
+                width: this.maxwidth * this.scaleOfTheGame,
+                useAdvancedWrap: true,
+              },
+            }
+          );
 
-        // Update currentY based on the height of the added text to ensure proper spacing
-        currentY += titleText.height + 5 * scaleOfTheGame; // Adjust spacing after title
-      }
+          currentY += titleText.height + 4 * this.scaleOfTheGame; // Adjust spacing after title
+        }
 
-      // Add subTitle1 if it exists
-      if (section.subTitle1) {
-        scene.add.text(
-          x + 2.5 * scaleOfTheGame,
-          currentY,
-          section.subTitle1,
-          textStyle
-        );
-        currentY += 7 * scaleOfTheGame; // Add spacing after subtitle
-      }
+        // Add subTitle1 if it exists
+        if (section.subTitle1) {
+          const subtitleText = scene.add.text(
+            x + 2.5 * this.scaleOfTheGame,
+            currentY,
+            section.subTitle1,
+            {
+              ...this.textStyle,
+              wordWrap: {
+                width: this.maxwidth * this.scaleOfTheGame,
+                useAdvancedWrap: true,
+              },
+            }
+          );
+          currentY += subtitleText.height + 4 * this.scaleOfTheGame; // Add spacing after subtitle
+        }
 
-      // Add date if it exists
-      if (section.date) {
-        scene.add.text(
-          x + 2.5 * scaleOfTheGame,
-          currentY,
-          section.date,
-          textStyle
-        );
-        currentY += 5 * scaleOfTheGame; // Add spacing after date
-      }
+        // Add date if it exists
+        if (section.date) {
+          scene.add.text(
+            x + 2.5 * this.scaleOfTheGame,
+            currentY,
+            section.date,
+            this.textStyle
+          );
+          currentY += 7 * this.scaleOfTheGame; // Add spacing after date
+        }
 
-      // Display the picture if it exists
-      if (section.picture) {
-        const picture = scene.add.image(
-          x + 2.5 * scaleOfTheGame,
-          currentY,
-          section.picture.pictureName
-        );
-        picture.setOrigin(0, 0); // Position by the left edge
-        picture.displayHeight = section.picture.pictureSize * scaleOfTheGame; // Fixed height
-        picture.scaleX = picture.scaleY; // Keep aspect ratio
-        currentY += (section.picture.pictureSize + 2.5) * scaleOfTheGame; // Add spacing after logo
-      }
+        // Display the main content
+        if (section.main) {
+          section.main.forEach((main) => {
+            if (typeof main.text === 'string') {
+              const textObject = scene.add.text(
+                x + 2.5 * this.scaleOfTheGame,
+                currentY,
+                main.text,
+                {
+                  ...this.textStyle,
+                  wordWrap: {
+                    width: this.maxwidth * this.scaleOfTheGame,
+                    useAdvancedWrap: true,
+                  },
+                }
+              );
+              currentY += textObject.height + 2 * this.scaleOfTheGame;
+            } else if (this.isPicture(main) && main.picture) {
+              const image = scene.add.image(
+                x + 2.5 * this.scaleOfTheGame,
+                currentY,
+                main.picture.pictureName
+              );
+              image.setOrigin(0, 0);
+              image.displayHeight =
+                main.picture.pictureSize * this.scaleOfTheGame;
+              image.scaleX = image.scaleY;
+              currentY +=
+                (main.picture.pictureSize + 2.5) * this.scaleOfTheGame;
 
-      // Display the main content
-      if (section.main) {
-        section.main.forEach((main) => {
-          if (typeof main.text === 'string') {
-            // If main.text is a string, display it as a text element
-            const textObject = scene.add.text(
-              x + 2.5 * scaleOfTheGame,
-              currentY,
-              main.text, // Access text from the object
-              {
-                ...textStyle,
-                wordWrap: {
-                  width: this.maxwidth * scaleOfTheGame,
-                  useAdvancedWrap: true,
-                },
-              } // Set max width and wrap options
-            );
-
-            // Update currentY based on the height of the added text to ensure proper spacing
-            currentY += textObject.height + 2 * scaleOfTheGame;
-          } else if (this.isPicture(main)) {
-            // If main is of type Picture, display the picture
-            const image = scene.add.image(
-              x + 2.5 * scaleOfTheGame,
-              currentY,
-              main.picture.pictureName // Access pictureName from the object
-            );
-
-            image.setOrigin(0, 0); // Align the image to the top-left
-            image.displayHeight = main.picture.pictureSize * scaleOfTheGame; // Set fixed height
-            image.scaleX = image.scaleY; // Maintain aspect ratio
-
-            // Update currentY based on the height of the added image to ensure proper spacing
-            currentY += (main.picture.pictureSize + 2.5) * scaleOfTheGame;
-          }
-        });
+              // Check if the picture has a downloadLink
+              if (main.picture.downloadLink) {
+                // Set the image as interactive
+                image.setInteractive({ useHandCursor: true });
+                image.on('pointerdown', () => {
+                  const link = document.createElement('a');
+                  if (main.picture.downloadLink) {
+                    link.href = main.picture.downloadLink;
+                    link.download = ''; // Setting download attribute with an empty string to prompt the user to save the file with its original name
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }
+                });
+                // Check if the picture has a link
+              } else if (main.picture.pictureLink) {
+                image.setInteractive({ useHandCursor: true });
+                image.on('pointerdown', () => {
+                  window.open(main.picture.pictureLink, '_blank');
+                });
+              }
+            }
+          });
+        }
       }
     });
   }
 
   createKeyBlock(
     scene: Phaser.Scene,
-    scaleOfTheGame: number,
     player: Phaser.Physics.Arcade.Sprite,
-    PortfolioData: PortfolioData
+    PortfolioData: PortfolioDatas
   ) {
     // Example structure of keyBlockCoordinate, you can modify it based on actual coordinates
     const keyBlockCoordinate = [
@@ -191,21 +265,23 @@ export class PortfolioContentService {
     // Iterate over each portfolio section and corresponding coordinates
     if (PortfolioData) {
       PortfolioData.portfolio.forEach((section, index) => {
-        // Check if the "more" field is missing or empty
-        if (!section.more || section.more.length === 0) {
-          // Get the coordinates from keyBlockCoordinate based on the index
-          const coordinates = keyBlockCoordinate[index];
+        if (section) {
+          // Check if the "more" field is missing or empty
+          if (!section.more || section.more.length === 0) {
+            // Get the coordinates from keyBlockCoordinate based on the index
+            const coordinates = keyBlockCoordinate[index];
 
-          const keyblock = scene.physics.add.sprite(
-            scaleOfTheGame * coordinates.x,
-            scaleOfTheGame * coordinates.y,
-            'keyBlock'
-          );
-          keyblock.setScale(scaleOfTheGame);
-          keyblock.body.immovable = true;
+            const keyblock = scene.physics.add.sprite(
+              this.scaleOfTheGame * coordinates.x,
+              this.scaleOfTheGame * coordinates.y,
+              'keyBlock'
+            );
+            keyblock.setScale(this.scaleOfTheGame);
+            keyblock.body.immovable = true;
 
-          // Add collider between the player and the keylock
-          scene.physics.add.collider(player, keyblock);
+            // Add collider between the player and the keylock
+            scene.physics.add.collider(player, keyblock);
+          }
         }
       });
     }

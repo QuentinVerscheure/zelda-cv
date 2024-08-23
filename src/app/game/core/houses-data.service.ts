@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as yaml from 'js-yaml';
 import { HttpClient } from '@angular/common/http';
-import { PortfolioData } from '../../models/portfolioData.enum';
+import { PortfolioDatas } from '../../models/portfolioData.enum';
 import { CvData } from '../../models/cvData.enum';
 import { VariousContentConfig } from '../../models/various_Data.enum';
 
@@ -15,7 +15,7 @@ export class HousesDataService {
 
 
   private portfolioUrl = 'assets/texts/portfolio_data.yaml'; // URL to the YAML file
-  private portfolioData: PortfolioData | undefined;
+  private portfolioData: PortfolioDatas | undefined;
   private cvDataUrl: string = 'assets/texts/cv_data.yaml';
   private cvData: CvData | undefined;
   private variousDataUrl = 'assets/texts/various_data.yaml';
@@ -23,7 +23,7 @@ export class HousesDataService {
 
   public loadHousesData() {
     //preload config file for avoiding bug with asynchonus data with the preload() and create() working way of phaser.
-    this.loadYamlData<PortfolioData>(this.portfolioUrl).subscribe((data) => {
+    this.loadYamlData<PortfolioDatas>(this.portfolioUrl).subscribe((data) => {
       this.portfolioData = data;
     });
     this.loadYamlData<CvData>(this.cvDataUrl).subscribe((data) => {
@@ -42,7 +42,7 @@ export class HousesDataService {
     );
   }
 
-    getPortfolioData(): PortfolioData | undefined {
+    getPortfolioData(): PortfolioDatas | undefined {
       return this.portfolioData;
     }
   
