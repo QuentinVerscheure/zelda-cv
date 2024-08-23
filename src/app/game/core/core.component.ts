@@ -51,7 +51,6 @@ export class CoreComponent implements OnInit {
         autoCenter: Phaser.Scale.CENTER_BOTH,
       },
       scene: [
-        this.scenePortfolioService,
         this.scenePlayerHouse, //1st scene will be load at the start of the game
         this.sceneWorld,
         this.sceneContact,
@@ -61,7 +60,7 @@ export class CoreComponent implements OnInit {
         this.sceneLink,
         this.sceneVarious,
         this.sceneCreditService,
-        // this.scenePortfolioService,
+        this.scenePortfolioService,
         this.scenePortfolio2Service,
       ],
       plugins: {

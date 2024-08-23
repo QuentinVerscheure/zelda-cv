@@ -1,9 +1,9 @@
 .menu-container {
-
-  position: absolute;
-  width: 100%;
-  max-width: 300px;
-  height: 100vw;
+  position: fixed; /* Utiliser fixed pour que le menu soit toujours visible même en scrollant */
+  top: 0;
+  left: 0;
+  width: 300px; /* Largeur fixe du menu */
+  height: 100vh; /* Hauteur pleine fenêtre */
   font-family: Pixelify_Sans;
 
   h1 {
@@ -34,9 +34,8 @@
   }
 
   .menu-content {
-    z-index: 1;
+    position: absolute; /* Position absolue pour le menu */
     display: none;
-    position: absolute;
     top: 0;
     left: 0;
     width: 100%;

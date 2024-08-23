@@ -20,7 +20,6 @@ export class MenuComponent {
   }
 
   onSubmit() {
-    console.log('Pseudo:', this.pseudo);
-    console.log('Mot de passe:', this.password);
+
   }
 }
