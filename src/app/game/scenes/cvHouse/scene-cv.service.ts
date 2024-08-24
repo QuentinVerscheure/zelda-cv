@@ -129,8 +129,8 @@ export class SceneCVService extends Phaser.Scene {
     downloadCVButton.on('pointerdown', () => {
       this.validAchievementService.ValidAchievement('cvHouseDownload');
       const a = document.createElement('a');
-      a.href = 'assets/docs/CV.Verscheure.pdf';
-      a.download = 'CV.Verscheure.pdf';
+      a.href = 'assets/docs/CV.pdf';
+      a.download = 'Verscheure-Quentin-CV.pdf';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
