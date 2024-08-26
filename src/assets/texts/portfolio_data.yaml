@@ -42,7 +42,7 @@ portfolio:
           downloadLink: "assets/docs/dossierDeProjet.pdf"
     more:
       - type: "text"
-        xOffset: -80
+        xOffset: -320
         yOffset: 135
         text: 
           - "Page 1"
@@ -52,15 +52,15 @@ portfolio:
           pictureName: "suivi-ares_page1"
           pictureUrl: "assets/pictures/suivi-ares_page1.png"
           pictureSize: 150
-        xOffset: -80
+        xOffset: -320
         yOffset: 150
       - type: "text"
-        xOffset: -80
+        xOffset: -320
         yOffset: 305
         text: 
           - "Statistiques de réussite des tests globales et par test disponibles sur la page."
       - type: "text"
-        xOffset: -10
+        xOffset: -40
         yOffset: 135
         text: 
           - "Page 2"
@@ -70,10 +70,10 @@ portfolio:
           pictureName: "suivi-ares_page2"
           pictureUrl: "assets/pictures/suivi-ares_page2.png"
           pictureSize: 150
-        xOffset: -10
+        xOffset: -40
         yOffset: 150
       - type: "text"
-        xOffset: -10
+        xOffset: -40
         yOffset: 305
         text: 
           - "Commentaires par test."
@@ -81,7 +81,7 @@ portfolio:
           - "Statistiques sur les types d'erreurs (saisie manuelle)."
           - "Recherche par mot-clé dans le test ou dans l'historique."
       - type: "text"
-        xOffset: 60
+        xOffset: 240
         yOffset: 135
         text: 
           - "Page 3"
@@ -91,10 +91,10 @@ portfolio:
           pictureName: "suivi-ares_page3"
           pictureUrl: "assets/pictures/suivi-ares_page3.png"
           pictureSize: 150
-        xOffset: 60
+        xOffset: 240
         yOffset: 150
       - type: "text"
-        xOffset: 60
+        xOffset: 240
         yOffset: 305
         text: 
           - "Détail d'un test."

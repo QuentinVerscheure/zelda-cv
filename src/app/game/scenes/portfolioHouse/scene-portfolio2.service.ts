@@ -105,7 +105,6 @@ export class ScenePortfolio2Service extends Phaser.Scene {
         if (this.moreElement) {
           this.portfolioContentService.displayPortfolio2(
             this,
-            this.scaleOfTheGame,
             this.moreElement
           );
         }

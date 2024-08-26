@@ -29,7 +29,7 @@ export class PlayerService {
     scene.cameras.main.startFollow(player);
 
     // Initialize players animation
-    MovementService.initializeMoveAnimation(scene.anims);
+    this.movementService.initializeMoveAnimation(scene.anims);
 
     return player
   }

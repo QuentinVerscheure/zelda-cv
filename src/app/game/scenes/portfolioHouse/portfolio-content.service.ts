@@ -99,7 +99,6 @@ export class PortfolioContentService {
    */
   displayPortfolio2(
     scene: Phaser.Scene,
-    scaleOfTheGame: number,
     MoreElements: MoreElements[]
   ): void {
     MoreElements.forEach((moreElement) => {
@@ -108,7 +107,7 @@ export class PortfolioContentService {
 
       if (moreElement.picture) {
         const picture = scene.add.image(
-          x * this.scaleOfTheGame,
+          x,
           y,
           moreElement.picture.pictureName
         );
@@ -118,7 +117,7 @@ export class PortfolioContentService {
         picture.scaleX = picture.scaleY; // Keep aspect ratio
       } else if (moreElement.text) {
         moreElement.text.forEach((text) => {
-          scene.add.text(x * this.scaleOfTheGame, y, text, this.textStyleWhite);
+          scene.add.text(x , y, text, this.textStyleWhite);
           y += 5 * this.scaleOfTheGame;
         });
       }
