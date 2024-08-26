@@ -1,6 +1,8 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ConfigService } from '../../services/config.service';
+import { AppConfig } from '../../models/config.enum';
 
 @Component({
   selector: 'app-menu',
@@ -10,22 +12,32 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
   ],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss'
+  styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
   menuOpen = false;
   currentSection: string = 'quests';
-  isSmartphone:boolean= true;
+  isSmartphone: boolean = true;
+
+  config: AppConfig | undefined;
 
   pseudo = '';
   password = '';
+
+  constructor(private configService: ConfigService) {}
+
+  ngOnInit() {
+    this.configService.config$.subscribe(config => {
+      this.config = config;
+    });
+  }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
   onSubmit() {
-
+    // Your submit logic here
   }
 
   changeSection(section: string) {
@@ -40,5 +52,4 @@ export class MenuComponent {
   checkIfSmartphone() {
     this.isSmartphone = window.innerHeight < 850;
   }
-  
 }

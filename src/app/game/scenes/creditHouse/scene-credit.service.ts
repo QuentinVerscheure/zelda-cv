@@ -110,7 +110,7 @@ export class SceneCreditService extends Phaser.Scene {
 
     const zeldaOracleOfAge = this.add.image(
       30 * this.scaleOfTheGame,
-      120 * this.scaleOfTheGame,
+      127 * this.scaleOfTheGame,
       'zeldaOracleOfAge'
     );
     zeldaOracleOfAge.setOrigin(0, 0); // Positionner par le bord gauche
@@ -119,7 +119,7 @@ export class SceneCreditService extends Phaser.Scene {
 
     const zeldaOracleOfSeasons = this.add.image(
       75 * this.scaleOfTheGame,
-      120 * this.scaleOfTheGame,
+      127 * this.scaleOfTheGame,
       'zeldaOracleOfSeasons'
     );
     zeldaOracleOfSeasons.setOrigin(0, 0); // Positionner par le bord gauche
@@ -135,6 +135,11 @@ export class SceneCreditService extends Phaser.Scene {
       27.5,
       96.25,
       'they come from the game "the legend of zelda link\'s awakening", "the legend of zelda oracle of age" and "the legend of zelda oracle of seasons"'
+    );
+    this.createText(
+      27.5,
+      117,
+      'this site is a homage to a game that marked my childhood'
     );
 
     //-------------------------------- author credit --------------------------------------

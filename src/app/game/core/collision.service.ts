@@ -1,12 +1,23 @@
 import { Injectable } from '@angular/core';
 import * as Phaser from 'phaser';
 import { BackgroundCollisionMap } from '../../models/koholint_collision_map.enum';
+import { ConfigService } from '../../services/config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CollisionService {
-  constructor() {}
+
+  private wallDebugMode:number = 0;
+
+  constructor(private configService: ConfigService) {
+    //if debugmode = true, the wall will be 0.5 opacity in red
+    this.configService.config$.subscribe(config => {
+      if (config?.debugMode) {
+        this.wallDebugMode = 0.5;
+      }
+    });
+  }
 
   /**
    * load the background collision map
@@ -35,7 +46,7 @@ export class CollisionService {
           obj.width * scaleOfTheGame,
           obj.height * scaleOfTheGame,
           0xff0000,
-          0//0.5 for seen the hitbox
+          this.wallDebugMode
         );
         scene.physics.add.existing(collisionObject);
         const collisionBody =
@@ -59,7 +70,7 @@ export class CollisionService {
     yOfHitbox: number,
     startXPositionInNewScene?: number,
     startYPositionInNewScene?: number,
-    firstAnimationFrame?: string
+    firstAnimationFrame?: string,
   ) {
     // Create hitbox for scene transition using an invisible sprite
     const exitHitbox = scene.physics.add.sprite(

@@ -13,6 +13,8 @@ import { SceneCreditService } from '../scenes/creditHouse/scene-credit.service';
 import { ScenePortfolioService } from '../scenes/portfolioHouse/scene-portfolio.service';
 import { ScenePortfolio2Service } from '../scenes/portfolioHouse/scene-portfolio2.service';
 import { HousesDataService } from './houses-data.service';
+import { ConfigService } from '../../services/config.service';
+import { AppConfig } from '../../models/config.enum';
 
 @Component({
   selector: 'app-game',
@@ -23,7 +25,6 @@ import { HousesDataService } from './houses-data.service';
 })
 export class CoreComponent implements OnInit {
   private phaserGame!: Phaser.Game;
-  private config: Phaser.Types.Core.GameConfig;
 
   constructor(
     private sceneWorld: SceneWorldService,
@@ -37,55 +38,58 @@ export class CoreComponent implements OnInit {
     private sceneCreditService: SceneCreditService,
     private scenePortfolioService: ScenePortfolioService,
     private scenePortfolio2Service: ScenePortfolio2Service,
-    private housesDataService: HousesDataService
-  ) {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    this.config = {
-      type: Phaser.AUTO,
-      width: width,
-      height: height,
-      scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-      },
-      scene: [
-        this.scenePlayerHouse, //1st scene will be load at the start of the game
-        this.sceneWorld,
-        this.sceneContact,
-        this.sceneCV,
-        this.sceneGuestBook1,
-        this.sceneGuestBook2,
-        this.sceneLink,
-        this.sceneVarious,
-        this.sceneCreditService,
-        this.scenePortfolioService,
-        this.scenePortfolio2Service,
-      ],
-      plugins: {
-        global: [
-          {
-            key: 'rexVirtualJoystick',
-            plugin: VirtualJoystickPlugin,
-            start: true,
-          },
-        ],
-      },
-      pixelArt: true, // Enable pixel art mode
-      physics: {
-        default: 'arcade',
-        arcade: {
-          debug: true,
-        },
-      },
-    };
-  }
+    private housesDataService: HousesDataService,
+    private configService: ConfigService
+  ) {}
 
   ngOnInit(): void {
-    //preload config file for avoiding bug with asynchonus data with the preload() and create() working way of phaser.
-    this.housesDataService.loadHousesData();
+    this.configService.config$.subscribe((config) => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-    this.phaserGame = new Phaser.Game(this.config);
+      let Gameconfig: Phaser.Types.Core.GameConfig = {
+        type: Phaser.AUTO,
+        width: width,
+        height: height,
+        scale: {
+          mode: Phaser.Scale.FIT,
+          autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
+        scene: [
+          this.scenePlayerHouse, //1st scene will be load at the start of the game
+          this.sceneWorld,
+          this.sceneContact,
+          this.sceneCV,
+          this.sceneGuestBook1,
+          this.sceneGuestBook2,
+          this.sceneLink,
+          this.sceneVarious,
+          this.sceneCreditService,
+          this.scenePortfolioService,
+          this.scenePortfolio2Service,
+        ],
+        plugins: {
+          global: [
+            {
+              key: 'rexVirtualJoystick',
+              plugin: VirtualJoystickPlugin,
+              start: true,
+            },
+          ],
+        },
+        pixelArt: true, // Enable pixel art mode
+        physics: {
+          default: 'arcade',
+          arcade: {
+            debug: config?.debugMode,
+          },
+        },
+      };
+
+      //preload config file for avoiding bug with asynchonus data with the preload() and create() working way of phaser.
+      this.housesDataService.loadHousesData();
+
+      this.phaserGame = new Phaser.Game(Gameconfig);
+    });
   }
 }

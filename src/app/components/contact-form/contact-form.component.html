@@ -1,6 +1,7 @@
 <div id="contact-container" class="hidden">
 <!-- Close icon -->
 <h1>Contact</h1>
+  <p>mail: {{config?.me?.mail}}</p>
   <form id="messageForm" (ngSubmit)="onSubmit()">
     <span class="closeButton" (click)="hideForm()">&times;</span>
     <div>

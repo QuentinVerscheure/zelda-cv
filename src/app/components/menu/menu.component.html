@@ -8,7 +8,7 @@
     <span class="closeButton" [class.active]="menuOpen" (click)="toggleMenu()"
       >&times;</span
     >
-    <h1>Verscheure Quentin®</h1>
+    <h1>{{config?.me?.menuName}}</h1>
     <h3 (click)="changeSection('quests')">Quêtes:</h3>
     <div *ngIf="!isSmartphone || currentSection === 'quests'">
       <ul>
@@ -75,7 +75,7 @@
     </div>
     <h3 (click)="changeSection('noTime')">J'ai pas le temps</h3>
     <div *ngIf="!isSmartphone || currentSection === 'noTime'"> 
-      <a href="assets/docs/CV.pdf" download="Verscheure-Quentin-CV.pdf">
+      <a href="assets/docs/CV.pdf" download="Verscheure-Quentin-CV">
         <p class="clickable"> - Télécharger le CV</p>
       </a>
     </div> 

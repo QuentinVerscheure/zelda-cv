@@ -1,27 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { AppConfig } from '../../models/config.enum';
+import { ConfigService } from '../../services/config.service';
 
 @Component({
   selector: 'app-contact-form',
   standalone: true,
-  imports: [
-    ReactiveFormsModule
-  ],
+  imports: [ReactiveFormsModule],
   templateUrl: './contact-form.component.html',
-  styleUrl: './contact-form.component.scss'
+  styleUrl: './contact-form.component.scss',
 })
-export class ContactFormComponent {
+export class ContactFormComponent implements OnInit {
   messageForm: FormGroup;
-  pseudo = '';
-  password = '';
 
-  constructor(private fb: FormBuilder) {
+  config: AppConfig | undefined;
+
+  constructor(private fb: FormBuilder, private configService: ConfigService) {
     this.messageForm = this.fb.group({
       pseudo: ['', Validators.required],
       pass: ['', Validators.required],
-      message: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]]
+      message: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(500),
+        ],
+      ],
+    });
+  }
+
+  ngOnInit() {
+    this.configService.config$.subscribe(config => {
+      this.config = config;
+      // Optionally handle any logic after the config is loaded
     });
   }
 
