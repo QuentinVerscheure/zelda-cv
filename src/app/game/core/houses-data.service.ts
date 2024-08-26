@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { PortfolioDatas } from '../../models/portfolioData.enum';
 import { CvData } from '../../models/cvData.enum';
 import { VariousContentConfig } from '../../models/various_Data.enum';
+import { LinkData } from '../../models/linkData.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,8 @@ export class HousesDataService {
   private cvData: CvData | undefined;
   private variousDataUrl = 'assets/texts/various_data.yaml';
   private variousData: VariousContentConfig | undefined;
+  private linkDataUrl = 'assets/texts/link_data.yaml';
+  private linkData: LinkData | undefined;
 
   public loadHousesData() {
     //preload config file for avoiding bug with asynchonus data with the preload() and create() working way of phaser.
@@ -31,6 +34,9 @@ export class HousesDataService {
     });
     this.loadYamlData<VariousContentConfig>(this.variousDataUrl).subscribe((data) => {
       this.variousData = data;
+    });
+    this.loadYamlData<LinkData>(this.linkDataUrl).subscribe((data) => {
+      this.linkData = data;
     });
   }
 
@@ -52,5 +58,9 @@ export class HousesDataService {
   
     getVariousData(): VariousContentConfig | undefined {
       return this.variousData;
+    }
+
+    getLinkData(): LinkData | undefined {
+      return this.linkData;
     }
 }

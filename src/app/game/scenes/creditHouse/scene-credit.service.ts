@@ -49,6 +49,8 @@ export class SceneCreditService extends Phaser.Scene {
       'assets/game/Links_Default.png',
       'assets/game/Links_Default.json'
     );
+
+    this.validAchievementService.ValidAchievement('creditHouse');
   }
 
   create() {

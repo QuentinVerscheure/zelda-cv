@@ -21,7 +21,7 @@ export class CvContentService {
   constructor() {}
 
   /**
-   *  Load picture in cvContent
+   *  Load picture in cvScene
    */
   loadPicture(scene: Phaser.Scene, cvData: CvData): void {
     cvData.cv.forEach((section) => {

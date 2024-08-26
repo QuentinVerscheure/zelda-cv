@@ -5,6 +5,9 @@ import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { LinkData } from '../../../models/linkData.enum';
+import { HousesDataService } from '../../core/houses-data.service';
+import { LinkContentService } from './link-content.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +16,15 @@ export class SceneLinkService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  private linkData: LinkData | undefined;
 
   constructor(
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService
+    private validAchievementService: ValidAchievementService,
+    private housesDataService: HousesDataService,
+    private linkContentService: LinkContentService
   ) {
     super({ key: 'sceneLink' });
   }
@@ -51,9 +57,13 @@ export class SceneLinkService extends Phaser.Scene {
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
 
-    this.load.image('gitHub', 'assets/logo/GitHub-Logo.png');
-    this.load.image('linkedin', 'assets/logo/logo-linkedin_50.png');
-    this.load.image('codepen', 'assets/logo/codepen_50.png');
+    // Load pictures use for the CV content
+    this.linkData = this.housesDataService.getLinkData();
+    if (this.linkData) {
+      this.linkContentService.loadPicture(this, this.linkData);
+    } else {
+      console.log('error, cvData not load from file');
+    }
   }
 
   create() {
@@ -105,56 +115,16 @@ export class SceneLinkService extends Phaser.Scene {
       1345
     );
 
-    this.createPicture(
-      68,
-      60,
-      0.07,
-      'gitHub',
-      'https://github.com/QuentinVerscheure',
-      this.scaleOfTheGame
-    );
-    this.createPicture(
-      45,
-      60,
-      0.3,
-      'linkedin',
-      'https://www.linkedin.com/in/quentin-verscheure-b7b4b09b/l',
-      this.scaleOfTheGame
-    );
-    this.createPicture(
-      55,
-      45,
-      0.15,
-      'codepen',
-      'https://codepen.io/Verscheure-Quentin',
-      this.scaleOfTheGame
-    );
+    if (this.linkData) {
+      this.linkContentService.displayContent(
+        this,
+        this.linkData,
+        this.scaleOfTheGame
+      );
+    }
   }
 
   override update() {
     MovementService.movePlayer(this.player, this.scaleOfTheGame);
-  }
-
-  createPicture(
-    x: number,
-    y: number,
-    scale: number,
-    picture: string,
-    url: string,
-    scaleOfTheGame: number
-  ) {
-    const pictureSprite = this.add.image(
-      scaleOfTheGame * x,
-      scaleOfTheGame * y,
-      picture
-    );
-    pictureSprite.setScale(scale * scaleOfTheGame);
-
-    pictureSprite.setInteractive({ useHandCursor: true });
-
-    pictureSprite.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement('linkCklicked');
-      window.open(url, '_blank');
-    });
   }
 }
