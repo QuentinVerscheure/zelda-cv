@@ -100,7 +100,7 @@ export class ScenePortfolioService extends Phaser.Scene {
       'portFolioHouseBackgroundData'
     );
 
-    MovementService.initializeInput(this);
+    this.movementService.initializeInput(this);
 
     //table of all transiton between scenes
     const transitions = [
@@ -224,6 +224,6 @@ export class ScenePortfolioService extends Phaser.Scene {
   }
 
   override update() {
-    MovementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 }

@@ -24,7 +24,8 @@ export class SceneLinkService extends Phaser.Scene {
     private npcService: NpcService,
     private validAchievementService: ValidAchievementService,
     private housesDataService: HousesDataService,
-    private linkContentService: LinkContentService
+    private linkContentService: LinkContentService, 
+    private movementService: MovementService,
   ) {
     super({ key: 'sceneLink' });
   }
@@ -101,7 +102,7 @@ export class SceneLinkService extends Phaser.Scene {
       'linkCollisionBackgroundData'
     );
 
-    MovementService.initializeInput(this);
+    this.movementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -125,6 +126,6 @@ export class SceneLinkService extends Phaser.Scene {
   }
 
   override update() {
-    MovementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 }

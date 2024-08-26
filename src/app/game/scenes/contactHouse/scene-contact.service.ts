@@ -17,7 +17,7 @@ export class SceneContactService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService
+    private validAchievementService: ValidAchievementService,
   ) {
     super({ key: 'sceneContact' });
   }
@@ -72,7 +72,7 @@ export class SceneContactService extends Phaser.Scene {
       'phoneHouseCollisionBackgroundData'
     );
 
-    MovementService.initializeInput(this);
+    this.movementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -96,7 +96,7 @@ export class SceneContactService extends Phaser.Scene {
   }
 
   override update() {
-    MovementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
   createClickableBook(

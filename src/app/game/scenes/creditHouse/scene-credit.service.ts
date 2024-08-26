@@ -16,7 +16,8 @@ export class SceneCreditService extends Phaser.Scene {
   constructor(
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService
+    private validAchievementService: ValidAchievementService,
+    private movementService: MovementService,
   ) {
     super({ key: 'sceneCredit' });
   }
@@ -77,7 +78,7 @@ export class SceneCreditService extends Phaser.Scene {
       'creditCollisionBackgroundData'
     );
 
-    MovementService.initializeInput(this);
+    this.movementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -268,7 +269,7 @@ export class SceneCreditService extends Phaser.Scene {
   }
 
   override update() {
-    MovementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
   private textStyle = {

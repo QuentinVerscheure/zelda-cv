@@ -121,7 +121,7 @@ export class SceneWorldService extends Phaser.Scene {
     );
 
     // Initialize keyboard inputs
-    MovementService.initializeInput(this);
+    this.movementService.initializeInput(this);
 
     // create scene transition collision
     let sceneTransitionCollisionData: SceneTransitionCollisionData[] = [
@@ -242,7 +242,7 @@ export class SceneWorldService extends Phaser.Scene {
   }
 
   override update() {
-    MovementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
 }

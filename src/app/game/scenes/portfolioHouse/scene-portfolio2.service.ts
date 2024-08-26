@@ -74,7 +74,7 @@ export class ScenePortfolio2Service extends Phaser.Scene {
       'portFolioCollisionBackgroundData'
     );
 
-    MovementService.initializeInput(this);
+    this.movementService.initializeInput(this);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -116,6 +116,6 @@ export class ScenePortfolio2Service extends Phaser.Scene {
   }
 
   override update() {
-    MovementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 }
