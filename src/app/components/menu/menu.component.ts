@@ -7,12 +7,9 @@ import { AppConfig } from '../../models/config.enum';
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss']
+  styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
   menuOpen = false;
@@ -27,7 +24,7 @@ export class MenuComponent implements OnInit {
   constructor(private configService: ConfigService) {}
 
   ngOnInit() {
-    this.configService.config$.subscribe(config => {
+    this.configService.config$.subscribe((config) => {
       this.config = config;
     });
   }
@@ -36,9 +33,7 @@ export class MenuComponent implements OnInit {
     this.menuOpen = !this.menuOpen;
   }
 
-  onSubmit() {
-    // Your submit logic here
-  }
+  onSubmit() {}
 
   changeSection(section: string) {
     this.currentSection = section;

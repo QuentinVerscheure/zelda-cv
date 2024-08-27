@@ -84,7 +84,7 @@ export class ScenePortfolio2Service extends Phaser.Scene {
       'scenePortfolio1',
       80,
       73,
-      data?.portfolio1Information.x || 249 * this.scaleOfTheGame, //return to the door the player use else return yo main door
+      data?.portfolio1Information.x || 249 * this.scaleOfTheGame, //return to the door the player use in portfolio1 to access portfolio2 else return to main door
       data?.portfolio1Information.y || 910 * this.scaleOfTheGame,
       data?.portfolio1Information.firstAnimationFrame
     );
@@ -94,13 +94,13 @@ export class ScenePortfolio2Service extends Phaser.Scene {
         data.portfolio2Number
       ].more;
 
-    // Load pictures use in the portfolio content in create() because preload() can't access data: portfolio2Data
+    // Load pictures use in the portfolio content in create() because preload() can't access parameter (data: portfolio2Data)
     if (this.moreElement) {
       this.portfolioContentService.loadPicturePortfolio2(
         this,
         this.moreElement
       );
-      this.load.start(); // Démarre le chargement des images spécifiques
+      this.load.start();
       this.load.once('complete', () => {
         if (this.moreElement) {
           this.portfolioContentService.displayPortfolio2(

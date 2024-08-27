@@ -6,7 +6,7 @@ import { CvData } from '../../../models/cvData.enum';
   providedIn: 'root',
 })
 export class CvContentService {
-  //frame coordinate from top left to bottom right
+  //frame coordinate from top left to bottom right, do not change if you have not change the bakground .png
   private frameCoordinates = [
     { x: 112, y: 48 },
     { x: 320, y: 48 },
@@ -21,7 +21,8 @@ export class CvContentService {
   constructor() {}
 
   /**
-   *  Load picture in cvScene
+   *  Load picture in Scene
+   * @param cvData - content of the yaml file with all information to display
    */
   loadPicture(scene: Phaser.Scene, cvData: CvData): void {
     cvData.cv.forEach((section) => {
@@ -31,6 +32,10 @@ export class CvContentService {
     });
   }
 
+  /**
+   *  display text in the scene
+   * @param cvData - content of the yaml file with all information to display
+   */
   displayTexts(
     scene: Phaser.Scene,
     scaleOfTheGame: number,

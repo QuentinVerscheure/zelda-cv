@@ -1,14 +1,12 @@
 <div id="menu-container">
   <div class="burger-menu" [class.active]="menuOpen" (click)="toggleMenu()">
     &#9776;
-    <!-- Hamburger icon -->
   </div>
   <div class="menu-content" [class.active]="menuOpen">
-    <!-- Close icon -->
     <span class="closeButton" [class.active]="menuOpen" (click)="toggleMenu()"
       >&times;</span
     >
-    <h1>{{config?.me?.menuName}}</h1>
+    <h1>{{ config?.me?.menuName }}</h1>
     <h3 (click)="changeSection('quests')">Quêtes:</h3>
     <div *ngIf="!isSmartphone || currentSection === 'quests'">
       <ul>
@@ -74,10 +72,10 @@
       </form>
     </div>
     <h3 (click)="changeSection('noTime')">J'ai pas le temps</h3>
-    <div *ngIf="!isSmartphone || currentSection === 'noTime'"> 
+    <div *ngIf="!isSmartphone || currentSection === 'noTime'">
       <a href="assets/docs/CV.pdf" download="Verscheure-Quentin-CV">
-        <p class="clickable"> - Télécharger le CV</p>
+        <p class="clickable">- Télécharger le CV</p>
       </a>
-    </div> 
+    </div>
   </div>
 </div>

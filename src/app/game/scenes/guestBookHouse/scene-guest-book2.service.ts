@@ -101,8 +101,8 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       'walkingDown/frame0001'
     );
 
-    //create the clickable book who display the comment form
-    const openBook = this.commentService.createClickableBook(
+    //create the clickable icon who display the comment form
+    this.commentService.createClickableIcon(
       104,
       150,
       this.scaleOfTheGame,

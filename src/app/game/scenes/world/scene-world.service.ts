@@ -19,7 +19,7 @@ export class SceneWorldService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private npcService: NpcService,
+    private npcService: NpcService
   ) {
     super({ key: 'sceneWorld' });
   }
@@ -244,5 +244,4 @@ export class SceneWorldService extends Phaser.Scene {
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
-
 }

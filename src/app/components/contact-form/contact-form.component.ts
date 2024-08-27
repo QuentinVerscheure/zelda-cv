@@ -32,16 +32,14 @@ export class ContactFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.configService.config$.subscribe(config => {
+    this.configService.config$.subscribe((config) => {
       this.config = config;
-      // Optionally handle any logic after the config is loaded
     });
   }
 
   onSubmit() {
     if (this.messageForm.valid) {
       console.log('Form Value:', this.messageForm.value);
-      // Handle form submission logic here
     }
   }
 

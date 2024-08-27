@@ -7,13 +7,12 @@ import { ConfigService } from '../../services/config.service';
   providedIn: 'root',
 })
 export class CollisionService {
-
-  private wallDebugMode:number = 0;
+  private wallDebugMode: number = 0;
 
   constructor(private configService: ConfigService) {
-    //if debugmode = true, the wall will be 0.5 opacity in red
-    this.configService.config$.subscribe(config => {
+    this.configService.config$.subscribe((config) => {
       if (config?.debugMode) {
+        //if debugmode = true, the wall will be 0.5 opacity in red
         this.wallDebugMode = 0.5;
       }
     });
@@ -58,7 +57,7 @@ export class CollisionService {
   }
 
   /**
-   * create the collision for trigger another scene
+   * create the hitbox for trigger another scene
    */
   createSceneTransitionCollision(
     scene: Phaser.Scene,
@@ -70,7 +69,7 @@ export class CollisionService {
     yOfHitbox: number,
     startXPositionInNewScene?: number,
     startYPositionInNewScene?: number,
-    firstAnimationFrame?: string,
+    firstAnimationFrame?: string
   ) {
     // Create hitbox for scene transition using an invisible sprite
     const exitHitbox = scene.physics.add.sprite(
@@ -79,18 +78,22 @@ export class CollisionService {
       nameOfTheSpriteCollision
     );
     exitHitbox.setOrigin(0, 0); // Position by the top-left corner
-    exitHitbox.displayWidth = 16 * scaleOfTheGame; // Set width
-    exitHitbox.displayHeight = 16 * scaleOfTheGame; // Set height
-    exitHitbox.setVisible(false); // Make the sprite invisible
-    exitHitbox.body.immovable = true; // Make the hitbox immovable
-    exitHitbox.body.allowGravity = false; // Disable gravity for the hitbox
+    exitHitbox.displayWidth = 16 * scaleOfTheGame;
+    exitHitbox.displayHeight = 16 * scaleOfTheGame;
+    exitHitbox.setVisible(false);
+    exitHitbox.body.immovable = true;
+    exitHitbox.body.allowGravity = false;
 
     // Add collider with callback for scene transition
     scene.physics.add.collider(
       player,
       exitHitbox,
       () => {
-        const landingCoordinates = { x: startXPositionInNewScene, y: startYPositionInNewScene, firstAnimationFrame: firstAnimationFrame };
+        const landingCoordinates = {
+          x: startXPositionInNewScene,
+          y: startYPositionInNewScene,
+          firstAnimationFrame: firstAnimationFrame,
+        };
         scene.scene.start(sceneToLoad, landingCoordinates);
       },
       undefined,

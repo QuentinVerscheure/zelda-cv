@@ -44,6 +44,8 @@ export class CoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.configService.config$.subscribe((config) => {
+      //subscribe to the config.json file to know if debug mode=true
+
       const width = window.innerWidth;
       const height = window.innerHeight;
 
@@ -77,7 +79,7 @@ export class CoreComponent implements OnInit {
             },
           ],
         },
-        pixelArt: true, // Enable pixel art mode
+        pixelArt: true, // (if not, blur pixel)
         physics: {
           default: 'arcade',
           arcade: {

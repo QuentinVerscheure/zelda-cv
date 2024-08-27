@@ -5,11 +5,17 @@ import { VariousContentConfig } from '../../../models/various_Data.enum';
   providedIn: 'root',
 })
 export class VariousContentService {
-
   constructor() {}
 
-
-  createBox(scene: Phaser.Scene, scaleOfTheGame: number, variousData: VariousContentConfig): void {
+  /**
+   * create the content of boxes in various scene
+   * @param variousData - pictures and texts to display in various scene from the yaml file
+   */
+  createBox(
+    scene: Phaser.Scene,
+    scaleOfTheGame: number,
+    variousData: VariousContentConfig
+  ): void {
     const textStyle = {
       fontFamily: 'Pixelify_Sans',
       fontSize: 4 * scaleOfTheGame,
@@ -23,7 +29,7 @@ export class VariousContentService {
       wordWrap: { width: 60 * scaleOfTheGame }, // Same for bold text
     };
 
-    // Creation of titles and elements based on YAML data
+    // Creation of titles and elements based on file data
     if (variousData) {
       variousData.boxes.forEach((box) => {
         const x = box.x * scaleOfTheGame;

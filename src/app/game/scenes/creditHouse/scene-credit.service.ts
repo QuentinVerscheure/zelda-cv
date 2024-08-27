@@ -17,7 +17,7 @@ export class SceneCreditService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private validAchievementService: ValidAchievementService,
-    private movementService: MovementService,
+    private movementService: MovementService
   ) {
     super({ key: 'sceneCredit' });
   }
@@ -98,36 +98,36 @@ export class SceneCreditService extends Phaser.Scene {
       25 * this.scaleOfTheGame,
       'NintendoLogo'
     );
-    NintendoLogo.setOrigin(0, 0); // Positionner par le bord gauche
-    NintendoLogo.displayHeight = 12.5 * this.scaleOfTheGame; // Taille fixe en longueur
-    NintendoLogo.scaleX = NintendoLogo.scaleY; // Laisser libre en largeur
+    NintendoLogo.setOrigin(0, 0);
+    NintendoLogo.displayHeight = 12.5 * this.scaleOfTheGame;
+    NintendoLogo.scaleX = NintendoLogo.scaleY;
 
     const linkAwakening = this.add.image(
       30 * this.scaleOfTheGame,
       65 * this.scaleOfTheGame,
       'linkAwakening'
     );
-    linkAwakening.setOrigin(0, 0); // Positionner par le bord gauche
-    linkAwakening.displayHeight = 25 * this.scaleOfTheGame; // Taille fixe en longueur
-    linkAwakening.scaleX = linkAwakening.scaleY; // Laisser libre en largeur
+    linkAwakening.setOrigin(0, 0);
+    linkAwakening.displayHeight = 25 * this.scaleOfTheGame;
+    linkAwakening.scaleX = linkAwakening.scaleY;
 
     const zeldaOracleOfAge = this.add.image(
       30 * this.scaleOfTheGame,
       127 * this.scaleOfTheGame,
       'zeldaOracleOfAge'
     );
-    zeldaOracleOfAge.setOrigin(0, 0); // Positionner par le bord gauche
-    zeldaOracleOfAge.displayHeight = 25 * this.scaleOfTheGame; // Taille fixe en longueur
-    zeldaOracleOfAge.scaleX = zeldaOracleOfAge.scaleY; // Laisser libre en largeur
+    zeldaOracleOfAge.setOrigin(0, 0);
+    zeldaOracleOfAge.displayHeight = 25 * this.scaleOfTheGame;
+    zeldaOracleOfAge.scaleX = zeldaOracleOfAge.scaleY;
 
     const zeldaOracleOfSeasons = this.add.image(
       75 * this.scaleOfTheGame,
       127 * this.scaleOfTheGame,
       'zeldaOracleOfSeasons'
     );
-    zeldaOracleOfSeasons.setOrigin(0, 0); // Positionner par le bord gauche
-    zeldaOracleOfSeasons.displayHeight = 25 * this.scaleOfTheGame; // Taille fixe en longueur
-    zeldaOracleOfSeasons.scaleX = zeldaOracleOfSeasons.scaleY; // Laisser libre en largeur
+    zeldaOracleOfSeasons.setOrigin(0, 0);
+    zeldaOracleOfSeasons.displayHeight = 25 * this.scaleOfTheGame;
+    zeldaOracleOfSeasons.scaleX = zeldaOracleOfSeasons.scaleY;
 
     this.createText(
       27.5,
@@ -280,7 +280,7 @@ export class SceneCreditService extends Phaser.Scene {
   };
 
   createText(x: number, y: number, text: string, url?: string) {
-    // Create a temporary text object to measure its dimensions
+    // Create a temporary text object to measure its dimensions so the text can be multi-line and have a background rectangle
     const tempTextObject = this.add.text(0, 0, text, this.textStyle);
     const textWidth = tempTextObject.width;
     const textHeight = tempTextObject.height;

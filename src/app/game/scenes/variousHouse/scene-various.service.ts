@@ -57,7 +57,6 @@ export class SceneVariousService extends Phaser.Scene {
       this.variousData.boxes.forEach((box) => {
         box.elements.forEach((element) => {
           if (element.type === 'image' && element.pictureUrl && element.key) {
-            // Charger l'image en utilisant la clé et l'URL spécifiées dans le YAML
             this.load.image(element.key, element.pictureUrl);
           }
         });
@@ -74,8 +73,6 @@ export class SceneVariousService extends Phaser.Scene {
 
     const initialPlayerX = 200 * this.scaleOfTheGame; // Set your desired initial X position
     const initialPlayerY = 250 * this.scaleOfTheGame; // Set your desired initial Y position
-
-    // this.variousContentService.loadTexts(this, this.scaleOfTheGame);
 
     this.player = this.playerService.createPlayer(
       this.player,
@@ -107,10 +104,12 @@ export class SceneVariousService extends Phaser.Scene {
       1350
     );
 
-    
-
     if (this.variousData) {
-      this.variousContentService.createBox(this, this.scaleOfTheGame, this.variousData);
+      this.variousContentService.createBox(
+        this,
+        this.scaleOfTheGame,
+        this.variousData
+      );
     } else {
       console.log('error, variousData not load from file');
     }

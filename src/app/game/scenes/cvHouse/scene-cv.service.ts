@@ -41,7 +41,7 @@ export class SceneCVService extends Phaser.Scene {
       'assets/game/CV_collision_background.json'
     );
 
-    //load an invisible sprite for the hitbox detection for the change of scene
+    //load an invisible sprite for the hitbox detection for the changement of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
 
     this.load.atlas(
@@ -143,7 +143,7 @@ export class SceneCVService extends Phaser.Scene {
         this.cvData
       );
     } else {
-      console.log('error, cvData not load from file')
+      console.log('error, cvData not load from file');
     }
   }
 

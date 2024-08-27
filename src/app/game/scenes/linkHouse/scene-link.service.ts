@@ -24,8 +24,8 @@ export class SceneLinkService extends Phaser.Scene {
     private npcService: NpcService,
     private validAchievementService: ValidAchievementService,
     private housesDataService: HousesDataService,
-    private linkContentService: LinkContentService, 
-    private movementService: MovementService,
+    private linkContentService: LinkContentService,
+    private movementService: MovementService
   ) {
     super({ key: 'sceneLink' });
   }

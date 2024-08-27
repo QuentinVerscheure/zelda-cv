@@ -13,7 +13,10 @@ export class PortfolioContentService {
   private maxwidth: number = 100;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
 
-  //frame coordinate from top left to bottom right
+  /**
+   *  frame coordinate from top left to bottom right
+   * do not change if you have not change the picture background
+   */
   private frameCoordinates = [
     { x: 80, y: 672 },
     { x: 304, y: 672 },
@@ -79,6 +82,7 @@ export class PortfolioContentService {
 
   /**
    * Load picture in portfolioContent2
+   * @param moreElement - pictures and texts to display in portfolioContent2 if the scene have to be create for a specific portfolio1 section
    */
   loadPicturePortfolio2(
     scene: Phaser.Scene,
@@ -95,29 +99,23 @@ export class PortfolioContentService {
   }
 
   /**
-   * Displays the portfolio2 content .
+   * Displays the portfolio2 content
+   * @param moreElement - pictures and texts to display in portfolioContent2 if the scene have to be create for a specific portfolio1 section ("more" section)
    */
-  displayPortfolio2(
-    scene: Phaser.Scene,
-    MoreElements: MoreElements[]
-  ): void {
+  displayPortfolio2(scene: Phaser.Scene, MoreElements: MoreElements[]): void {
     MoreElements.forEach((moreElement) => {
       let y = moreElement.yOffset * this.scaleOfTheGame;
       const x = moreElement.xOffset * this.scaleOfTheGame;
 
       if (moreElement.picture) {
-        const picture = scene.add.image(
-          x,
-          y,
-          moreElement.picture.pictureName
-        );
+        const picture = scene.add.image(x, y, moreElement.picture.pictureName);
         picture.setOrigin(0, 0); // Position by the left edge
         picture.displayHeight =
           moreElement.picture.pictureSize * this.scaleOfTheGame; // Fixed height
         picture.scaleX = picture.scaleY; // Keep aspect ratio
       } else if (moreElement.text) {
         moreElement.text.forEach((text) => {
-          scene.add.text(x , y, text, this.textStyleWhite);
+          scene.add.text(x, y, text, this.textStyleWhite);
           y += 5 * this.scaleOfTheGame;
         });
       }
@@ -126,6 +124,7 @@ export class PortfolioContentService {
 
   /**
    * Displays the portfolio content on the scene.
+   * @param PortfolioData - content of the yaml file to display
    */
   displayPortfolio(scene: Phaser.Scene, PortfolioData: PortfolioDatas): void {
     if (!PortfolioData) {
@@ -244,12 +243,16 @@ export class PortfolioContentService {
     });
   }
 
+  /**
+   * create a key block prohibiting the acces to portfolio2 if the portfolio1 frame have not a "more" section
+   * @param PortfolioData - content of the yaml file to display
+   */
   createKeyBlock(
     scene: Phaser.Scene,
     player: Phaser.Physics.Arcade.Sprite,
     PortfolioData: PortfolioDatas
   ) {
-    // Example structure of keyBlockCoordinate, you can modify it based on actual coordinates
+    // keyblock coodinate, do not modifie if you have not modify the background picture
     const keyBlockCoordinate = [
       { x: 40, y: 744 },
       { x: 456, y: 744 },

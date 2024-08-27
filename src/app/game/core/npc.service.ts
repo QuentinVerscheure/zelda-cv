@@ -47,13 +47,16 @@ export class NpcService {
         player,
         secondAnimation,
         animationTimer,
-        jsonNameForNpcText        
+        jsonNameForNpcText
       );
     });
 
     scene.load.start();
   }
 
+  /**
+   * create the npc sprite
+   */
   private createNpcSprite(
     scene: Phaser.Scene,
     scaleOfTheGame: number,
@@ -65,7 +68,6 @@ export class NpcService {
     animationTimer: number,
     jsonNameForNpcText?: string
   ) {
-    // create the NPC
     const npc = scene.physics.add.sprite(
       initialNpcX * scaleOfTheGame,
       initialNpcY * scaleOfTheGame,
@@ -76,7 +78,6 @@ export class NpcService {
     npc.body.immovable = true;
     scene.physics.add.collider(player, npc);
 
-    // Créer animation1
     const animationKey1: string = textureKey + '1';
     scene.anims.create({
       key: animationKey1,
@@ -102,10 +103,11 @@ export class NpcService {
           suffix: '',
           zeroPad: 1,
         }),
-        frameRate: 1, // 1 frame per second
+        frameRate: 1, // 1 frame/second
         repeat: 0, // play once
       });
 
+      //set event to play animation2 every 10s
       scene.time.addEvent({
         delay: 10000, // 10 seconds
         callback: () => {
@@ -134,6 +136,8 @@ export class NpcService {
 
   /**
    *  create and display the dialogue text for the npc
+   * @param jsonNameForNpcText - the name of the json file containing the text for the npc
+   * @param initialNpcX - Coordinate the text in the scene, using the same position as the NPC
    *
    */
   private createText(
@@ -150,8 +154,8 @@ export class NpcService {
     }
 
     const textBubble = scene.add.text(
-      initialNpcX * scaleOfTheGame,
-      (initialNpcY - 15) * scaleOfTheGame,
+      initialNpcX * scaleOfTheGame, //center of text will be align with center of npc
+      (initialNpcY - 15) * scaleOfTheGame, //text will be 15px above the npc
       '',
       {
         fontFamily: 'Pixelify_Sans',
@@ -164,15 +168,15 @@ export class NpcService {
       }
     );
 
-    textBubble.setOrigin(0.5, 1); // Position the text above the NPC
+    textBubble.setOrigin(0.5, 1);
 
     let index = 0;
     const showNextText = () => {
+      //create a loop to display all text with a looping of 4s and a blanc of 6s at the end
       textBubble.setText(texts[index]);
       textBubble.setPadding({ x: 10, y: 5 });
       index = (index + 1) % texts.length;
 
-      // Display the next text after 4 seconds
       scene.time.addEvent({
         delay: 4000,
         callback: () => {

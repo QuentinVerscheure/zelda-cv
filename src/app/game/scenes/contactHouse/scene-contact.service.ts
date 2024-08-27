@@ -17,7 +17,7 @@ export class SceneContactService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService,
+    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'sceneContact' });
   }
@@ -86,45 +86,40 @@ export class SceneContactService extends Phaser.Scene {
       1490
     );
 
-    //create the clickable book who display the contact form
-    const openBook = this.createClickableBook(
-      95,
-      90,
-      this.scaleOfTheGame,
-      this.player
-    );
+    //create the clickable icon who display the contact form
+    this.createSendMailIcon(95, 90, this.scaleOfTheGame, this.player);
   }
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
   }
 
-  createClickableBook(
+  createSendMailIcon(
     x: number,
     y: number,
     scaleOfTheGame: number,
     player: Phaser.Physics.Arcade.Sprite
   ) {
-    const openBook = this.physics.add.sprite(
+    const icon = this.physics.add.sprite(
       scaleOfTheGame * x,
       scaleOfTheGame * y,
       'message'
     );
-    openBook.setScale(scaleOfTheGame);
-    openBook.setInteractive({ useHandCursor: true });
-    openBook.body.immovable = true;
+    icon.setScale(scaleOfTheGame);
+    icon.setInteractive({ useHandCursor: true });
+    icon.body.immovable = true;
 
-    openBook.on('pointerdown', () => {
+    icon.on('pointerdown', () => {
       this.validAchievementService.ValidAchievement('contactMe');
-      this.showForm()
+      this.showForm();
     });
 
-    this.physics.add.collider(player, openBook);
+    this.physics.add.collider(player, icon);
 
-    return openBook;
+    return icon;
   }
 
-  showForm(){
+  showForm() {
     const form = document.getElementById('contact-container');
     if (form) {
       form.classList.remove('hidden');

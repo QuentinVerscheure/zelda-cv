@@ -12,7 +12,6 @@ export interface LinkPictureContent {
   };
 }
 
-// Interface principale pour vos données
 export interface LinkData {
   link: LinkPictureContent[];
 }

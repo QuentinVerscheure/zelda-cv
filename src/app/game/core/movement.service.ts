@@ -17,6 +17,7 @@ export class MovementService {
 
   /**
    * Initialize the keyboard input and joystick
+   * the game isn't qwerty friendly
    */
   initializeInput(scene: Phaser.Scene) {
     const input = scene.input;
@@ -31,7 +32,7 @@ export class MovementService {
       };
     }
 
-    // Check if the screen width is less than 1024px (example threshold for desktop size)
+    // Check if the screen width is less than 1024px for trigger joystick
     if (scene.scale.width < 1024) {
       const plugin = scene.plugins.get('rexVirtualJoystick') as any;
       if (plugin) {
@@ -52,7 +53,7 @@ export class MovementService {
   }
 
   /**
-   * Create the animation for the moves of the players
+   * Create the animation for the players' movements.
    */
   initializeMoveAnimation(anims: Phaser.Animations.AnimationManager) {
     const animations = [
@@ -114,10 +115,10 @@ export class MovementService {
     // Joystick input
     if (this.joystick) {
       const force = this.joystick.force;
-      const angleDeg = this.joystick.angle; // Assuming angle is already in degrees
+      const angleDeg = this.joystick.angle; // angle is already in degrees
 
       if (force > 0) {
-        // Convert degrees to radians for trigonometric calculations
+        // Convert degrees to radians by trigonometric calculations
         const angleRad = Phaser.Math.DegToRad(angleDeg);
         const vx = Math.cos(angleRad) * 80 * scaleOfTheGame;
         const vy = Math.sin(angleRad) * 80 * scaleOfTheGame;
@@ -151,7 +152,7 @@ export class MovementService {
 
     // Joystick animation
     if (this.joystick && this.joystick.force > 0) {
-      const angleDeg = this.joystick.angle; // Assuming angle is already in degrees
+      const angleDeg = this.joystick.angle; // angle is already in degrees
 
       if (angleDeg >= -135 && angleDeg <= -45) {
         player.play('walkingTop', true);

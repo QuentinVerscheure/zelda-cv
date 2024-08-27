@@ -76,7 +76,7 @@ export class ScenePortfolioService extends Phaser.Scene {
     this.background.setOrigin(0, 0); // Origin top left
     this.background.setScale(this.scaleOfTheGame);
 
-    //coordonate depanding of the scene transition
+    //start coordonate depanding of the scene transition
     const initialPlayerX =
       data?.x * this.scaleOfTheGame || 249 * this.scaleOfTheGame;
     const initialPlayerY =
@@ -102,7 +102,7 @@ export class ScenePortfolioService extends Phaser.Scene {
 
     this.movementService.initializeInput(this);
 
-    //table of all transiton between scenes
+    //table of all transiton between scenes. do not modify if you have not modify the background picture
     const transitions = [
       {
         sprite: 'sceneTransitionSprite2',
@@ -180,24 +180,24 @@ export class ScenePortfolioService extends Phaser.Scene {
         transition.y1 * this.scaleOfTheGame,
         transition.sprite
       );
-    
-      exitHitbox.setOrigin(0, 0); // Position by the top-left corner
-      exitHitbox.displayWidth = 16 * this.scaleOfTheGame; // Set width
-      exitHitbox.displayHeight = 16 * this.scaleOfTheGame; // Set height
-      exitHitbox.setVisible(false); // Make the sprite invisible
-      exitHitbox.body.immovable = true; // Make the hitbox immovable
-      exitHitbox.body.allowGravity = false; // Disable gravity for the hitbox
-    
-      // Define the data to pass to the next scene
+
+      exitHitbox.setOrigin(0, 0);
+      exitHitbox.displayWidth = 16 * this.scaleOfTheGame;
+      exitHitbox.displayHeight = 16 * this.scaleOfTheGame;
+      exitHitbox.setVisible(false);
+      exitHitbox.body.immovable = true;
+      exitHitbox.body.allowGravity = false;
+
+      // Define the data that need to be pass to the portfolio2 scene
       const portfolio2Data: portfolio2Data = {
         portfolio1Information: {
           x: transition.x2,
           y: transition.y2,
-          firstAnimationFrame: firstAnimationFrame, // Assurez-vous que cette variable est définie correctement
+          firstAnimationFrame: firstAnimationFrame,
         },
-        portfolio2Number: index, // Utilisez l'index pour identifier quel portfolio afficher
+        portfolio2Number: index,
       };
-    
+
       // Add collider with callback for scene transition
       this.physics.add.collider(
         this.player,
@@ -209,7 +209,6 @@ export class ScenePortfolioService extends Phaser.Scene {
         this
       );
     });
-    
 
     if (this.portfolioData) {
       this.portfolioContentService.displayPortfolio(this, this.portfolioData);

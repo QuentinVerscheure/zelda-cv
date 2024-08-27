@@ -24,7 +24,7 @@ export class CommentFormComponent {
       date: new Date(),
       x: 38,
       y: 34,
-      newComment: true
+      newComment: true,
     };
 
     this.commentService.createComment(

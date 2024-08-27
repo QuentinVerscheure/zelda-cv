@@ -12,7 +12,7 @@ import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 export class ScenePlayerService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
-  
+
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
 
   constructor(
@@ -96,7 +96,7 @@ export class ScenePlayerService extends Phaser.Scene {
       1364
     );
 
-    const Npc = this.npcService.createNpc(
+    this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
       170,

@@ -16,32 +16,39 @@ export class CommentService {
     });
   }
 
-  createClickableBook(
+  /**
+   *  create the icon use to display the create comment form
+   */
+  createClickableIcon(
     x: number,
     y: number,
     scaleOfTheGame: number,
     player: Phaser.Physics.Arcade.Sprite,
     scene: Phaser.Scene
   ) {
-    const openBook = scene.physics.add.sprite(
+    const icon = scene.physics.add.sprite(
       scaleOfTheGame * x,
       scaleOfTheGame * y,
       'openBook'
     );
-    openBook.setScale(scaleOfTheGame);
-    openBook.setInteractive({ useHandCursor: true });
-    openBook.body.immovable = true;
+    icon.setScale(scaleOfTheGame);
+    icon.setInteractive({ useHandCursor: true });
+    icon.body.immovable = true;
 
-    openBook.on('pointerdown', () => {
+    icon.on('pointerdown', () => {
       this.validAchievementService.ValidAchievement('postComment');
       this.showForm();
     });
 
-    scene.physics.add.collider(player, openBook);
+    scene.physics.add.collider(player, icon);
 
-    return openBook;
+    return icon;
   }
 
+  /**
+   *  create a message from the database in the scene
+   * @param guestBookCommentary - content of one message
+   */
   createComment(
     message: guestBookCommentary,
     scaleOfTheGame: number,
@@ -51,8 +58,8 @@ export class CommentService {
       message.user
     }   -   (${message.date.toLocaleDateString()})\n\n${message.message}`;
 
-    const fixedWidth = 131 * scaleOfTheGame;
-    const fixedHeight = 44 * scaleOfTheGame;
+    const fixedWidth = 131 * scaleOfTheGame; //fixe width of the message. Do not change
+    const fixedHeight = 44 * scaleOfTheGame; //fixe height of the message. Do not change
 
     const container = scene.add.container(
       message.x * scaleOfTheGame,
@@ -86,13 +93,18 @@ export class CommentService {
     borderGraphics.strokeRect(0, 0, fixedWidth, fixedHeight);
     container.add(borderGraphics);
 
-    const trashIcon = scene.add.image(fixedWidth - 20, 20, 'trashIcon').setScale(scaleOfTheGame / 2);
+    //trashIcon to delete his message
+    const trashIcon = scene.add
+      .image(fixedWidth - 20, 20, 'trashIcon')
+      .setScale(scaleOfTheGame / 2);
     trashIcon.setInteractive({ useHandCursor: true });
     container.add(trashIcon);
 
     trashIcon.on('pointerdown', () => {
       container.destroy();
-      this.commentContainers = this.commentContainers.filter(c => c !== container);
+      this.commentContainers = this.commentContainers.filter(
+        (c) => c !== container
+      );
     });
 
     text.setOrigin(0, 0);
@@ -131,7 +143,9 @@ export class CommentService {
     return graphics;
   }
 
-
+  /**
+   *  check if the drag and drop message overlaps another message
+   */
   checkOverlap(
     container: Phaser.GameObjects.Container,
     width: number,
@@ -147,20 +161,23 @@ export class CommentService {
 
     let isOverlapping = false;
 
-        // Check overlap with the central restricted zone
-        const restrictedZone = new Phaser.Geom.Rectangle(
-          -10*scaleOfTheGame, -10*scaleOfTheGame, 228*scaleOfTheGame, 132*scaleOfTheGame
-        );
-        if (
-          Phaser.Geom.Intersects.RectangleToRectangle(
-            containerBounds,
-            restrictedZone
-          )
-        ) {
-          isOverlapping = true;
-        }
+    // Check overlap with the central restricted zone
+    const restrictedZone = new Phaser.Geom.Rectangle(
+      -10 * scaleOfTheGame,
+      -10 * scaleOfTheGame,
+      228 * scaleOfTheGame,
+      132 * scaleOfTheGame
+    );
+    if (
+      Phaser.Geom.Intersects.RectangleToRectangle(
+        containerBounds,
+        restrictedZone
+      )
+    ) {
+      isOverlapping = true;
+    }
 
-    this.commentContainers.forEach(otherContainer => {
+    this.commentContainers.forEach((otherContainer) => {
       if (otherContainer === container) return; // Ignore self
 
       const otherBounds = new Phaser.Geom.Rectangle(
@@ -170,7 +187,12 @@ export class CommentService {
         height
       );
 
-      if (Phaser.Geom.Intersects.RectangleToRectangle(containerBounds, otherBounds)) {
+      if (
+        Phaser.Geom.Intersects.RectangleToRectangle(
+          containerBounds,
+          otherBounds
+        )
+      ) {
         isOverlapping = true;
       }
     });
@@ -178,13 +200,18 @@ export class CommentService {
     this.updateCommentAppearance(container, width, height, isOverlapping);
   }
 
+  /**
+   *  update the appearance of the message if he overlap something forbidden
+   */
   updateCommentAppearance(
     container: Phaser.GameObjects.Container,
     width: number,
     height: number,
     isOverlapping: boolean
   ) {
-    const backgroundGraphics = container.getAt(0) as Phaser.GameObjects.Graphics;
+    const backgroundGraphics = container.getAt(
+      0
+    ) as Phaser.GameObjects.Graphics;
     backgroundGraphics.clear();
 
     if (isOverlapping) {
@@ -196,6 +223,9 @@ export class CommentService {
     backgroundGraphics.fillRect(0, 0, width, height);
   }
 
+  /**
+   *  show the form to create the message
+   */
   showForm() {
     const form = document.getElementById('messageForm');
     if (form) {
@@ -203,6 +233,9 @@ export class CommentService {
     }
   }
 
+  /**
+   *  mock message to delete when the database will be implemented
+   */
   private mockMessages: guestBookCommentary[] = [
     {
       user: 'test1',
