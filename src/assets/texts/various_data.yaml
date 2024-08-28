@@ -1,3 +1,19 @@
+# Every box is optional. You can leave them empty (don't delete) or modify them as you want.
+# There are 6 frames, from top left to bottom right:
+# 1 2 3 
+# 4 5 6 
+# You can create your own child folder for pictures if you want.
+
+# title1: A title for the frame.
+# x and y: Coordinates of the box, DO NOT CHANGE.
+# elements: The elements to display in the box.
+  # type: "image" or "text".
+  # xOffset and yOffset: Coordinates of the element in the scene.
+  # text: If type is "text", the text.
+  # key: If type is "image", a name for the main picture, doesn't matter.
+  # pictureUrl: If type is "image", the link to your file in the asset folder.
+  # height: If type is "image", the size of your picture in the scene.
+    
 boxes:
   - title: "Contact" #Title of the box, feel free to change
     x: 33 #coordinate of the box, DO NOT CHANGE

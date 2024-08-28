@@ -1,3 +1,13 @@
+# To create a link, download a picture into the asset folder or one of its child folders.
+# You can create your own child folder if you want.
+
+# x and y: Coordinates of the picture in the scene.
+# pictureName: A name for the picture, doesn't matter.
+# pictureUrl: The link to your file in the asset folder.
+# pictureSize: The size of the picture in the scene. You can modify it if you want your picture to be bigger or smaller.
+# pictureLink: The link used for redirection when the user clicks on your picture.
+
+
 link:
   - picture:
       x: 68

@@ -1,3 +1,29 @@
+# Every portfolio are optional. You can leave them empty (don't delete) or modify them as you want.
+# There are 6 frames, from bottom left to top right:
+# 5 6 
+# 3 4 
+# 1 2 
+# You can create your own child folder for pictures if you want.
+
+# title1: Optional, a title for the frame.
+# subTitle1: Optional, a subtitle for the frame.
+# date: Optional, in string format, a text between "subtitle" and "main" usually used for the date.
+# main: Optional, the main content.
+  # picture: 
+    # pictureName: A name for the picture, doesn't matter.
+    # pictureUrl: The link to your file in the asset folder.
+    # pictureSize: The size of the picture in the scene. You can modify it if you want your picture to be bigger or smaller.
+  # text: A line of text.
+# more: Optional, content displayed in the portfolio2 scene. If not created, a key block will block access to the portfolio2 scene.
+  # type: "text" or "image".
+  # xOffset and yOffset: Coordinates of the picture in the scene.
+  # text: If type is "text", the text.
+  # picture: If type is "image":
+    # pictureName: A name for the picture, doesn't matter.
+    # pictureUrl: The link to your file in the asset folder.
+    # pictureSize: The size of the picture in the scene. You can modify it if you want your picture to be bigger or smaller.
+
+
 portfolio:
   - 
     title1: "CV Zelda" # Main title in bold

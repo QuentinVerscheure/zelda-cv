@@ -1,8 +1,20 @@
-# Every line are optional. You can delete or modify them as you want
-# You can let empty a frame if needed. There a 8 frame, from top left to bottom right
+# Every cv frame are optional. You can let them empty (don't delete) or modify them as you want
+# There a 8 frame, from top left to bottom right
 # 1 2 3 4
 # 5 6 7 8
-#to change a picture, paste the file into the asset folder and change his url in "pictureUrl"
+
+# You can create your own child folder for pictures if you want.
+
+# title1: Optional, a title for the frame.
+# subTitle1: Optional, a subtitle for the frame.
+# date: Optional, in string format, a text between "subtitle" and "main" usually used for the date.
+# picture: A name for the main picture, doesn't matter. 
+# pictureUrl: The link to your file in the asset folder.
+# text: your main text multi-line
+# list: a list of texte
+  # text: a line of text
+
+
 
 cv:
   - {}
