@@ -44,9 +44,9 @@ public class AchievementMapper {
             return null;
         }
 
-        AchievementEntity entity = new AchievementEntity();
         UserEntity user = new UserEntity(); // Create a new instance or fetch from repository
         user.setId(bean.getUserId());
+        AchievementEntity entity = new AchievementEntity(user);
         entity.setUser(user);
 
         String[] ACHIEVEMENT_FIELDS = AchievementConstants.ACHIEVEMENT_FIELDS;

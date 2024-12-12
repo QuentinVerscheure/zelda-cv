@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface CommentService {
     CommentDTO getCommentById(Long id);
+    List<CommentDTO> getCommentByPseudo(String pseudo);
     List<CommentDTO> getAllComments();
     CommentDTO createComment(CommentDTO commentDTO);
     CommentDTO updateComment(Long id, CommentDTO commentDTO);

@@ -7,15 +7,19 @@ import jakarta.persistence.*;
 public class AchievementEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private UserEntity user;
 
-    //if entity fields is change, you have to change the AchievementConstants too because JPA cannot support dynamic set up to the entity fields 
+    // Achievements
     @Column(name = "cv")
     private boolean cv;
 
-    @Column(name = "cvDownload")
+    @Column(name = "cv_download")
     private boolean cvDownload;
 
     @Column(name = "portfolio")
@@ -24,29 +28,45 @@ public class AchievementEntity {
     @Column(name = "link")
     private boolean link;
 
-    @Column(name = "linkClick")
+    @Column(name = "link_click")
     private boolean linkClick;
 
     @Column(name = "phone")
     private boolean phone;
 
-    @Column(name = "phoneContact")
+    @Column(name = "phone_contact")
     private boolean phoneContact;
 
-    @Column(name = "guestBook")
+    @Column(name = "guest_book")
     private boolean guestBook;
 
-    @Column(name = "guestBookComment")
+    @Column(name = "guest_book_comment")
     private boolean guestBookComment;
 
-    @Column(name = "achievementVarious")
+    @Column(name = "achievement_various")
     private boolean achievementVarious;
 
-    @Column(name = "achievementCredit")
+    @Column(name = "achievement_credit")
     private boolean achievementCredit;
 
     // Default constructor
     public AchievementEntity() {}
+
+    // Constructor with UserEntity
+    public AchievementEntity(UserEntity user) {
+        this.user = user;
+        this.cv = false;
+        this.cvDownload = false;
+        this.portfolio = false;
+        this.link = false;
+        this.linkClick = false;
+        this.phone = false;
+        this.phoneContact = false;
+        this.guestBook = false;
+        this.guestBookComment = false;
+        this.achievementVarious = false;
+        this.achievementCredit = false;
+    }
 
     // Constructor with arguments
     public AchievementEntity(UserEntity user, boolean cv, boolean cvDownload, boolean portfolio, boolean link, boolean linkClick,
@@ -67,6 +87,14 @@ public class AchievementEntity {
     }
 
     // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public UserEntity getUser() {
         return user;
     }

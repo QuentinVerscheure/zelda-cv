@@ -24,6 +24,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<CommentDTO> getCommentByPseudo(String pseudo) {
+        List<CommentEntity> comments = commentRepository.findByUserPseudo(pseudo);
+        return comments.stream()
+                .map(CommentMapper::entityToBean)
+                .map(CommentMapper::beanToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<CommentDTO> getAllComments() {
         List<CommentEntity> comments = commentRepository.findAll();
         return comments.stream()
