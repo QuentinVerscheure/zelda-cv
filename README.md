@@ -39,9 +39,23 @@ If you want to contact me: quentin.verscheure@gmail.com
 
 ## Development
 
+### front:
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.0.  
 It uses the [Phaser](https://phaser.io/) library to create the game.  
 It uses the [VirtualJoystickPlugin](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/virtualjoystick/) for the mobile version's joystick.
 
 Run `ng serve` for a development server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.  
 Run `ng build` to generate the deployment files only if you modify code that isn't in the `assets` folder. The build artifacts will be stored in the `dist/` directory.
+
+### back:
+This project use :
+
+- Apache Maven 3.9.9
+- Java version: 17.0.12, vendor: Oracle Corporation
+- Spring Boot 3.3.3 with depandencies:
+  - Spring Web (pour créer les contrôleurs et services web).
+  - Spring Data JPA (pour l'intégration avec Hibernate).
+  - MySQL Driver (si tu utilises MySQL).
+  - Spring DevTools (optionnel, mais utile pour le rechargement automatique des changements).
+  
+Run `mvn spring-boot:run` for a development server. 
