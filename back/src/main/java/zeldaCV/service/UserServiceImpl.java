@@ -1,9 +1,12 @@
 package zeldaCV.service;
 
+import zeldaCV.bean.UserBean;
 import zeldaCV.converter.UserMapper;
 import zeldaCV.dto.UserDTO;
 import zeldaCV.model.UserEntity;
 import zeldaCV.repository.UserRepository;
+import zeldaCV.util.Achievement;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +23,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(Long id) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         return UserMapper.beanToDto(
-            UserMapper.entityToBean(userEntity)
-        );
+                UserMapper.entityToBean(userEntity));
     }
 
     @Override
@@ -36,24 +39,49 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
-        UserEntity userEntity = UserMapper.beanToEntity(UserMapper.dtoToBean(userDTO));
+        UserBean userBean = UserMapper.dtoToBean(userDTO);
+
+        if (!Achievement.checkAchievement(userBean.getAchievements())) {
+            throw new RuntimeException("Achievements are not correct");
+        }
+
+        UserEntity userEntity = UserMapper.beanToEntity(userBean);
         UserEntity savedUser = userRepository.save(userEntity);
         return UserMapper.beanToDto(UserMapper.entityToBean(savedUser));
     }
 
     @Override
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
-        UserEntity existingUser = userRepository.findById(id)
+    public UserDTO updateUser(Long id, UserDTO newUserDTO) {
+        UserEntity existingUserEntity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        existingUser.setPseudo(userDTO.getPseudo());
-        UserEntity updatedUser = userRepository.save(existingUser);
+
+        UserBean newUserBean = UserMapper.dtoToBean(newUserDTO);
+        UserBean existingUserBean = UserMapper.entityToBean(existingUserEntity);
+
+        // only id and pseudo can't be change in a user
+        newUserBean.setId(existingUserBean.getId());
+        newUserBean.setPseudo(existingUserBean.getPseudo());
+
+        if (!Achievement.checkAchievement(newUserBean.getAchievements())) {
+            throw new RuntimeException("Achievements are not correct");
+        }
+
+        UserEntity updatedUser = userRepository.save(UserMapper.beanToEntity(newUserBean));
         return UserMapper.beanToDto(UserMapper.entityToBean(updatedUser));
+
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public boolean deleteUser(Long id, String pass) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        userRepository.delete(userEntity);
+
+        if (pass == userEntity.getPass()) {
+            userRepository.delete(userEntity);
+            return true;
+        } else {
+            throw new RuntimeException("pass incorrect");
+        }
+
     }
 }

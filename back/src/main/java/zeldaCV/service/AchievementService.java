@@ -1,11 +1,10 @@
 package zeldaCV.service;
 
 import zeldaCV.bean.AchievementBean;
+import zeldaCV.dto.AchievementDTO;
 
-import java.util.List;
 
 public interface AchievementService {
-    List<AchievementBean> getAllAchievements();
-    AchievementBean getAchievementByUserId(Long userId);
-    AchievementBean updateAchievement(AchievementBean achievementBean);
+    AchievementDTO getAchievementByUserId(Long userId);
+    AchievementDTO updateAchievement(AchievementBean achievementBean);
 }

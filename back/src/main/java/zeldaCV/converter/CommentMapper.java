@@ -24,6 +24,7 @@ public class CommentMapper {
         commentEntity.setComment(commentBean.getComment());
         commentEntity.setCoordinateX(commentBean.getCoordinateX());
         commentEntity.setCoordinateY(commentBean.getCoordinateY());
+        commentEntity.setUserId(commentBean.getUserId());
         return commentEntity;
     }
 

@@ -69,7 +69,7 @@ public class AchievementMapper {
     }
 
     // Convert AchievementBean to AchievementDTO with null checks
-    public static AchievementDTO beanToDto(AchievementBean bean) {
+    public static AchievementDTO beanToDTO(AchievementBean bean) {
         if (bean == null) {
             return null;
         }
@@ -99,7 +99,7 @@ public class AchievementMapper {
     }
 
     // Convert AchievementDTO to AchievementBean
-    public static AchievementBean dtoToBean(AchievementDTO dto) {
+    public static AchievementBean DTOToBean(AchievementDTO dto) {
         if (dto == null) {
             return null;
         }

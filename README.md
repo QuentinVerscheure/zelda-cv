@@ -27,7 +27,7 @@ If you want to contact me: quentin.verscheure@gmail.com
 
 #### In `assets`:
 - `config.json`: the config file
-  - `"debugMode"`: Do not touch; used to activate debug mode (visibility of hitboxes and mobility of the player).
+  - `"debugMode"`: used to activate debug mode (visibility of hitboxes and mobility of the player).
   - `"menuName"`: The name displayed as the title in the menu.
   - `"cvName"`: The name given to your `CV.pdf` when downloaded.
   - `"mail"`: Your email displayed in the ContactHouse.
@@ -53,9 +53,11 @@ This project use :
 - Apache Maven 3.9.9
 - Java version: 17.0.12, vendor: Oracle Corporation
 - Spring Boot 3.3.3 with depandencies:
-  - Spring Web (pour créer les contrôleurs et services web).
-  - Spring Data JPA (pour l'intégration avec Hibernate).
-  - MySQL Driver (si tu utilises MySQL).
-  - Spring DevTools (optionnel, mais utile pour le rechargement automatique des changements).
+  - Spring Web.
+  - Spring Data JPA.
+  - MySQL Driver.
+  - Spring DevTools.
   
 Run `mvn spring-boot:run` for a development server. 
+
+Swagger available to: http://localhost:8080/swagger-ui/index.html

@@ -8,10 +8,9 @@ import zeldaCV.model.AchievementEntity;
 import zeldaCV.bean.AchievementBean;
 import zeldaCV.constants.AchievementConstants;
 import zeldaCV.converter.AchievementMapper;
+import zeldaCV.dto.AchievementDTO;
 import zeldaCV.repository.AchievementRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import zeldaCV.util.Achievement;
 
 import java.lang.reflect.Method;
 
@@ -26,21 +25,15 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
     @Override
-    public List<AchievementBean> getAllAchievements() {
-        return achievementRepository.findAll().stream()
-                .map(AchievementMapper::entityToBean)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public AchievementBean getAchievementByUserId(Long userId) {
+    public AchievementDTO getAchievementByUserId(Long userId) {
         return achievementRepository.findByUserId(userId)
                 .map(AchievementMapper::entityToBean)
-                .orElse(null); // or throw a custom exception if not found
+                .map(AchievementMapper::beanToDTO)
+                .orElseThrow(() -> new RuntimeException("Achievement not found for user ID: " + userId));
     }
 
     @Override
-    public AchievementBean updateAchievement(AchievementBean newAchievementBean) {
+    public AchievementDTO updateAchievement(AchievementBean newAchievementBean) {
 
         // get the achievement from the DB for the user because not all Achievement are
         // present/update in newAchievementBean
@@ -53,10 +46,10 @@ public class AchievementServiceImpl implements AchievementService {
         // dbAchievementBean
         String[] achievements = AchievementConstants.ACHIEVEMENT_FIELDS;
         try {
-            for (String field : achievements) {
+            for (String achievement : achievements) {
                 // Getter and setter methods for both dbAchievementBean and newAchievementBean
-                Method getMethod = AchievementBean.class.getMethod("is" + field);
-                Method setMethod = AchievementBean.class.getMethod("set" + field, boolean.class);
+                Method getMethod = AchievementBean.class.getMethod("is" + achievement);
+                Method setMethod = AchievementBean.class.getMethod("set" + achievement, boolean.class);
 
                 // Get the value from newAchievementBean
                 Boolean newValue = (Boolean) getMethod.invoke(newAchievementBean);
@@ -72,36 +65,12 @@ public class AchievementServiceImpl implements AchievementService {
         }
 
         // check the validity of the new achievements and save if ok
-        if (checkAchievement(dbAchievementBean)) {
+        if (Achievement.checkAchievement(dbAchievementBean)) {
             AchievementEntity achievementEntity = AchievementMapper.beanToEntity(dbAchievementBean);
             AchievementEntity updatedAchievement = achievementRepository.save(achievementEntity);
-            return AchievementMapper.entityToBean(updatedAchievement);
+            return AchievementMapper.beanToDTO(AchievementMapper.entityToBean(updatedAchievement));
         } else {
             throw new UnsupportedOperationException("Achievement not valid");
         }
     }
-
-    /**
-     * Verifies the user's achievements.
-     * This method takes an {@link AchievementBean} and checks that achievements are valid betwen them
-     *
-     * @param achievementBean The {@link AchievementBean} object containing the achievement details to verify.
-     * @return {@code true} if all conditions are met, otherwise {@code false}.
-     */
-    private boolean checkAchievement(AchievementBean achievementBean) {
-
-        // if the player send a comment but never enter the house where you can do it
-        if (achievementBean.isGuestBookComment() && !achievementBean.isGuestBook()) {
-            return false;
-        }
-        if (achievementBean.isLinkClick() && !achievementBean.isLink()) {
-            return false;
-        }
-        if (achievementBean.isPhoneContact() && !achievementBean.isPhone()) {
-            return false;
-        }
-
-        return true;
-    }
-
 }

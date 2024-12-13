@@ -5,17 +5,19 @@ import java.util.List;
 public class UserDTO {
     private Long id;
     private String pseudo;
+    private String pass;
     private List<CommentDTO> comments;
     private AchievementDTO achievement;
 
     // Default constructor
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     // Constructor with arguments
-    public UserDTO(Long id, String pseudo, List<CommentDTO> comments, AchievementDTO achievement) {
+    public UserDTO(Long id, String pseudo,String pass, AchievementDTO achievement) {
         this.id = id;
         this.pseudo = pseudo;
-        this.comments = comments;
+        this.pass = pass;
         this.achievement = achievement;
     }
 
@@ -31,6 +33,15 @@ public class UserDTO {
     public String getPseudo() {
         return pseudo;
     }
+
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
 
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;

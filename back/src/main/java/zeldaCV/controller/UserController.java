@@ -42,9 +42,15 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a user by ID", description = "Delete a user by ID")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        
+        if (userService.deleteUser(id, userDTO.getPass())) {
+            System.out.println("User successfully deleted: " + userDTO.getId());
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else {
+            System.out.println("User unsuccessfully deleted: " + userDTO.getId());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package zeldaCV.service;
 
+import zeldaCV.bean.CommentBean;
 import zeldaCV.converter.CommentMapper;
 import zeldaCV.dto.CommentDTO;
 import zeldaCV.model.CommentEntity;
@@ -43,19 +44,34 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO createComment(CommentDTO commentDTO) {
-        CommentEntity commentEntity = CommentMapper.beanToEntity(CommentMapper.dtoToBean(commentDTO));
+        CommentBean commentBean = CommentMapper.dtoToBean(commentDTO);
+
+        if (!CommentServiceImpl.commentVerification(commentBean)) {
+            throw new RuntimeException("comments are not correct");
+        }
+
+        CommentEntity commentEntity = CommentMapper.beanToEntity(commentBean);
         CommentEntity savedComment = commentRepository.save(commentEntity);
         return CommentMapper.beanToDto(CommentMapper.entityToBean(savedComment));
     }
 
     @Override
     public CommentDTO updateComment(Long id, CommentDTO commentDTO) {
-        CommentEntity existingComment = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
-        existingComment.setComment(commentDTO.getComment());
-        existingComment.setCoordinateX(commentDTO.getCoordinateX());
-        existingComment.setCoordinateY(commentDTO.getCoordinateY());
-        CommentEntity updatedComment = commentRepository.save(existingComment);
+
+        CommentBean commentBean = CommentMapper.dtoToBean(commentDTO);
+
+        if (!CommentServiceImpl.commentVerification(commentBean)) {
+            throw new RuntimeException("comments are not correct");
+        }
+
+        CommentEntity commentEntity = CommentMapper.beanToEntity(commentBean);
+
+        CommentEntity existingCommentEntity = commentRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Comment not found"));
+        existingCommentEntity.setComment(commentEntity.getComment());
+        existingCommentEntity.setCoordinateX(commentEntity.getCoordinateX());
+        existingCommentEntity.setCoordinateY(commentEntity.getCoordinateY());
+        CommentEntity updatedComment = commentRepository.save(existingCommentEntity);
         return CommentMapper.beanToDto(CommentMapper.entityToBean(updatedComment));
     }
 
@@ -64,5 +80,10 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity commentEntity = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
         commentRepository.delete(commentEntity);
+    }
+
+    public static boolean commentVerification(CommentBean commentBean) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'commentVerification'");
     }
 }

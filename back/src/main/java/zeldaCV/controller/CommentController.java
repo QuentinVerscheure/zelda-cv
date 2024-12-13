@@ -41,7 +41,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a comment by ID", description = "Delete an existing comment by ID")
+    @Operation(summary = "Delete a comment", description = "Delete an existing comment by ID")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
