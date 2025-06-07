@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comments")
+@RequestMapping("/api/comments")
 @Tag(name = "Comment", description = "Operations related to the comments a user can leave in the guestHouse")
 public class CommentController {
 

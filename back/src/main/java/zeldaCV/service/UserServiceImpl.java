@@ -6,6 +6,7 @@ import zeldaCV.dto.UserDTO;
 import zeldaCV.model.UserEntity;
 import zeldaCV.repository.UserRepository;
 import zeldaCV.util.Achievement;
+import zeldaCV.util.pseudo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,11 @@ public class UserServiceImpl implements UserService {
     public UserDTO createUser(UserDTO userDTO) {
         UserBean userBean = UserMapper.dtoToBean(userDTO);
 
+        // Check for forbidden pseudo
+        if (pseudo.isForbidden(userBean.getPseudo())) {
+            throw new RuntimeException("This username is not allowed. Please choose another one.");
+        }
+
         if (!Achievement.checkAchievement(userBean.getAchievements())) {
             throw new RuntimeException("Achievements are not correct");
         }
@@ -58,7 +64,7 @@ public class UserServiceImpl implements UserService {
         UserBean newUserBean = UserMapper.dtoToBean(newUserDTO);
         UserBean existingUserBean = UserMapper.entityToBean(existingUserEntity);
 
-        // only id and pseudo can't be change in a user
+        // id and pseudo can't be change in a user
         newUserBean.setId(existingUserBean.getId());
         newUserBean.setPseudo(existingUserBean.getPseudo());
 
