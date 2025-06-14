@@ -1,6 +1,7 @@
 package zeldaCV.converter;
 
 import zeldaCV.dto.CommentDTO;
+
 import zeldaCV.bean.CommentBean;
 import zeldaCV.model.CommentEntity;
 
@@ -9,7 +10,7 @@ public class CommentMapper {
     // DTO -> Bean
     public static CommentBean dtoToBean(CommentDTO commentDTO) {
         CommentBean commentBean = new CommentBean();
-        commentBean.setId(commentDTO.getId()); 
+        commentBean.setId(commentDTO.getId());
         commentBean.setComment(commentDTO.getComment());
         commentBean.setCoordinateX(commentDTO.getCoordinateX());
         commentBean.setCoordinateY(commentDTO.getCoordinateY());
@@ -40,7 +41,7 @@ public class CommentMapper {
     }
 
     // Bean -> DTO
-    public static CommentDTO beanToDto(CommentBean commentBean) {
+    public static CommentDTO beanToDTO(CommentBean commentBean) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setId(commentBean.getId());
         commentDTO.setComment(commentBean.getComment());

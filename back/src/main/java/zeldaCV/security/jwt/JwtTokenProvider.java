@@ -13,7 +13,6 @@ import io.jsonwebtoken.io.Decoders;
 
 @Component
 public class JwtTokenProvider {
-
     @Value("${app.jwt-secret}")
     private String jwtSecret;
 

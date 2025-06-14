@@ -1,129 +1,80 @@
 package zeldaCV.converter;
 
-import java.lang.reflect.Method;
-
 import zeldaCV.bean.AchievementBean;
-import zeldaCV.constants.AchievementConstants;
 import zeldaCV.dto.AchievementDTO;
 import zeldaCV.model.AchievementEntity;
-import zeldaCV.model.UserEntity;
 
 public class AchievementMapper {
 
-    // Convert AchievementEntity to AchievementBean
-    public static AchievementBean entityToBean(AchievementEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-
+    public static AchievementBean entityToBean(AchievementEntity achievementEntity) {
+        if (achievementEntity == null) return null;
         AchievementBean bean = new AchievementBean();
-        bean.setUserId(entity.getUser().getId());
-
-        String[] ACHIEVEMENT_FIELDS = AchievementConstants.ACHIEVEMENT_FIELDS;
-
-        //create       if (entity.isAchievement()) {bean.setAchievement(entity.isAchievement());}     for every achievement in the field
-        try {
-            for (String field : ACHIEVEMENT_FIELDS) {
-                Method getter = AchievementEntity.class.getMethod("is" + field);
-                Boolean value = (Boolean) getter.invoke(entity);
-                if (value != null) {
-                    Method setter = AchievementBean.class.getMethod("set" + field, Boolean.class);
-                    setter.invoke(bean, value);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        bean.setId(achievementEntity.getId());
+        bean.setCv(achievementEntity.isCv());
+        bean.setCvDownload(achievementEntity.isCvDownload());
+        bean.setPortfolio(achievementEntity.isPortfolio());
+        bean.setLink(achievementEntity.isLink());
+        bean.setLinkClick(achievementEntity.isLinkClick());
+        bean.setPhone(achievementEntity.isPhone());
+        bean.setPhoneContact(achievementEntity.isPhoneContact());
+        bean.setGuestBook(achievementEntity.isGuestBook());
+        bean.setGuestBookComment(achievementEntity.isGuestBookComment());
+        bean.setAchievementVarious(achievementEntity.isAchievementVarious());
+        bean.setAchievementCredit(achievementEntity.isAchievementCredit());
         return bean;
     }
 
-    // Convert AchievementBean to AchievementEntity
-    public static AchievementEntity beanToEntity(AchievementBean bean) {
-        if (bean == null) {
-            return null;
-        }
-
-        UserEntity user = new UserEntity(); // Create a new instance or fetch from repository
-        user.setId(bean.getUserId());
-        AchievementEntity entity = new AchievementEntity(user);
-        entity.setUser(user);
-
-        String[] ACHIEVEMENT_FIELDS = AchievementConstants.ACHIEVEMENT_FIELDS;
-
-                //create       if (bean.isAchievement()) {entity.setAchievement(bean.isAchievement());}     for every achievement in the field
-        try {
-            for (String field : ACHIEVEMENT_FIELDS) {
-                Method getter = AchievementBean.class.getMethod("is" + field);
-                Boolean value = (Boolean) getter.invoke(bean);
-                if (value != null) {
-                    Method setter = AchievementEntity.class.getMethod("set" + field, Boolean.class);
-                    setter.invoke(entity, value);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return entity;
-    }
-
-    // Convert AchievementBean to AchievementDTO with null checks
-    public static AchievementDTO beanToDTO(AchievementBean bean) {
-        if (bean == null) {
-            return null;
-        }
-
+    public static AchievementDTO beanToDto(AchievementBean bean) {
+        if (bean == null) return null;
         AchievementDTO dto = new AchievementDTO();
-        if (bean.getUserId() != null) {
-            dto.setUserId(bean.getUserId());
-        }
-
-        String[] ACHIEVEMENT_FIELDS = AchievementConstants.ACHIEVEMENT_FIELDS;
-
-        //create       if (bean.isAchievement()) {dto.setAchievement(bean.isAchievement());}     for every achievement in the field
-        try {
-            for (String field : ACHIEVEMENT_FIELDS) {
-                Method getter = AchievementBean.class.getMethod("is" + field);
-                Boolean value = (Boolean) getter.invoke(bean);
-                if (value != null) {
-                    Method setter = AchievementDTO.class.getMethod("set" + field, Boolean.class);
-                    setter.invoke(dto, value);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        dto.setId(bean.getId());
+        dto.setCv(bean.isCv());
+        dto.setCvDownload(bean.isCvDownload());
+        dto.setPortfolio(bean.isPortfolio());
+        dto.setLink(bean.isLink());
+        dto.setLinkClick(bean.isLinkClick());
+        dto.setPhone(bean.isPhone());
+        dto.setPhoneContact(bean.isPhoneContact());
+        dto.setGuestBook(bean.isGuestBook());
+        dto.setGuestBookComment(bean.isGuestBookComment());
+        dto.setAchievementVarious(bean.isAchievementVarious());
+        dto.setAchievementCredit(bean.isAchievementCredit());
         return dto;
     }
 
-    // Convert AchievementDTO to AchievementBean
-    public static AchievementBean DTOToBean(AchievementDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-
+    public static AchievementBean dtoToBean(AchievementDTO dto) {
+        if (dto == null) return null;
         AchievementBean bean = new AchievementBean();
-        bean.setUserId(dto.getUserId());
-
-        String[] ACHIEVEMENT_FIELDS = AchievementConstants.ACHIEVEMENT_FIELDS;
-
-        //create       if (dto.isAchievement()) {bean.setUserId(dto.getAchievement());}     for every achievement in the field
-        
-        try {
-            for (String field : ACHIEVEMENT_FIELDS) {
-                Method getter = AchievementDTO.class.getMethod("is" + field);
-                Boolean value = (Boolean) getter.invoke(dto);
-                if (value != null) {
-                    Method setter = AchievementBean.class.getMethod("set" + field, Boolean.class);
-                    setter.invoke(bean, value);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        bean.setId(dto.getId());
+        bean.setCv(dto.isCv());
+        bean.setCvDownload(dto.isCvDownload());
+        bean.setPortfolio(dto.isPortfolio());
+        bean.setLink(dto.isLink());
+        bean.setLinkClick(dto.isLinkClick());
+        bean.setPhone(dto.isPhone());
+        bean.setPhoneContact(dto.isPhoneContact());
+        bean.setGuestBook(dto.isGuestBook());
+        bean.setGuestBookComment(dto.isGuestBookComment());
+        bean.setAchievementVarious(dto.isAchievementVarious());
+        bean.setAchievementCredit(dto.isAchievementCredit());
         return bean;
     }
+
+    public static AchievementEntity beanToEntity(AchievementBean bean, AchievementEntity achievementEntity) {
+        if (bean == null) return null;
+        achievementEntity.setId(bean.getId());
+        achievementEntity.setCv(bean.isCv());
+        achievementEntity.setCvDownload(bean.isCvDownload());
+        achievementEntity.setPortfolio(bean.isPortfolio());
+        achievementEntity.setLink(bean.isLink());
+        achievementEntity.setLinkClick(bean.isLinkClick());
+        achievementEntity.setPhone(bean.isPhone());
+        achievementEntity.setPhoneContact(bean.isPhoneContact());
+        achievementEntity.setGuestBook(bean.isGuestBook());
+        achievementEntity.setGuestBookComment(bean.isGuestBookComment());
+        achievementEntity.setAchievementVarious(bean.isAchievementVarious());
+        achievementEntity.setAchievementCredit(bean.isAchievementCredit());
+        return achievementEntity;
+    }
 }
+

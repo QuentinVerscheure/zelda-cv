@@ -1,6 +1,7 @@
 package zeldaCV.controller;
 
 import zeldaCV.dto.UserDTO;
+import zeldaCV.dto.UserResponseDTO;
 import zeldaCV.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,7 +22,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping("/{id}")
     @Operation(summary = "Get a user by ID", description = "Get a user by ID")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
@@ -27,29 +30,67 @@ public class UserController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a new user", description = "Create a new user")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    @Operation(summary = "Create a new user", 
+    description = "Create a new user", 
+    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        required = true, 
+        content = @Content(
+            schema = @Schema(implementation = UserDTO.class), 
+            examples = @ExampleObject(
+                value = "{\n"+
+            "  \"pseudo\": \"Link\",\n" +
+            "  \"pass\": \"Zelda\",\n" +
+            "  \"achievement\": {\n" +
+            "    \"cv\": true,\n" +
+            "    \"cvDownload\": true,\n" +
+            "    \"portfolio\": true,\n" +
+            "    \"link\": true,\n" +
+            "    \"linkClick\": true,\n" +
+            "    \"phone\": true,\n" +
+            "    \"phoneContact\": true,\n" +
+            "    \"guestBook\": true,\n" +
+            "    \"guestBookComment\": true,\n" +
+            "    \"achievementVarious\": true,\n" +
+            "    \"achievementCredit\": true\n" +
+            "  }\n" +
+            "}"))))
+    public UserResponseDTO createUser(@RequestBody UserDTO userDTO) {
+        UserResponseDTO createdUser = userService.createUser(userDTO);
+        return createdUser;
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update an existing user", description = "Update an existing user")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.updateUser(id, userDTO);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    @Operation(
+        summary = "Update an existing user",
+        description = "Update an existing user",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            required = true,
+            content = @Content(
+                schema = @Schema(implementation = UserDTO.class),
+                examples = @ExampleObject(
+                    value = "{ \"pseudo\": \"Link\", \"pass\": \"Zelda\" }"
+                )
+            )
+        )
+    )
+    public UserResponseDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        userDTO.setId(id);
+        UserResponseDTO updatedUser = userService.updateUser(userDTO);
+        return updatedUser;
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a user by ID", description = "Delete a user by ID")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        
-        if (userService.deleteUser(id, userDTO.getPass())) {
-            System.out.println("User successfully deleted: " + userDTO.getId());
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+
+        if (userService.deleteUser(id)) {
+            String msg = "User successfully deleted: " + id;
+            System.out.println(msg);
+            return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
         } else {
-            System.out.println("User unsuccessfully deleted: " + userDTO.getId());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            String msg = "You are not allowed to delete this user.";
+            System.out.println("User unsuccessfully deleted: " + id);
+            return new ResponseEntity<>(msg, HttpStatus.FORBIDDEN);
         }
     }
 

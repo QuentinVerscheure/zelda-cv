@@ -6,10 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import zeldaCV.bean.AchievementBean;
 import zeldaCV.constants.AchievementConstants;
 import zeldaCV.dto.AchievementDTO;
+import zeldaCV.dto.UserDTO;
+import zeldaCV.dto.UserResponseDTO;
 import zeldaCV.converter.AchievementMapper;
 import zeldaCV.service.AchievementService;
 
@@ -25,18 +30,35 @@ public class AchievementController {
         this.achievementService = achievementService;
     }
 
-    // get all type of achivement in the game
     @GetMapping("/getDiffTypeOfAchievement")
     @Operation(summary = "give all type of achivement available for a player", description = "give all type of achivement available for a player")
     public String[] getDiffTypeOfAchievement() {
         return AchievementConstants.ACHIEVEMENT_FIELDS;
-    };
+    }
 
-    // Update an achievement
     @PutMapping("/update")
-    @Operation(summary = "update an achievement by true or false", description = "update a specific achivement of a user by true or false")
+    @Operation(summary = "update an achievement by true or false", 
+    description = "update a specific achivement of a user by true or false",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        required = true, 
+        content = @Content(
+            schema = @Schema(implementation = AchievementDTO.class), 
+            examples = @ExampleObject(
+                value = "{\n"+
+            "  \"cv\": false,\n" +
+            "  \"cvDownload\": false,\n" +
+            "  \"portfolio\": false,\n" +
+            "  \"link\": true,\n" +
+            "  \"linkClick\": true,\n" +
+            "  \"phone\": true,\n" +
+            "  \"phoneContact\": true,\n" +
+            "  \"guestBook\": true,\n" +
+            "  \"guestBookComment\": true,\n" +
+            "  \"achievementVarious\": true,\n" +
+            "  \"achievementCredit\": true\n" +
+            "}"))))
     public ResponseEntity<AchievementDTO> updateAchievement(@RequestBody AchievementDTO achievementDTO) {
-        AchievementBean achievementBean = AchievementMapper.DTOToBean(achievementDTO);
+        AchievementBean achievementBean = AchievementMapper.dtoToBean(achievementDTO);
         AchievementDTO updatedAchievementDTO = achievementService.updateAchievement(achievementBean);
         return ResponseEntity.ok(updatedAchievementDTO);
     }

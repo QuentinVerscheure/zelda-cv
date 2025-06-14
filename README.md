@@ -61,3 +61,10 @@ This project use :
 Run `mvn spring-boot:run` for a development server. 
 
 Swagger available to: http://localhost:8080/swagger-ui/index.html
+To use it, create a acount with `POST /api/users Create a new user` then authenticate with `POST /api/auth/login`
+Copy paste the token you receive in responses in the `Authorize` button on top right
+Be carefull to change the token if you modify your name or pass and don't use the token if you use a unauthenticate controler
+
+### DB shéma:
+
+![Database Schema](src/main/resources/static/shemaDB.png)

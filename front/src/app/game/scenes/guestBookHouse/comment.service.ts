@@ -166,7 +166,7 @@ export class CommentService {
       -10 * scaleOfTheGame,
       -10 * scaleOfTheGame,
       228 * scaleOfTheGame,
-      132 * scaleOfTheGame
+      175 * scaleOfTheGame
     );
     if (
       Phaser.Geom.Intersects.RectangleToRectangle(

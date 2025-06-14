@@ -1,6 +1,8 @@
 package zeldaCV.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -11,8 +13,6 @@ import zeldaCV.converter.AchievementMapper;
 import zeldaCV.dto.AchievementDTO;
 import zeldaCV.repository.AchievementRepository;
 import zeldaCV.util.Achievement;
-
-import java.lang.reflect.Method;
 
 @Service
 public class AchievementServiceImpl implements AchievementService {
@@ -28,49 +28,42 @@ public class AchievementServiceImpl implements AchievementService {
     public AchievementDTO getAchievementByUserId(Long userId) {
         return achievementRepository.findByUserId(userId)
                 .map(AchievementMapper::entityToBean)
-                .map(AchievementMapper::beanToDTO)
+                .map(AchievementMapper::beanToDto)
                 .orElseThrow(() -> new RuntimeException("Achievement not found for user ID: " + userId));
     }
 
     @Override
     public AchievementDTO updateAchievement(AchievementBean newAchievementBean) {
 
-        // get the achievement from the DB for the user because not all Achievement are
-        // present/update in newAchievementBean
-        AchievementEntity dbAchievementEntity = achievementRepository.findById(newAchievementBean.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Achievement not found for user ID: " + newAchievementBean.getUserId()));
-        AchievementBean dbAchievementBean = AchievementMapper.entityToBean(dbAchievementEntity);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication != null ? authentication.getName() : null;
 
-        // take the new achievement in newAchievementBean and replace them in
-        // dbAchievementBean
-        String[] achievements = AchievementConstants.ACHIEVEMENT_FIELDS;
-        try {
-            for (String achievement : achievements) {
-                // Getter and setter methods for both dbAchievementBean and newAchievementBean
-                Method getMethod = AchievementBean.class.getMethod("is" + achievement);
-                Method setMethod = AchievementBean.class.getMethod("set" + achievement, boolean.class);
-
-                // Get the value from newAchievementBean
-                Boolean newValue = (Boolean) getMethod.invoke(newAchievementBean);
-
-                // If the new value is present (i.e., true), update the value in
-                // dbAchievementBean
-                if (newValue != null && newValue) {
-                    setMethod.invoke(dbAchievementBean, newValue);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        AchievementEntity achievementEntity = achievementRepository.findByUserPseudo(pseudo);
+        if (achievementEntity == null) {
+            throw new EntityNotFoundException(
+                    "Achievement not found for actual user");
         }
+        AchievementBean dbAchievementBean = AchievementMapper.entityToBean(achievementEntity);
 
-        // check the validity of the new achievements and save if ok
+        dbAchievementBean.setCv(newAchievementBean.isCv());
+        dbAchievementBean.setCvDownload(newAchievementBean.isCvDownload());
+        dbAchievementBean.setPortfolio(newAchievementBean.isPortfolio());
+        dbAchievementBean.setLink(newAchievementBean.isLink());
+        dbAchievementBean.setLinkClick(newAchievementBean.isLinkClick());
+        dbAchievementBean.setPhone(newAchievementBean.isPhone());
+        dbAchievementBean.setPhoneContact(newAchievementBean.isPhoneContact());
+        dbAchievementBean.setGuestBook(newAchievementBean.isGuestBook());
+        dbAchievementBean.setGuestBookComment(newAchievementBean.isGuestBookComment());
+        dbAchievementBean.setAchievementVarious(newAchievementBean.isAchievementVarious());
+        dbAchievementBean.setAchievementCredit(newAchievementBean.isAchievementCredit());
+
         if (Achievement.checkAchievement(dbAchievementBean)) {
-            AchievementEntity achievementEntity = AchievementMapper.beanToEntity(dbAchievementBean);
+            AchievementMapper.beanToEntity(dbAchievementBean, achievementEntity);
             AchievementEntity updatedAchievement = achievementRepository.save(achievementEntity);
-            return AchievementMapper.beanToDTO(AchievementMapper.entityToBean(updatedAchievement));
+            return AchievementMapper.beanToDto(AchievementMapper.entityToBean(updatedAchievement));
         } else {
             throw new UnsupportedOperationException("Achievement not valid");
         }
     }
 }
+
