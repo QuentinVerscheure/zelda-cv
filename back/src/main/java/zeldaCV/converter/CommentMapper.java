@@ -8,13 +8,13 @@ import zeldaCV.model.CommentEntity;
 public class CommentMapper {
 
     // DTO -> Bean
-    public static CommentBean dtoToBean(CommentDTO commentDTO) {
+    public static CommentBean dtoToBean(CommentDTO commentDto) {
         CommentBean commentBean = new CommentBean();
-        commentBean.setId(commentDTO.getId());
-        commentBean.setComment(commentDTO.getComment());
-        commentBean.setCoordinateX(commentDTO.getCoordinateX());
-        commentBean.setCoordinateY(commentDTO.getCoordinateY());
-        commentBean.setUserId(commentDTO.getUserId());
+        commentBean.setId(commentDto.getId());
+        commentBean.setComment(commentDto.getComment());
+        commentBean.setCoordinateX(commentDto.getCoordinateX());
+        commentBean.setCoordinateY(commentDto.getCoordinateY());
+        commentBean.setUserId(commentDto.getUserId());
         return commentBean;
     }
 
@@ -41,13 +41,13 @@ public class CommentMapper {
     }
 
     // Bean -> DTO
-    public static CommentDTO beanToDTO(CommentBean commentBean) {
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setId(commentBean.getId());
-        commentDTO.setComment(commentBean.getComment());
-        commentDTO.setCoordinateX(commentBean.getCoordinateX());
-        commentDTO.setCoordinateY(commentBean.getCoordinateY());
-        commentDTO.setUserId(commentBean.getUserId());
-        return commentDTO;
+    public static CommentDTO beanToDto(CommentBean commentBean) {
+        CommentDTO commentDto = new CommentDTO();
+        commentDto.setId(commentBean.getId());
+        commentDto.setComment(commentBean.getComment());
+        commentDto.setCoordinateX(commentBean.getCoordinateX());
+        commentDto.setCoordinateY(commentBean.getCoordinateY());
+        commentDto.setUserId(commentBean.getUserId());
+        return commentDto;
     }
 }

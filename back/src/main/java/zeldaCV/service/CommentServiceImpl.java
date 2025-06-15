@@ -4,7 +4,10 @@ import zeldaCV.bean.CommentBean;
 import zeldaCV.converter.CommentMapper;
 import zeldaCV.dto.CommentDTO;
 import zeldaCV.model.CommentEntity;
+import zeldaCV.model.UserEntity;
 import zeldaCV.repository.CommentRepository;
+import zeldaCV.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
@@ -20,6 +23,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // size fix of the comment rectangle
     private static final int COMMENT_WIDTH = 131;
@@ -34,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDTO getCommentById(Long id) {
         CommentEntity commentEntity = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
-        return CommentMapper.beanToDTO(CommentMapper.entityToBean(commentEntity));
+        return CommentMapper.beanToDto(CommentMapper.entityToBean(commentEntity));
     }
 
     @Override
@@ -42,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
         List<CommentEntity> comments = commentRepository.findByUserPseudo(pseudo);
         return comments.stream()
                 .map(CommentMapper::entityToBean)
-                .map(CommentMapper::beanToDTO)
+                .map(CommentMapper::beanToDto)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
         List<CommentEntity> comments = commentRepository.findAll();
         return comments.stream()
                 .map(CommentMapper::entityToBean)
-                .map(CommentMapper::beanToDTO)
+                .map(CommentMapper::beanToDto)
                 .collect(Collectors.toList());
     }
 
@@ -63,9 +68,17 @@ public class CommentServiceImpl implements CommentService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment is not valid: it overlaps a forbidden area or another comment.");
         }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication != null ? authentication.getName() : null;
+
+        UserEntity user = userRepository.findByPseudo(pseudo)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
         CommentEntity commentEntity = CommentMapper.beanToEntity(commentBean);
+        commentEntity.setUser(user);
+
         CommentEntity savedComment = commentRepository.save(commentEntity);
-        return CommentMapper.beanToDTO(CommentMapper.entityToBean(savedComment));
+        return CommentMapper.beanToDto(CommentMapper.entityToBean(savedComment));
     }
 
     @Override
@@ -77,7 +90,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You are not authorized to modify this comment");
         }
         if (!this.commentVerification(commentBean)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Comment is not valid: it overlaps a forbidden area or another comment.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment is not valid: it overlaps a forbidden area or another comment.");
         }
 
         CommentEntity commentEntity = CommentMapper.beanToEntity(commentBean);
@@ -88,13 +101,13 @@ public class CommentServiceImpl implements CommentService {
         existingCommentEntity.setCoordinateX(commentEntity.getCoordinateX());
         existingCommentEntity.setCoordinateY(commentEntity.getCoordinateY());
         CommentEntity updatedComment = commentRepository.save(existingCommentEntity);
-        return CommentMapper.beanToDTO(CommentMapper.entityToBean(updatedComment));
+        return CommentMapper.beanToDto(CommentMapper.entityToBean(updatedComment));
     }
 
     @Override
     public void deleteComment(Long id) {
         if (!isCurrentUserOwnerOfComment(id)) {
-            throw new RuntimeException("You are not authorized to delete this comment");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to delete this comment");
         }
         CommentEntity commentEntity = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));

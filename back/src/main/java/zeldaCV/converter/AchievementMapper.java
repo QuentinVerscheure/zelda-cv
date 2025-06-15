@@ -24,39 +24,39 @@ public class AchievementMapper {
         return bean;
     }
 
-    public static AchievementDTO beanToDto(AchievementBean bean) {
-        if (bean == null) return null;
-        AchievementDTO dto = new AchievementDTO();
-        dto.setId(bean.getId());
-        dto.setCv(bean.isCv());
-        dto.setCvDownload(bean.isCvDownload());
-        dto.setPortfolio(bean.isPortfolio());
-        dto.setLink(bean.isLink());
-        dto.setLinkClick(bean.isLinkClick());
-        dto.setPhone(bean.isPhone());
-        dto.setPhoneContact(bean.isPhoneContact());
-        dto.setGuestBook(bean.isGuestBook());
-        dto.setGuestBookComment(bean.isGuestBookComment());
-        dto.setAchievementVarious(bean.isAchievementVarious());
-        dto.setAchievementCredit(bean.isAchievementCredit());
-        return dto;
+    public static AchievementDTO beanToDto(AchievementBean achievementBean) {
+        if (achievementBean == null) return null;
+        AchievementDTO achievementDto = new AchievementDTO();
+        achievementDto.setId(achievementBean.getId());
+        achievementDto.setCv(achievementBean.isCv());
+        achievementDto.setCvDownload(achievementBean.isCvDownload());
+        achievementDto.setPortfolio(achievementBean.isPortfolio());
+        achievementDto.setLink(achievementBean.isLink());
+        achievementDto.setLinkClick(achievementBean.isLinkClick());
+        achievementDto.setPhone(achievementBean.isPhone());
+        achievementDto.setPhoneContact(achievementBean.isPhoneContact());
+        achievementDto.setGuestBook(achievementBean.isGuestBook());
+        achievementDto.setGuestBookComment(achievementBean.isGuestBookComment());
+        achievementDto.setAchievementVarious(achievementBean.isAchievementVarious());
+        achievementDto.setAchievementCredit(achievementBean.isAchievementCredit());
+        return achievementDto;
     }
 
-    public static AchievementBean dtoToBean(AchievementDTO dto) {
-        if (dto == null) return null;
+    public static AchievementBean dtoToBean(AchievementDTO achievementDto) {
+        if (achievementDto == null) return null;
         AchievementBean bean = new AchievementBean();
-        bean.setId(dto.getId());
-        bean.setCv(dto.isCv());
-        bean.setCvDownload(dto.isCvDownload());
-        bean.setPortfolio(dto.isPortfolio());
-        bean.setLink(dto.isLink());
-        bean.setLinkClick(dto.isLinkClick());
-        bean.setPhone(dto.isPhone());
-        bean.setPhoneContact(dto.isPhoneContact());
-        bean.setGuestBook(dto.isGuestBook());
-        bean.setGuestBookComment(dto.isGuestBookComment());
-        bean.setAchievementVarious(dto.isAchievementVarious());
-        bean.setAchievementCredit(dto.isAchievementCredit());
+        bean.setId(achievementDto.getId());
+        bean.setCv(achievementDto.isCv());
+        bean.setCvDownload(achievementDto.isCvDownload());
+        bean.setPortfolio(achievementDto.isPortfolio());
+        bean.setLink(achievementDto.isLink());
+        bean.setLinkClick(achievementDto.isLinkClick());
+        bean.setPhone(achievementDto.isPhone());
+        bean.setPhoneContact(achievementDto.isPhoneContact());
+        bean.setGuestBook(achievementDto.isGuestBook());
+        bean.setGuestBookComment(achievementDto.isGuestBookComment());
+        bean.setAchievementVarious(achievementDto.isAchievementVarious());
+        bean.setAchievementCredit(achievementDto.isAchievementCredit());
         return bean;
     }
 

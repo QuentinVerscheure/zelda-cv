@@ -54,9 +54,9 @@ public class UserController {
             "    \"achievementCredit\": true\n" +
             "  }\n" +
             "}"))))
-    public UserResponseDTO createUser(@RequestBody UserDTO userDTO) {
-        UserResponseDTO createdUser = userService.createUser(userDTO);
-        return createdUser;
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserDTO userDto) {
+        UserResponseDTO createdUser = userService.createUser(userDto);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -73,10 +73,10 @@ public class UserController {
             )
         )
     )
-    public UserResponseDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        userDTO.setId(id);
-        UserResponseDTO updatedUser = userService.updateUser(userDTO);
-        return updatedUser;
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDto) {
+        userDto.setId(id);
+        UserResponseDTO updatedUser = userService.updateUser(userDto);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

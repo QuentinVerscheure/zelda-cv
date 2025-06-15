@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
@@ -27,23 +30,47 @@ public class CommentController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a new comment", description = "Create a new comment for a specific user")
-    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) {
-        CommentDTO createdComment = commentService.createComment(commentDTO);
-        return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+    @Operation(summary = "Create a new comment", 
+    description = "Create a new comment for the current user", 
+    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        required = true, 
+        content = @Content(
+            schema = @Schema(implementation = CommentDTO.class), 
+            examples = @ExampleObject(
+                value = "{\n" +
+                        "  \"comment\": \"string\",\n" +
+                        "  \"coordinateX\": 1000,\n" +
+                        "  \"coordinateY\": 1000\n" +
+                        "}"
+            ))))
+    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDto) {
+        CommentDTO createdCommentDto = commentService.createComment(commentDto);
+        return new ResponseEntity<>(createdCommentDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update an existing comment", description = "Update an existing comment by id")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDTO) {
-        CommentDTO updatedComment = commentService.updateComment(id, commentDTO);
-        return new ResponseEntity<>(updatedComment, HttpStatus.OK);
+    @Operation(summary = "Update an existing comment", 
+    description = "Update an existing comment by id",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        required = true, 
+        content = @Content(
+            schema = @Schema(implementation = CommentDTO.class), 
+            examples = @ExampleObject(
+                value = "{\n" +
+                        "  \"comment\": \"string\",\n" +
+                        "  \"coordinateX\": 1000,\n" +
+                        "  \"coordinateY\": 1000\n" +
+                        "}"
+            ))))
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDto) {
+        CommentDTO updatedCommentDto = commentService.updateComment(id, commentDto);
+        return ResponseEntity.ok(updatedCommentDto);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a comment", description = "Delete an existing comment by ID")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

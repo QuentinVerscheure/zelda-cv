@@ -37,7 +37,6 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    // Get username from JWT token
     public String getUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key())
@@ -47,7 +46,6 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    // Validate JWT token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -56,7 +54,6 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException ex) {
-            // log exception if needed
             return false;
         }
     }

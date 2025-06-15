@@ -1,7 +1,6 @@
 package zeldaCV.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import zeldaCV.bean.AchievementBean;
 import zeldaCV.constants.AchievementConstants;
 import zeldaCV.dto.AchievementDTO;
-import zeldaCV.dto.UserDTO;
-import zeldaCV.dto.UserResponseDTO;
 import zeldaCV.converter.AchievementMapper;
 import zeldaCV.service.AchievementService;
 
@@ -61,12 +58,13 @@ public class AchievementController {
         AchievementBean achievementBean = AchievementMapper.dtoToBean(achievementDTO);
         AchievementDTO updatedAchievementDTO = achievementService.updateAchievement(achievementBean);
         return ResponseEntity.ok(updatedAchievementDTO);
+
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a user's achievement", description = "Get all achievement for a user")
     public ResponseEntity<AchievementDTO> getUserachievement(@PathVariable Long id) {
-        AchievementDTO Achievement = achievementService.getAchievementByUserId(id);
-        return new ResponseEntity<>(Achievement, HttpStatus.OK);
+        AchievementDTO achievementDto = achievementService.getAchievementByUserId(id);
+        return ResponseEntity.ok(achievementDto);
     }
 }

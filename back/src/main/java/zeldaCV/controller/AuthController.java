@@ -3,7 +3,6 @@ package zeldaCV.controller;
 import lombok.AllArgsConstructor;
 import zeldaCV.dto.LoginDTO;
 import zeldaCV.service.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zeldaCV.security.jwt.JwtAuthResponse;    
@@ -23,7 +22,7 @@ public class AuthController {
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setAccessToken(token);
 
-        return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
+        return  ResponseEntity.ok(jwtAuthResponse);
     }
 
 }

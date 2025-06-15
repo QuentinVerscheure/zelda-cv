@@ -3,7 +3,6 @@ package zeldaCV.service;
 import zeldaCV.bean.UserBean;
 import zeldaCV.converter.AchievementMapper;
 import zeldaCV.converter.UserMapper;
-import zeldaCV.dto.UserDTO;
 import zeldaCV.dto.UserResponseDTO;
 import zeldaCV.model.AchievementEntity;
 import zeldaCV.model.UserEntity;
@@ -21,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import zeldaCV.dto.LoginDTO;
+import zeldaCV.dto.UserDTO;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,20 +58,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO createUser(UserDTO userDTO) {
-        UserBean userBean = UserMapper.dtoToBean(userDTO);
+    public UserResponseDTO createUser(UserDTO userDto) {
+        UserBean userBean = UserMapper.dtoToBean(userDto);
 
         // Check for forbidden pseudo
         if (pseudo.isForbidden(userBean.getPseudo())) {
-            throw new RuntimeException("This username is not allowed. Please choose another one.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username is not allowed. Please choose another one.");
         }
 
         if (userRepository.existsByPseudo(userBean.getPseudo())) {
-            throw new RuntimeException("This pseudo is already used by another user.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This pseudo is already used by another user.");
         }
 
-        if (!Achievement.checkAchievement(AchievementMapper.dtoToBean(userDTO.getAchievement()))) {
-            throw new RuntimeException("Achievements are not correct");
+        if (!Achievement.checkAchievement(userBean.getAchievements())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Achievements are not correct");
         }
 
         userBean.setPass(passwordEncoder.encode(userBean.getPass()));
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
         UserEntity savedUser = userRepository.save(userEntity);
 
 
-        if (userDTO.getAchievement() != null) {
+        if (userDto.getAchievement() != null) {
             AchievementEntity achievementEntity = AchievementMapper.beanToEntity(
                 userBean.getAchievements(), new AchievementEntity());
             achievementEntity.setUser(savedUser);
@@ -91,8 +92,8 @@ public class UserServiceImpl implements UserService {
         }
         
         LoginDTO loginDto = new LoginDTO();
-        loginDto.setUser(userDTO.getPseudo());
-        loginDto.setPassword(userDTO.getPass());
+        loginDto.setUser(userDto.getPseudo());
+        loginDto.setPassword(userDto.getPass());
         String token = authService.login(loginDto);
 
         return new UserResponseDTO(token, HttpStatus.CREATED,
@@ -100,18 +101,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO updateUser(UserDTO newUserDTO) {
-        UserEntity existingUserEntity = userRepository.findById(newUserDTO.getId())
+    public UserResponseDTO updateUser(UserDTO newUserDto) {
+        UserEntity existingUserEntity = userRepository.findById(newUserDto.getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserBean newUserBean = UserMapper.dtoToBean(newUserDTO);
+        UserBean newUserBean = UserMapper.dtoToBean(newUserDto);
 
         if (pseudo.isForbidden(newUserBean.getPseudo())) {
-            throw new RuntimeException("This username is not allowed. Please choose another one.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username is not allowed. Please choose another one.");
         }
         if (userRepository.existsByPseudo(newUserBean.getPseudo()) &&
                 !existingUserEntity.getPseudo().equals(newUserBean.getPseudo())) {
-            throw new RuntimeException("This pseudo is already used by another user.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This pseudo is already used by another user.");
+        }
+
+        if (!Achievement.checkAchievement(newUserBean.getAchievements())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Achievements are not correct");
         }
 
         existingUserEntity.setPseudo(newUserBean.getPseudo());
@@ -121,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
         LoginDTO loginDto = new LoginDTO();
         loginDto.setUser(updatedUser.getPseudo());
-        loginDto.setPassword(newUserDTO.getPass());
+        loginDto.setPassword(newUserDto.getPass());
 
         String token = authService.login(loginDto);
 

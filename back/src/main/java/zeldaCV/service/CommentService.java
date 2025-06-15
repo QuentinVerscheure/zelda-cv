@@ -7,7 +7,7 @@ public interface CommentService {
     CommentDTO getCommentById(Long id);
     List<CommentDTO> getCommentByPseudo(String pseudo);
     List<CommentDTO> getAllComments();
-    CommentDTO createComment(CommentDTO commentDTO);
-    CommentDTO updateComment(Long id, CommentDTO commentDTO);
+    CommentDTO createComment(CommentDTO commentDto);
+    CommentDTO updateComment(Long id, CommentDTO commentDto);
     void deleteComment(Long id);
 }

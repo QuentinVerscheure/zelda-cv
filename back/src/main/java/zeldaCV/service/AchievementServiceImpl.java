@@ -4,11 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import jakarta.persistence.EntityNotFoundException;
 import zeldaCV.model.AchievementEntity;
 import zeldaCV.bean.AchievementBean;
-import zeldaCV.constants.AchievementConstants;
 import zeldaCV.converter.AchievementMapper;
 import zeldaCV.dto.AchievementDTO;
 import zeldaCV.repository.AchievementRepository;
@@ -62,7 +63,7 @@ public class AchievementServiceImpl implements AchievementService {
             AchievementEntity updatedAchievement = achievementRepository.save(achievementEntity);
             return AchievementMapper.beanToDto(AchievementMapper.entityToBean(updatedAchievement));
         } else {
-            throw new UnsupportedOperationException("Achievement not valid");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Achievements are not correct");
         }
     }
 }
