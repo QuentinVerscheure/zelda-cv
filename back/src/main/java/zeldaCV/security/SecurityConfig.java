@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .requestMatchers("POST", "/api/users").permitAll()
                 .requestMatchers("GET", "/api/achievements/**").permitAll()
                 .requestMatchers("POST", "/api/auth/login").permitAll()
+                .requestMatchers("POST", "api/sendMailToOwner/**").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers(
                         "/v3/api-docs/**",
