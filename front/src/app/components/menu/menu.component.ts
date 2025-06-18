@@ -93,12 +93,13 @@ export class MenuComponent implements OnInit {
       next: (response: LoginResponseDTO) => {
         if (response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
-          this.isAuthenticated = true;
-          this.signUpError = null;
-          this.loginError = null;
+          this.cleanErrorMessages();
+          this.ToggleTemporaryClassToButton('signUpButton', 'buttonSuccess', "buttonReturnNormal");
+          this.ToggleFadedAnim(true, 'loginButton', 'signUpButton');
         }
       },
       error: (err) => {
+        this.cleanErrorMessages();
         this.signUpError = err.error?.error || "Erreur lors de l'inscription";
       },
     });
@@ -114,34 +115,89 @@ export class MenuComponent implements OnInit {
         if (response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
         }
-        this.isAuthenticated = true;
-        this.signUpError = null;
-        this.loginError = null;
+        this.cleanErrorMessages();
+        this.ToggleTemporaryClassToButton('loginButton', 'buttonSuccess', "buttonReturnNormal");
+        this.ToggleFadedAnim(true, 'loginButton', 'signUpButton');
       },
       error: (err) => {
-        this.loginError = err.error?.error || "Erreur lors de l'authentification";
+        this.cleanErrorMessages();
+        this.loginError =
+          err.error?.error || "Erreur lors de l'authentification";
       },
     });
   }
-  onChangePass() {
-
+  onChangeUser() {
     const login: LoginDTO = {
       pseudo: this.pseudo,
       pass: this.password,
     };
-    this.apiService.login(login).subscribe({
+    this.apiService.updateUser(login).subscribe({
       next: (response: LoginResponseDTO) => {
-        this.signUpError = null;
-        this.loginError = null;
+        if (response.accessToken) {
+          localStorage.setItem('accessToken', response.accessToken);
+        }
+        this.cleanErrorMessages();
+        this.ToggleTemporaryClassToButton('changeLoginPassButton', 'buttonSuccess', "buttonReturnNormal");
+        this.isAuthenticated = true;
       },
       error: (err) => {
-        this.changeLoginPassError = err.error?.error || "Erreur lors du changement de mot de passe";
+        this.cleanErrorMessages();
+        this.changeLoginPassError =
+          err.error?.error || 'Erreur lors du changement de mot de passe/pseudo';
       },
     });
   }
   onLogout() {
     localStorage.removeItem('accessToken');
-    this.isAuthenticated = false;
-
+    this.cleanErrorMessages();
+    this.ToggleTemporaryClassToButton('logOutButton', 'buttonSuccess', "buttonReturnNormal");
+    this.ToggleFadedAnim(false,'deleteUserButton', 'changeLoginPassButton', 'logOutButton');
   }
+
+  onDeleteUser(){
+    this.apiService.deleteUser().subscribe({
+      next: () => {
+        localStorage.removeItem('accessToken');
+        this.cleanErrorMessages();
+        this.ToggleTemporaryClassToButton('deleteUserButton', 'buttonSuccess', "buttonReturnNormal");
+        this.ToggleFadedAnim(false,'deleteUserButton', 'changeLoginPassButton', 'logOutButton');
+      },
+      error: (err) => {
+        this.cleanErrorMessages();
+        this.loginError = err.error?.error || 'Erreur lors de la suppression du compte';
+      },
+    });
+  }
+
+  cleanErrorMessages() {
+    this.signUpError = null;
+    this.loginError = null;
+    this.changeLoginPassError = null;
+  }
+
+  ToggleTemporaryClassToButton(buttonId: string, className1: string, className2: string) {
+    const btn = document.getElementById(buttonId);
+    if (btn) {
+      btn.classList.add(className1);
+      btn.classList.remove(className2);
+      setTimeout(() => {
+        btn.classList.add(className2);
+        btn.classList.remove(className1);
+      }, 1500);
+    }
+  }
+
+  ToggleFadedAnim(isAuthenticated: boolean, ...buttonIds: string[]) {
+    buttonIds.forEach(buttonId => {
+      const btn = document.getElementById(buttonId);
+      if (btn) {
+        btn.classList.add('fade-anim');
+        setTimeout(() => {
+          this.isAuthenticated = isAuthenticated;
+          btn.classList.add('fade-anim');
+        }, 1500);
+      }
+    });
+  }
+  
 }

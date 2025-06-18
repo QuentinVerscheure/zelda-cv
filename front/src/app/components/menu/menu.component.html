@@ -66,10 +66,11 @@
         />
 
         <button
+        id="signUpButton"
           type="button"
           (click)="onSignUp()"
-          [ngClass]="{ success: isAuthenticated }"
-          *ngIf="!isAuthenticated && !isAuthenticated"
+          class=""
+          *ngIf="!isAuthenticated"
         >
           Sauvegarder <small>(sign up)</small>
         </button>
@@ -78,26 +79,41 @@
           {{ signUpError }}
         </div>
         <button
+        id="changeLoginPassButton"
           type="button"
-          (click)="onChangePass()"
-          *ngIf="isAuthenticated || isAuthenticated"
+          (click)="onChangeUser()"
+          class=""
+          *ngIf="isAuthenticated"
         >
-          Changer utilisateur/pass
+          Changer de héros <small>(changer pseudo/pass)</small>
         </button>
         <div *ngIf="changeLoginPassError" class="error">
           {{ changeLoginPassError }}
         </div>
         <button
+        id="logOutButton"
           type="button"
           (click)="onLogout()"
-          *ngIf="isAuthenticated || isAuthenticated"
+          class=""
+          *ngIf="isAuthenticated"
         >
           Quitter <small>(logout)</small>
         </button>
         <button
+        id="deleteUserButton"
+          type="button"
+          (click)="onDeleteUser()"
+          class=""
+          *ngIf="isAuthenticated"
+        >
+          Supprimer la partie <small>(Supprimer utilisateur)</small>
+        </button>
+        <button
+        id="loginButton"
           type="button"
           (click)="onLogin()"
-          *ngIf="!isAuthenticated && !isAuthenticated"
+          class=""
+          *ngIf="!isAuthenticated"
         >
           Charger <small>(login)</small>
         </button>

@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .requestMatchers("POST", "/api/users").permitAll()
                 .requestMatchers("GET", "/api/achievements/**").permitAll()
                 .requestMatchers("POST", "/api/auth/login").permitAll()
-                .requestMatchers("POST", "api/sendMailToOwner/**").permitAll()
+                .requestMatchers("POST", "api/sendMailToOwner/**").permitAll() // <-- il manque un slash initial
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers(
                         "/v3/api-docs/**",
@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOriginPattern("*"); // Autorise toutes les origines, adapte selon tes besoins
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);

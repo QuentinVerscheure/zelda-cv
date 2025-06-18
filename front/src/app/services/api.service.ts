@@ -62,27 +62,25 @@ export class ApiService {
     return this.http.post<LoginResponseDTO>(`${this.baseUrl}/users`, loginDTO);
   }
 
-  updateUser(id: number, user: UserDTO): Observable<UserDTO> {
-    return this.http.put<UserDTO>(
-      `${this.baseUrl}/users/${id}`,
+  updateUser(user: UserDTO): Observable<LoginResponseDTO> {
+    return this.http.put<LoginResponseDTO>(
+      `${this.baseUrl}/users`,
       user,
       { headers: this.getAuthHeaders() }
     );
   }
 
-  deleteUser(id: number): Observable<void> {
+  deleteUser(): Observable<void> {
     return this.http.delete<void>(
-      `${this.baseUrl}/users/${id}`,
+      `${this.baseUrl}/users`,
       { headers: this.getAuthHeaders() }
     );
   }
 
-  // --- Mail to Owner ---
   sendMailToOwner(mail: MailDTO): Observable<string> {
     return this.http.post<string>(`${this.baseUrl}/sendMailToOwner/`, mail);
   }
 
-  // --- Achievements APIs ---
   updateAchievement(achievement: Achievement): Observable<Achievement> {
     return this.http.put<Achievement>(
       `${this.baseUrl}/achievements/update`,
@@ -102,7 +100,6 @@ export class ApiService {
     return this.http.get<string[]>(`${this.baseUrl}/achievements/getDiffTypeOfAchievement`);
   }
 
-  // --- Auth ---
   login(credentials: LoginDTO): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(`${this.baseUrl}/auth/login`, credentials);
   }

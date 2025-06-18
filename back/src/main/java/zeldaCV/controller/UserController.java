@@ -3,6 +3,9 @@ package zeldaCV.controller;
 import zeldaCV.dto.UserDTO;
 import zeldaCV.dto.UserResponseDTO;
 import zeldaCV.service.UserService;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +26,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    @Operation(summary = "Get the current user", description = "Get the current user")
+    @Operation(summary = "Get the current user", 
+    description = "Get the current user")
     public ResponseEntity<UserDTO> getCurrentUser() {
         UserDTO user = userService.getCurrentUser();
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -80,16 +84,11 @@ public class UserController {
 
     @DeleteMapping
     @Operation(summary = "Delete a user by token", description = "Delete the curent user")
-    public ResponseEntity<String> deleteUser() {
-
+    public ResponseEntity<Object> deleteUser() {
         if (userService.deleteCurrentUser()) {
-            String msg = "User successfully deleted: ";
-            System.out.println(msg);
-            return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(Map.of("message", "User successfully deleted"), HttpStatus.ACCEPTED);
         } else {
-            String msg = "You are not allowed to delete this user.";
-            System.out.println("User unsuccessfully deleted: ");
-            return new ResponseEntity<>(msg, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(Map.of("error", "You are not allowed to delete this user."), HttpStatus.FORBIDDEN);
         }
     }
 
