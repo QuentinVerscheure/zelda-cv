@@ -9,7 +9,7 @@ import zeldaCV.model.UserEntity;
 import zeldaCV.repository.AchievementRepository;
 import zeldaCV.repository.UserRepository;
 import zeldaCV.util.Achievement;
-import zeldaCV.util.pseudo;
+import zeldaCV.util.Pseudo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,8 +40,11 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDTO getUserById(Long id) {
-        UserEntity userEntity = userRepository.findById(id)
+    public UserDTO getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication != null ? authentication.getName() : null;
+
+        UserEntity userEntity = userRepository.findByPseudo(pseudo)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return UserMapper.beanToDto(
@@ -62,7 +65,7 @@ public class UserServiceImpl implements UserService {
         UserBean userBean = UserMapper.dtoToBean(userDto);
 
         // Check for forbidden pseudo
-        if (pseudo.isForbidden(userBean.getPseudo())) {
+        if (Pseudo.isForbidden(userBean.getPseudo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username is not allowed. Please choose another one.");
         }
 
@@ -92,8 +95,8 @@ public class UserServiceImpl implements UserService {
         }
         
         LoginDTO loginDto = new LoginDTO();
-        loginDto.setUser(userDto.getPseudo());
-        loginDto.setPassword(userDto.getPass());
+        loginDto.setPseudo(userDto.getPseudo());
+        loginDto.setPass(userDto.getPass());
         String token = authService.login(loginDto);
 
         return new UserResponseDTO(token, HttpStatus.CREATED,
@@ -102,47 +105,48 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateUser(UserDTO newUserDto) {
-        UserEntity existingUserEntity = userRepository.findById(newUserDto.getId())
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication != null ? authentication.getName() : null;
+
+        UserEntity existingUserEntity = userRepository.findByPseudo(pseudo)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         UserBean newUserBean = UserMapper.dtoToBean(newUserDto);
 
-        if (pseudo.isForbidden(newUserBean.getPseudo())) {
+        if (Pseudo.isForbidden(newUserBean.getPseudo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username is not allowed. Please choose another one.");
         }
         if (userRepository.existsByPseudo(newUserBean.getPseudo()) &&
                 !existingUserEntity.getPseudo().equals(newUserBean.getPseudo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This pseudo is already used by another user.");
         }
-
-        if (!Achievement.checkAchievement(newUserBean.getAchievements())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Achievements are not correct");
-        }
-
+        
         existingUserEntity.setPseudo(newUserBean.getPseudo());
         existingUserEntity.setPass(passwordEncoder.encode(newUserBean.getPass()));
 
         UserEntity updatedUser = userRepository.save(existingUserEntity);
 
         LoginDTO loginDto = new LoginDTO();
-        loginDto.setUser(updatedUser.getPseudo());
-        loginDto.setPassword(newUserDto.getPass());
+        loginDto.setPseudo(updatedUser.getPseudo());
+        loginDto.setPass(newUserBean.getPass());
 
         String token = authService.login(loginDto);
 
-        return new UserResponseDTO(token, HttpStatus.CREATED,
+        return new UserResponseDTO(token, HttpStatus.ACCEPTED,
                 UserMapper.beanToDto(UserMapper.entityToBean(updatedUser)));
+                
     }
 
     @Override
-    public boolean deleteUser(Long id) {
-        UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));;
-
+    public boolean deleteCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication != null ? authentication.getName() : null;
+        String pseudo = authentication != null ? authentication.getName() : null;
 
-        if (currentUsername == null || !currentUsername.equals(userEntity.getPseudo())) {
+        UserEntity userEntity = userRepository.findByPseudo(pseudo)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (pseudo == null || !pseudo.equals(userEntity.getPseudo())) {
             return false;
         }
 

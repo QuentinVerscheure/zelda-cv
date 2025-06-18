@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { VariousContentConfig } from '../../../models/various_Data.enum';
+import { VariousContentConfig } from '../../../models/various_Data.model';
 
 @Injectable({
   providedIn: 'root',

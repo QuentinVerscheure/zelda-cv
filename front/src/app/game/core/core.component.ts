@@ -14,7 +14,7 @@ import { ScenePortfolioService } from '../scenes/portfolioHouse/scene-portfolio.
 import { ScenePortfolio2Service } from '../scenes/portfolioHouse/scene-portfolio2.service';
 import { HousesDataService } from './houses-data.service';
 import { ConfigService } from '../../services/config.service';
-import { AppConfig } from '../../models/config.enum';
+import { AppConfig } from '../../models/config.model';
 
 @Component({
   selector: 'app-game',

@@ -7,7 +7,7 @@ import { HousesDataService } from '../../core/houses-data.service';
 import {
   MoreElements,
   portfolio2Data,
-} from '../../../models/portfolioData.enum';
+} from '../../../models/portfolioData.model';
 import { PortfolioContentService } from './portfolio-content.service';
 
 @Injectable({

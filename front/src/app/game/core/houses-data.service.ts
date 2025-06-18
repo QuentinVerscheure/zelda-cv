@@ -3,10 +3,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as yaml from 'js-yaml';
 import { HttpClient } from '@angular/common/http';
-import { PortfolioDatas } from '../../models/portfolioData.enum';
-import { CvData } from '../../models/cvData.enum';
-import { VariousContentConfig } from '../../models/various_Data.enum';
-import { LinkData } from '../../models/linkData.enum';
+import { PortfolioDatas } from '../../models/portfolioData.model';
+import { CvData } from '../../models/cvData.model';
+import { VariousContentConfig } from '../../models/various_Data.model';
+import { LinkData } from '../../models/linkData.model';
 
 @Injectable({
   providedIn: 'root',

@@ -21,8 +21,8 @@ public class AuthServiceImpl implements AuthService {
         // Authenticate user with pseudo and password and send back a JWT token
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                loginDto.getUser(), 
-                loginDto.getPassword()
+                loginDto.getPseudo(), 
+                loginDto.getPass()
             )
         );
 

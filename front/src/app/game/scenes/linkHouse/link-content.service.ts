@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LinkData, LinkPictureContent } from '../../../models/linkData.enum';
+import { LinkData, LinkPictureContent } from '../../../models/linkData.model';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({

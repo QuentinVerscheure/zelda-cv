@@ -3,7 +3,7 @@ import {
   MoreElements,
   Picture,
   PortfolioDatas,
-} from '../../../models/portfolioData.enum';
+} from '../../../models/portfolioData.model';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 
 @Injectable({

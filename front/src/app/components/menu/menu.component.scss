@@ -11,6 +11,7 @@
 
   h3 {
     cursor: pointer;
+    text-decoration: underline;
   }
 
   .closeButton {
@@ -19,6 +20,12 @@
     top: 0;
     right: 20px;
     cursor: pointer;
+  }
+
+  .error {
+    color: red;
+    text-align: center;
+    margin-bottom: 8px;
   }
 
   .burger-menu {
@@ -104,6 +111,17 @@
           background-color: #424242;
           color: white;
         }
+
+        small {
+          font-size: 12px;
+          width: 100%;
+        }
+      }
+
+      button.success {
+        background-color: #4caf50 !important;
+        color: white !important;
+        transition: background-color 0.3s;
       }
     }
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CvData } from '../../../models/cvData.enum';
+import { CvData } from '../../../models/cvData.model';
 
 @Injectable({
   providedIn: 'root',

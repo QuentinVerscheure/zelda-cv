@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { guestBookCommentary } from '../../../models/guestBookCommentary.enum';
+import { guestBookCommentary } from '../../../models/guestBookCommentary.model';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 
 @Injectable({

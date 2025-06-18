@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, catchError, of, tap } from 'rxjs';
-import { AppConfig } from '../models/config.enum';
+import { AppConfig } from '../models/config.model';
 
 @Injectable({
   providedIn: 'root'

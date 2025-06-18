@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as Phaser from 'phaser';
-import { BackgroundCollisionMap } from '../../models/koholint_collision_map.enum';
+import { BackgroundCollisionMap } from '../../models/koholint_collision_map.model';
 import { ConfigService } from '../../services/config.service';
 
 @Injectable({

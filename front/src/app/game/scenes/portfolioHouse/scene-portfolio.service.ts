@@ -8,7 +8,7 @@ import { PortfolioContentService } from './portfolio-content.service';
 import {
   portfolio2Data,
   PortfolioDatas,
-} from '../../../models/portfolioData.enum';
+} from '../../../models/portfolioData.model';
 import { HousesDataService } from '../../core/houses-data.service';
 
 @Injectable({

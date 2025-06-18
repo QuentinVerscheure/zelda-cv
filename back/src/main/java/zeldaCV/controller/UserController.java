@@ -22,10 +22,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Get a user by ID", description = "Get a user by ID")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        UserDTO user = userService.getUserById(id);
+    @GetMapping
+    @Operation(summary = "Get the current user", description = "Get the current user")
+    public ResponseEntity<UserDTO> getCurrentUser() {
+        UserDTO user = userService.getCurrentUser();
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -59,7 +59,7 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @Operation(
         summary = "Update an existing user",
         description = "Update an existing user",
@@ -73,23 +73,22 @@ public class UserController {
             )
         )
     )
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDto) {
-        userDto.setId(id);
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserDTO userDto) {
         UserResponseDTO updatedUser = userService.updateUser(userDto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a user by ID", description = "Delete a user by ID")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    @DeleteMapping
+    @Operation(summary = "Delete a user by token", description = "Delete the curent user")
+    public ResponseEntity<String> deleteUser() {
 
-        if (userService.deleteUser(id)) {
-            String msg = "User successfully deleted: " + id;
+        if (userService.deleteCurrentUser()) {
+            String msg = "User successfully deleted: ";
             System.out.println(msg);
             return new ResponseEntity<>(msg, HttpStatus.ACCEPTED);
         } else {
             String msg = "You are not allowed to delete this user.";
-            System.out.println("User unsuccessfully deleted: " + id);
+            System.out.println("User unsuccessfully deleted: ");
             return new ResponseEntity<>(msg, HttpStatus.FORBIDDEN);
         }
     }

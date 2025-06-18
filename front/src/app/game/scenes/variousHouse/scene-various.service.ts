@@ -5,7 +5,7 @@ import { PlayerService } from '../../core/player.service';
 import { VariousContentService } from './various-content.service';
 import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
-import { VariousContentConfig } from '../../../models/various_Data.enum';
+import { VariousContentConfig } from '../../../models/various_Data.model';
 import { HousesDataService } from '../../core/houses-data.service';
 
 @Injectable({

@@ -46,13 +46,10 @@
     </div>
     <h3 (click)="changeSection('save')">(s')enregistrer</h3>
     <div *ngIf="!isSmartphone || currentSection === 'save'">
-      <p class="notImplemented">
-        enregistrement et authentification non implémentés
-      </p>
       <form (ngSubmit)="onSubmit()">
         <label for="pseudo">Pseudo:</label>
         <input
-          placeholder="votre pseudo, ex: link"
+          placeholder="votre pseudo, ex: Link"
           id="pseudo"
           name="pseudo"
           [(ngModel)]="pseudo"
@@ -60,18 +57,56 @@
         />
         <label for="password">Mot de passe:</label>
         <input
-          placeholder="votre mot de passe"
+          placeholder="votre mot de passe, ex: Zelda"
           type="password"
           id="password"
           name="password"
           [(ngModel)]="password"
           required
         />
-        <button type="submit">Sauvegarder</button>
-        <button type="submit">Charger</button>
+
+        <button
+          type="button"
+          (click)="onSignUp()"
+          [ngClass]="{ success: isAuthenticated }"
+          *ngIf="!isAuthenticated && !isAuthenticated"
+        >
+          Sauvegarder <small>(sign up)</small>
+        </button>
+
+        <div *ngIf="signUpError" class="error">
+          {{ signUpError }}
+        </div>
+        <button
+          type="button"
+          (click)="onChangePass()"
+          *ngIf="isAuthenticated || isAuthenticated"
+        >
+          Changer utilisateur/pass
+        </button>
+        <div *ngIf="changeLoginPassError" class="error">
+          {{ changeLoginPassError }}
+        </div>
+        <button
+          type="button"
+          (click)="onLogout()"
+          *ngIf="isAuthenticated || isAuthenticated"
+        >
+          Quitter <small>(logout)</small>
+        </button>
+        <button
+          type="button"
+          (click)="onLogin()"
+          *ngIf="!isAuthenticated && !isAuthenticated"
+        >
+          Charger <small>(login)</small>
+        </button>
+        <div *ngIf="loginError" class="error">
+          {{ loginError }}
+        </div>
       </form>
     </div>
-    <h3 (click)="changeSection('noTime')">J'ai pas le temps</h3>
+    <h3 (click)="changeSection('noTime')">CV</h3>
     <div *ngIf="!isSmartphone || currentSection === 'noTime'">
       <a href="assets/docs/CV.pdf" download="Verscheure-Quentin-CV">
         <p class="clickable">- Télécharger le CV</p>

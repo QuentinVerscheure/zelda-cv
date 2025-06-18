@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
-import { SceneTransitionCollisionData } from '../../../models/SceneTransitionCollisionData.enum';
+import { SceneTransitionCollisionData } from '../../../models/SceneTransitionCollisionData.model';
 import { NpcService } from '../../core/npc.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 

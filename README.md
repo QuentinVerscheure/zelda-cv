@@ -12,7 +12,7 @@ If you want to contact me: quentin.verscheure@gmail.com
 
 ### To customize this project for your personal use, you must modify:
 
-#### In `assets/texts`:
+#### front: In  `assets/texts`:
 - `cv_data.yaml`: your resume  
   This is the main content of your CV.
 - `link_data.yaml`: some links  
@@ -22,15 +22,21 @@ If you want to contact me: quentin.verscheure@gmail.com
 - `various_data.yaml`: some various information about you  
   Includes small information like mobility, secondary languages, or hobbies.
 
-#### In `assets/docs`:
+#### front: In `assets/docs`:
 - Replace the file `CV.pdf` with your own resume.
 
-#### In `assets`:
+#### front: In `assets`:
 - `config.json`: the config file
   - `"debugMode"`: used to activate debug mode (visibility of hitboxes and mobility of the player).
   - `"menuName"`: The name displayed as the title in the menu.
   - `"cvName"`: The name given to your `CV.pdf` when downloaded.
   - `"mail"`: Your email displayed in the ContactHouse.
+
+#### back: In `JavaMailSenderConfig`:
+- your mailsender properties
+#### back: In `MailService`:
+- your email adresse
+
 
 ### To modify the words of an NPC:
 #### In `assets/game`:
@@ -68,3 +74,10 @@ Be carefull to change the token if you modify your name or pass and don't use th
 ### DB shéma:
 
 ![Database Schema](src/main/resources/static/shemaDB.png)
+
+CORS : configure précisément les origines autorisées (pas de "*" en production, mais l’URL de ton front).
+Variables d’environnement : adapte les URLs d’API, clés, secrets, etc. pour l’environnement de production.
+Sécurité : désactive les logs sensibles, active HTTPS, vérifie les permissions et les accès.
+Optimisation : compile ton front en mode production (ng build --prod), optimise les ressources statiques.
+Configuration backend : adapte les propriétés Spring (application-prod.properties), configure la base de données, les emails, etc.
+Tests : vérifie que tout fonctionne bien sur le serveur (API, authentification, envoi de mail, etc.).

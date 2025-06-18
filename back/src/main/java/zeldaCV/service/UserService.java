@@ -6,9 +6,9 @@ import zeldaCV.dto.UserResponseDTO;
 import java.util.List;
 
 public interface UserService {
-    UserDTO getUserById(Long id);
+    UserDTO getCurrentUser();
     List<UserDTO> getAllUsers();
     UserResponseDTO createUser(UserDTO userDto);
     UserResponseDTO updateUser(UserDTO userDto);
-    boolean deleteUser(Long id);
+    boolean deleteCurrentUser();
 }

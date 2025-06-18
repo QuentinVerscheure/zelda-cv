@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommentService } from '../../game/scenes/guestBookHouse/comment.service';
-import { guestBookCommentary } from '../../models/guestBookCommentary.enum';
+import { guestBookCommentary } from '../../models/guestBookCommentary.model';
 import { SceneGuestBookService2 } from '../../game/scenes/guestBookHouse/scene-guest-book2.service';
 
 @Component({

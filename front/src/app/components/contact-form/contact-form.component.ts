@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AppConfig } from '../../models/config.enum';
+import { AppConfig } from '../../models/config.model';
 import { ConfigService } from '../../services/config.service';
 
 @Component({
