@@ -26,11 +26,16 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
     @Override
-    public AchievementDTO getAchievementByUserId(Long userId) {
-        return achievementRepository.findByUserId(userId)
-                .map(AchievementMapper::entityToBean)
-                .map(AchievementMapper::beanToDto)
-                .orElseThrow(() -> new RuntimeException("Achievement not found for user ID: " + userId));
+    public AchievementDTO getAchievement() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication != null ? authentication.getName() : null;
+
+        AchievementEntity achievementEntity = achievementRepository.findByUserPseudo(pseudo);
+        if (achievementEntity == null) {
+            throw new RuntimeException("No achievement found for pseudo: " + pseudo);
+        }
+        return AchievementMapper.beanToDto(AchievementMapper.entityToBean(achievementEntity));
+
     }
 
     @Override
@@ -42,21 +47,30 @@ public class AchievementServiceImpl implements AchievementService {
         AchievementEntity achievementEntity = achievementRepository.findByUserPseudo(pseudo);
         if (achievementEntity == null) {
             throw new EntityNotFoundException(
-                    "Achievement not found for actual user");
+                    "No achievement found for pseudo: " + pseudo);
         }
         AchievementBean dbAchievementBean = AchievementMapper.entityToBean(achievementEntity);
+        
+        // Liste des champs à synchroniser
+        String[] fields = {
+            "Cv", "CvDownload", "Portfolio", "Link", "LinkClick",
+            "Phone", "PhoneContact", "GuestBook", "GuestBookComment",
+            "AchievementVarious", "AchievementCredit"
+        };
 
-        dbAchievementBean.setCv(newAchievementBean.isCv());
-        dbAchievementBean.setCvDownload(newAchievementBean.isCvDownload());
-        dbAchievementBean.setPortfolio(newAchievementBean.isPortfolio());
-        dbAchievementBean.setLink(newAchievementBean.isLink());
-        dbAchievementBean.setLinkClick(newAchievementBean.isLinkClick());
-        dbAchievementBean.setPhone(newAchievementBean.isPhone());
-        dbAchievementBean.setPhoneContact(newAchievementBean.isPhoneContact());
-        dbAchievementBean.setGuestBook(newAchievementBean.isGuestBook());
-        dbAchievementBean.setGuestBookComment(newAchievementBean.isGuestBookComment());
-        dbAchievementBean.setAchievementVarious(newAchievementBean.isAchievementVarious());
-        dbAchievementBean.setAchievementCredit(newAchievementBean.isAchievementCredit());
+        for (String field : fields) {
+            try {
+                // Récupère les getters dynamiquement
+                boolean oldValue = (boolean) AchievementEntity.class.getMethod("is" + field).invoke(achievementEntity);
+                boolean newValue = (boolean) AchievementBean.class.getMethod("is" + field).invoke(newAchievementBean);
+
+                if (!oldValue && newValue) {
+                    AchievementEntity.class.getMethod("set" + field, boolean.class).invoke(dbAchievementBean, true);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error updating achievement field: " + field, e);
+            }
+        }
 
         if (Achievement.checkAchievement(dbAchievementBean)) {
             AchievementMapper.beanToEntity(dbAchievementBean, achievementEntity);
@@ -67,4 +81,3 @@ public class AchievementServiceImpl implements AchievementService {
         }
     }
 }
-

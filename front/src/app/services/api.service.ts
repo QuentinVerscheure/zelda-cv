@@ -53,11 +53,6 @@ export class ApiService {
     );
   }
 
-  // --- User APIs ---
-  getUserById(id: number): Observable<UserDTO> {
-    return this.http.get<UserDTO>(`${this.baseUrl}/users/${id}`);
-  }
-
   createUser(loginDTO: LoginDTO): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(`${this.baseUrl}/users`, loginDTO);
   }
@@ -89,15 +84,11 @@ export class ApiService {
     );
   }
 
-  getUserAchievement(id: number): Observable<Achievement> {
+  getUserAchievement(): Observable<Achievement> {
     return this.http.get<Achievement>(
-      `${this.baseUrl}/achievements/${id}`,
+      `${this.baseUrl}/achievements`,
       { headers: this.getAuthHeaders() }
     );
-  }
-
-  getDiffTypeOfAchievement(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/achievements/getDiffTypeOfAchievement`);
   }
 
   login(credentials: LoginDTO): Observable<LoginResponseDTO> {

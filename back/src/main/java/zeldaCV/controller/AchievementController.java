@@ -35,7 +35,7 @@ public class AchievementController {
 
     @PutMapping("/update")
     @Operation(summary = "update an achievement by true or false", 
-    description = "update a specific achivement of a user by true or false",
+    description = "update achievements of a user by true or false",
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
         required = true, 
         content = @Content(
@@ -61,10 +61,10 @@ public class AchievementController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping
     @Operation(summary = "Get a user's achievement", description = "Get all achievement for a user")
-    public ResponseEntity<AchievementDTO> getUserachievement(@PathVariable Long id) {
-        AchievementDTO achievementDto = achievementService.getAchievementByUserId(id);
+    public ResponseEntity<AchievementDTO> getUserachievement() {
+        AchievementDTO achievementDto = achievementService.getAchievement();
         return ResponseEntity.ok(achievementDto);
     }
 }

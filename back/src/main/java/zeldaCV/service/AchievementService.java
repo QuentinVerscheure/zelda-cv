@@ -5,6 +5,6 @@ import zeldaCV.dto.AchievementDTO;
 
 
 public interface AchievementService {
-    AchievementDTO getAchievementByUserId(Long userId);
+    AchievementDTO getAchievement();
     AchievementDTO updateAchievement(AchievementBean achievementBean);
 }

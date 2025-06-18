@@ -16,7 +16,7 @@ export class SessionStorageService {
     return data ? JSON.parse(data) as Achievement : null;
   }
 
-  updateAchievementField<K extends keyof Achievement>(field: K, value: Achievement[K]): void {
+  updateAchievement<K extends keyof Achievement>(field: K, value: Achievement[K]): void {
     const achievements = this.getAchievements() || {} as Achievement;
     achievements[field] = value;
     this.setAchievements(achievements);
