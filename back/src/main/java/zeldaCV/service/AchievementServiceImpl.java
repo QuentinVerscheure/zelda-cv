@@ -50,22 +50,25 @@ public class AchievementServiceImpl implements AchievementService {
                     "No achievement found for pseudo: " + pseudo);
         }
         AchievementBean dbAchievementBean = AchievementMapper.entityToBean(achievementEntity);
-        
-        // Liste des champs à synchroniser
+
         String[] fields = {
-            "Cv", "CvDownload", "Portfolio", "Link", "LinkClick",
-            "Phone", "PhoneContact", "GuestBook", "GuestBookComment",
-            "AchievementVarious", "AchievementCredit"
+                "cv", "cvDownload", "portfolio", "link", "linkClick",
+                "phone", "phoneContact", "guestBook", "guestBookComment",
+                "achievementVarious", "achievementCredit"
         };
+
+        java.util.function.Function<String, String> capitalize = str ->
+            str.substring(0, 1).toUpperCase() + str.substring(1);
 
         for (String field : fields) {
             try {
-                // Récupère les getters dynamiquement
-                boolean oldValue = (boolean) AchievementEntity.class.getMethod("is" + field).invoke(achievementEntity);
-                boolean newValue = (boolean) AchievementBean.class.getMethod("is" + field).invoke(newAchievementBean);
+                String methodSuffix = capitalize.apply(field);
+                // Utilise dbAchievementBean pour le setter, pas AchievementEntity.class
+                boolean oldValue = (boolean) AchievementEntity.class.getMethod("is" + methodSuffix).invoke(achievementEntity);
+                boolean newValue = (boolean) AchievementBean.class.getMethod("is" + methodSuffix).invoke(newAchievementBean);
 
                 if (!oldValue && newValue) {
-                    AchievementEntity.class.getMethod("set" + field, boolean.class).invoke(dbAchievementBean, true);
+                    AchievementBean.class.getMethod("set" + methodSuffix, boolean.class).invoke(dbAchievementBean, true);
                 }
             } catch (Exception e) {
                 throw new RuntimeException("Error updating achievement field: " + field, e);

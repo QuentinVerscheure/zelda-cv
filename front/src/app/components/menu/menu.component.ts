@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../services/config.service';
@@ -6,6 +6,9 @@ import { AppConfig } from '../../models/config.model';
 import { ApiService } from '../../services/api.service';
 import { LoginDTO, LoginResponseDTO } from '../../models/dto/login.dto';
 import { Achievement } from '../../models/achievement.model';
+import { AchievementService } from '../../services/achievement.service';
+import { SessionStorageService } from '../../services/session-storage.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
@@ -15,7 +18,7 @@ import { Achievement } from '../../models/achievement.model';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
-  menuOpen = false;
+  menuOpen = true;
   currentSection: string = 'quests';
   isSmartphone: boolean = true;
 
@@ -29,16 +32,26 @@ export class MenuComponent implements OnInit {
   changeLoginPassError: string | null = null;
   isAuthenticated: boolean = false;
 
+  achievements$: BehaviorSubject<Achievement | null>;
+
   constructor(
     private configService: ConfigService,
-    private apiService: ApiService
-  ) {}
+    private apiService: ApiService,
+    private achievementService: AchievementService,
+    private sessionStorageService: SessionStorageService,
+  ) {
+    this.achievements$ = this.sessionStorageService.achievements$;
+  }
 
   ngOnInit() {
     this.configService.config$.subscribe((config) => {
       this.config = config;
     });
     this.checkAuth();
+
+    if (!this.sessionStorageService.getAchievements()) {
+      this.sessionStorageService.achievements$.next(this.sessionStorageService.getAchievements());
+    }
   }
 
   checkAuth() {
@@ -118,6 +131,14 @@ export class MenuComponent implements OnInit {
         this.cleanErrorMessages();
         this.ToggleTemporaryClassToButton('loginButton', 'buttonSuccess', "buttonReturnNormal");
         this.ToggleFadedAnim(true, 'loginButton', 'signUpButton');
+
+        // synchronyse an unlogin user's achievements with database's user's achievement when he authenticates
+        this.apiService.getUserAchievement().subscribe({
+          next: (apiAchievement) => {
+            const merged = this.achievementService.mergeAchievementsAndSave(apiAchievement);
+            this.apiService.updateAchievement(merged).subscribe();
+          }
+        });
       },
       error: (err) => {
         this.cleanErrorMessages();

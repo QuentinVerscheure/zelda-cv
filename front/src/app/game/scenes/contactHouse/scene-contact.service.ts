@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
+import { AchievementService } from '../../../services/achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { Achievement } from '../../../models/achievement.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,13 +18,13 @@ export class SceneContactService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService
+    private achievementService: AchievementService
   ) {
     super({ key: 'sceneContact' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement('contactHouse');
+    this.achievementService.mergeAchievementsAndSave({ phone: true } as Achievement);
 
     this.load.image(
       'phoneHouse_background',
@@ -110,7 +111,7 @@ export class SceneContactService extends Phaser.Scene {
     icon.body.immovable = true;
 
     icon.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement('contactMe');
+      this.achievementService.mergeAchievementsAndSave({ phoneContact: true } as Achievement);
       this.showForm();
     });
 

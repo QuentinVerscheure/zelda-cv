@@ -33,7 +33,7 @@ public class AchievementController {
         return AchievementConstants.ACHIEVEMENT_FIELDS;
     }
 
-    @PutMapping("/update")
+    @PutMapping
     @Operation(summary = "update an achievement by true or false", 
     description = "update achievements of a user by true or false",
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(

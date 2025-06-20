@@ -1,18 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../models/achievement.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionStorageService {
-  private readonly key = 'achievements';
+  private readonly achievementsKey = 'achievements';
+
+  // BehaviorSubject for reactive updates
+  public achievements$ = new BehaviorSubject<Achievement | null>(this.getSessionStorageAchievements());
 
   setAchievements(achievements: Achievement): void {
-    sessionStorage.setItem(this.key, JSON.stringify(achievements));
+    sessionStorage.setItem(this.achievementsKey, JSON.stringify(achievements));
+    this.achievements$.next(achievements);
   }
 
   getAchievements(): Achievement | null {
-    const data = sessionStorage.getItem(this.key);
+    return this.achievements$.value;
+  }
+
+  getSessionStorageAchievements(): Achievement | null {
+    const data = sessionStorage.getItem(this.achievementsKey);
     return data ? JSON.parse(data) as Achievement : null;
   }
 
@@ -23,6 +32,8 @@ export class SessionStorageService {
   }
 
   clearAchievements(): void {
-    sessionStorage.removeItem(this.key);
+    sessionStorage.removeItem(this.achievementsKey);
+    this.achievements$.next(null);
   }
 }
+

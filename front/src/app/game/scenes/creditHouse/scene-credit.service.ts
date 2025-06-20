@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { Achievement } from '../../../models/achievement.model';
+import { AchievementService } from '../../../services/achievement.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,14 +17,16 @@ export class SceneCreditService extends Phaser.Scene {
   constructor(
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService,
-    private movementService: MovementService
+    private movementService: MovementService,
+    private achievementService: AchievementService
   ) {
     super({ key: 'sceneCredit' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement('cvHouse');
+    this.achievementService.mergeAchievementsAndSave({
+      phoneContact: true,
+    } as Achievement);
 
     this.load.image('creditBackground', 'assets/game/credit_background.png');
 
@@ -51,7 +54,7 @@ export class SceneCreditService extends Phaser.Scene {
       'assets/game/Links_Default.json'
     );
 
-    this.validAchievementService.ValidAchievement('creditHouse');
+    this.achievementService.mergeAchievementsAndSave({ achievementCredit: true } as Achievement);
   }
 
   create() {
@@ -164,7 +167,6 @@ export class SceneCreditService extends Phaser.Scene {
     pictureSprite.setInteractive({ useHandCursor: true });
 
     pictureSprite.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement('linkCklicked');
       window.open('https://github.com/QuentinVerscheure/zelda-cv', '_blank');
     });
 

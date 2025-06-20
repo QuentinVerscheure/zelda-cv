@@ -3,10 +3,11 @@ import { CollisionService } from '../../core/collision.service';
 import { MovementService } from '../../core/movement.service';
 import { PlayerService } from '../../core/player.service';
 import { VariousContentService } from './various-content.service';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { VariousContentConfig } from '../../../models/various_Data.model';
 import { HousesDataService } from '../../core/houses-data.service';
+import { AchievementService } from '../../../services/achievement.service';
+import { Achievement } from '../../../models/achievement.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,14 +23,14 @@ export class SceneVariousService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private variousContentService: VariousContentService,
-    private validAchievementService: ValidAchievementService,
+    private achievementService: AchievementService,
     private housesDataService: HousesDataService
   ) {
     super({ key: 'sceneVarious' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement('variousHouse');
+    this.achievementService.mergeAchievementsAndSave({ achievementVarious: true } as Achievement);
 
     this.load.image(
       'various_house_background',

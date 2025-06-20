@@ -27,7 +27,6 @@ public class AchievementMapper {
     public static AchievementDTO beanToDto(AchievementBean achievementBean) {
         if (achievementBean == null) return null;
         AchievementDTO achievementDto = new AchievementDTO();
-        achievementDto.setId(achievementBean.getId());
         achievementDto.setCv(achievementBean.isCv());
         achievementDto.setCvDownload(achievementBean.isCvDownload());
         achievementDto.setPortfolio(achievementBean.isPortfolio());
@@ -45,7 +44,6 @@ public class AchievementMapper {
     public static AchievementBean dtoToBean(AchievementDTO achievementDto) {
         if (achievementDto == null) return null;
         AchievementBean bean = new AchievementBean();
-        bean.setId(achievementDto.getId());
         bean.setCv(achievementDto.isCv());
         bean.setCvDownload(achievementDto.isCvDownload());
         bean.setPortfolio(achievementDto.isPortfolio());

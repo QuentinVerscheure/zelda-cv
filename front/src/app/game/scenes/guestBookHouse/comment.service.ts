@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { guestBookCommentary } from '../../../models/guestBookCommentary.model';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
+import { AchievementService } from '../../../services/achievement.service';
+import { Achievement } from '../../../models/achievement.model';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { ValidAchievementService } from '../../core/valid-achievement.service';
 export class CommentService {
   private commentContainers: Phaser.GameObjects.Container[] = [];
 
-  constructor(private validAchievementService: ValidAchievementService) {}
+  constructor(    private achievementService: AchievementService) {}
 
   displayComments(scaleOfTheGame: number, scene: Phaser.Scene) {
     this.mockMessages.forEach((message) => {
@@ -36,7 +37,7 @@ export class CommentService {
     icon.body.immovable = true;
 
     icon.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement('postComment');
+      this.achievementService.mergeAchievementsAndSave({ guestBookComment: true } as Achievement);
       this.showForm();
     });
 

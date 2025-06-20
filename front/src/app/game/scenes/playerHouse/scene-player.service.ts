@@ -3,7 +3,6 @@ import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 
 @Injectable({
@@ -20,13 +19,11 @@ export class ScenePlayerService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService
   ) {
     super({ key: 'scenePlayerHouse' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement('playerHouse');
 
     this.load.image(
       'Player_background',

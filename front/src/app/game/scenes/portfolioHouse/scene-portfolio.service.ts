@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { PortfolioContentService } from './portfolio-content.service';
 import {
@@ -10,6 +9,8 @@ import {
   PortfolioDatas,
 } from '../../../models/portfolioData.model';
 import { HousesDataService } from '../../core/houses-data.service';
+import { AchievementService } from '../../../services/achievement.service';
+import { Achievement } from '../../../models/achievement.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class ScenePortfolioService extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private validAchievementService: ValidAchievementService,
+    private achievementService: AchievementService,
     private portfolioContentService: PortfolioContentService,
     private housesDataService: HousesDataService
   ) {
@@ -32,7 +33,7 @@ export class ScenePortfolioService extends Phaser.Scene {
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement('portfolioHouse');
+    this.achievementService.mergeAchievementsAndSave({ portfolio: true } as Achievement);
 
     this.load.image(
       'portFolioHouseBackground',

@@ -12,7 +12,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class LoginDTO {
-    private Long id;
     private String pseudo;
     private String pass;
 }

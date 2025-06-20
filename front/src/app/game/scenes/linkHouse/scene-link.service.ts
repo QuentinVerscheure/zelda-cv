@@ -3,11 +3,13 @@ import { MovementService } from '../../core/movement.service';
 import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { LinkData } from '../../../models/linkData.model';
 import { HousesDataService } from '../../core/houses-data.service';
 import { LinkContentService } from './link-content.service';
+import { AchievementService } from '../../../services/achievement.service';
+import { Achievement } from '../../../models/achievement.model';
+
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +24,7 @@ export class SceneLinkService extends Phaser.Scene {
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService,
+        private achievementService: AchievementService,
     private housesDataService: HousesDataService,
     private linkContentService: LinkContentService,
     private movementService: MovementService
@@ -31,7 +33,7 @@ export class SceneLinkService extends Phaser.Scene {
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement('linkHouse');
+    this.achievementService.mergeAchievementsAndSave({ link: true } as Achievement);
 
     this.load.image('link_background', 'assets/game/Link_House_Background.png');
 

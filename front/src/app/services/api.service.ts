@@ -77,8 +77,9 @@ export class ApiService {
   }
 
   updateAchievement(achievement: Achievement): Observable<Achievement> {
+    console.log('Updating achievement:', achievement);
     return this.http.put<Achievement>(
-      `${this.baseUrl}/achievements/update`,
+      `${this.baseUrl}/achievements`,
       achievement,
       { headers: this.getAuthHeaders() }
     );

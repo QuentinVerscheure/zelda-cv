@@ -4,10 +4,11 @@ import { CollisionService } from '../../core/collision.service';
 import { CvContentService } from './cvContent.service';
 import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { CvData } from '../../../models/cvData.model';
 import { HousesDataService } from '../../core/houses-data.service';
+import { Achievement } from '../../../models/achievement.model';
+import { AchievementService } from '../../../services/achievement.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,14 +25,14 @@ export class SceneCVService extends Phaser.Scene {
     private cvContentService: CvContentService,
     private playerService: PlayerService,
     private npcService: NpcService,
-    private validAchievementService: ValidAchievementService,
-    private housesDataService: HousesDataService
+    private housesDataService: HousesDataService,
+    private achievementService: AchievementService
   ) {
     super({ key: 'sceneCV' });
   }
 
   preload() {
-    this.validAchievementService.ValidAchievement('cvHouse');
+    this.achievementService.mergeAchievementsAndSave({ cv: true } as Achievement);
 
     this.load.image('cvBackground', 'assets/game/CV_house_background.png');
 
@@ -127,7 +128,7 @@ export class SceneCVService extends Phaser.Scene {
     //icon to dowload the CV
     downloadCVButton.setInteractive({ useHandCursor: true });
     downloadCVButton.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement('cvHouseDownload');
+      this.achievementService.mergeAchievementsAndSave({ cvDownload: true } as Achievement);
       const a = document.createElement('a');
       a.href = 'assets/docs/CV.pdf';
       a.download = 'Verscheure-Quentin-CV';

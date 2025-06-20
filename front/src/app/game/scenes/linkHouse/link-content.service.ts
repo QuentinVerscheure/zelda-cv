@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { LinkData, LinkPictureContent } from '../../../models/linkData.model';
-import { ValidAchievementService } from '../../core/valid-achievement.service';
+import { AchievementService } from '../../../services/achievement.service';
+import { Achievement } from '../../../models/achievement.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LinkContentService {
-  constructor(private validAchievementService: ValidAchievementService) {}
+  constructor(    private achievementService: AchievementService) {}
 
   /**
    *  Load picture in linkScene
@@ -54,7 +55,7 @@ export class LinkContentService {
     pictureSprite.setInteractive({ useHandCursor: true });
 
     pictureSprite.on('pointerdown', () => {
-      this.validAchievementService.ValidAchievement('linkClicked');
+      this.achievementService.mergeAchievementsAndSave({ linkClick: true } as Achievement);
       window.open(url, '_blank');
     });
   }

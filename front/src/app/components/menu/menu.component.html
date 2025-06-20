@@ -10,38 +10,38 @@
     <h3 (click)="changeSection('quests')">Quêtes:</h3>
     <div *ngIf="!isSmartphone || currentSection === 'quests'">
       <ul>
-        <li id="playerHouse">
+        <li class="AchievementDone" id="playerHouse">
           <a>Parler au dev pour découvrir son monde</a>
         </li>
-        <li id="cvHouse">
+        <li [class.AchievementDone]="(achievements$ | async)?.cv" id="cvHouse">
           <a>Visiter la CV House</a>
           <ul>
-            <li id="cvHouseDownload">Télécharger le CV</li>
+            <li [class.AchievementDone]="(achievements$ | async)?.cvDownload" id="cvHouseDownload">Télécharger le CV</li>
           </ul>
         </li>
-        <li id="portfolioHouse"><a>Découvrir la portfolio house</a></li>
-        <li id="linkHouse">
+        <li [class.AchievementDone]="(achievements$ | async)?.portfolio" id="portfolioHouse"><a>Découvrir la portfolio house</a></li>
+        <li [class.AchievementDone]="(achievements$ | async)?.link" id="linkHouse">
           <a>Aller à la link house</a>
           <ul>
-            <li id="linkClicked">Cliquer sur un lien</li>
+            <li [class.AchievementDone]="(achievements$ | async)?.linkClick" id="linkClicked">Cliquer sur un lien</li>
           </ul>
         </li>
-        <li id="contactHouse">
+        <li [class.AchievementDone]="(achievements$ | async)?.phone" id="contactHouse">
           <a>Trouver la phone house</a>
           <ul>
-            <li id="contactMe">Contacter le dev</li>
+            <li [class.AchievementDone]="(achievements$ | async)?.phoneContact" id="contactMe">Contacter le dev</li>
           </ul>
         </li>
-        <li id="guestBookHouse">
+        <li [class.AchievementDone]="(achievements$ | async)?.guestBook" id="guestBookHouse">
           <a>Enqueter sur le livre d'or </a>
           <ul>
-            <li id="postComment">Déposer un commentaire</li>
+            <li [class.AchievementDone]="(achievements$ | async)?.guestBookComment" id="postComment">Déposer un commentaire</li>
           </ul>
         </li>
-        <li id="variousHouse">
+        <li [class.AchievementDone]="(achievements$ | async)?.achievementVarious" id="variousHouse">
           <a>Aller à la maison divers </a>
         </li>
-        <li id="creditHouse"><a>Voir les credits</a></li>
+        <li [class.AchievementDone]="(achievements$ | async)?.achievementCredit" id="creditHouse"><a>Voir les credits</a></li>
       </ul>
     </div>
     <h3 (click)="changeSection('save')">(s')enregistrer</h3>

@@ -15,6 +15,8 @@ import { ScenePortfolio2Service } from '../scenes/portfolioHouse/scene-portfolio
 import { HousesDataService } from './houses-data.service';
 import { ConfigService } from '../../services/config.service';
 import { AppConfig } from '../../models/config.model';
+import { AchievementService } from '../../services/achievement.service';
+import { SessionStorageService } from '../../services/session-storage.service';
 
 @Component({
   selector: 'app-game',
@@ -39,10 +41,14 @@ export class CoreComponent implements OnInit {
     private scenePortfolioService: ScenePortfolioService,
     private scenePortfolio2Service: ScenePortfolio2Service,
     private housesDataService: HousesDataService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private achievementService: AchievementService, // Ajout de l'injection du service
   ) {}
 
   ngOnInit(): void {
+    // Initialyze achievements when the game starts
+    this.achievementService.singletonInitializeAchievements();
+
     this.configService.config$.subscribe((config) => {
       //subscribe to the config.json file to know if debug mode=true
 

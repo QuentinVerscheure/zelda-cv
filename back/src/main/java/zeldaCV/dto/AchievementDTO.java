@@ -11,7 +11,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class AchievementDTO {
-    private Long id;
     private boolean cv;
     private boolean cvDownload;
     private boolean portfolio;
