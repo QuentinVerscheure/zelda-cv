@@ -4,6 +4,7 @@ import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
 import { CommentService } from './comment.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { NpcService } from '../../core/npc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,8 @@ export class SceneGuestBookService2 extends Phaser.Scene {
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private npcService: NpcService,
   ) {
     super({ key: 'sceneGuestBook2' });
   }
@@ -50,6 +52,13 @@ export class SceneGuestBookService2 extends Phaser.Scene {
 
     //load an invisible sprite for the hitbox detection for the change of scene
     this.load.image('sceneTransitionSprite', 'assets/game/hitbox.png');
+
+    //npc
+    this.load.atlas(
+      'fairy',
+      'assets/game/fairy.png',
+      'assets/game/fairy.json'
+    );
   }
 
   create() {
@@ -112,6 +121,18 @@ export class SceneGuestBookService2 extends Phaser.Scene {
     );
 
     this.commentService.displayComments(this.scaleOfTheGame, this);
+
+    this.npcService.createNpc(
+      this,
+      this.scaleOfTheGame,
+      185,
+      95,
+      'fairy',
+      this.player,
+      false,
+      0.25,
+      'fairy_text'
+    );
   }
 
   //move the player in the scene if user is not editing a comment

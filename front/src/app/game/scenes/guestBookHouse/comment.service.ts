@@ -10,6 +10,8 @@ import { CommentContainer } from '../../../models/commentContainer.model';
 @Injectable({
   providedIn: 'root',
 })
+//service to manage comments in the guest book scene
+// it allows to create, display, edit and delete comments in the scene
 export class CommentService {
   private commentContainers: Phaser.GameObjects.Container[] = [];
 
