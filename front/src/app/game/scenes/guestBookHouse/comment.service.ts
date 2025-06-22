@@ -138,18 +138,24 @@ export class CommentService {
       .image(fixedWidth - 20, 20, 'trashIcon')
       .setScale(scaleOfTheGame / 2);
     trashIcon.setInteractive({ useHandCursor: true });
-    container.add(trashIcon);
+
+    if (guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
+      container.add(trashIcon);
+    }
 
     trashIcon.on('pointerdown', () => {
+      if (container.commentId !== undefined) {
+        this.apiService.deleteComment(container.commentId).subscribe();
+      }
       container.destroy();
       this.commentContainers = this.commentContainers.filter(
         (c) => c !== container
       );
+
     });
 
     text.setOrigin(0, 0);
     text.setDepth(1);
-
     if (guestBookComment.newComment || guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
       container.setInteractive(
         new Phaser.Geom.Rectangle(0, 0, fixedWidth, fixedHeight),
