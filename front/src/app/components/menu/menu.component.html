@@ -16,37 +16,93 @@
         <li [class.AchievementDone]="(achievements$ | async)?.cv" id="cvHouse">
           <a>Visiter la CV House</a>
           <ul>
-            <li [class.AchievementDone]="(achievements$ | async)?.cvDownload" id="cvHouseDownload">Télécharger le CV</li>
+            <li
+              [class.AchievementDone]="(achievements$ | async)?.cvDownload"
+              id="cvHouseDownload"
+            >
+              Télécharger le CV
+            </li>
           </ul>
         </li>
-        <li [class.AchievementDone]="(achievements$ | async)?.portfolio" id="portfolioHouse"><a>Découvrir la portfolio house</a></li>
-        <li [class.AchievementDone]="(achievements$ | async)?.link" id="linkHouse">
+        <li
+          [class.AchievementDone]="(achievements$ | async)?.portfolio"
+          id="portfolioHouse"
+        >
+          <a>Découvrir la portfolio house</a>
+        </li>
+        <li
+          [class.AchievementDone]="(achievements$ | async)?.link"
+          id="linkHouse"
+        >
           <a>Aller à la link house</a>
           <ul>
-            <li [class.AchievementDone]="(achievements$ | async)?.linkClick" id="linkClicked">Cliquer sur un lien</li>
+            <li
+              [class.AchievementDone]="(achievements$ | async)?.linkClick"
+              id="linkClicked"
+            >
+              Cliquer sur un lien
+            </li>
           </ul>
         </li>
-        <li [class.AchievementDone]="(achievements$ | async)?.phone" id="contactHouse">
+        <li
+          [class.AchievementDone]="(achievements$ | async)?.phone"
+          id="contactHouse"
+        >
           <a>Trouver la phone house</a>
           <ul>
-            <li [class.AchievementDone]="(achievements$ | async)?.phoneContact" id="contactMe">Contacter le dev</li>
+            <li
+              [class.AchievementDone]="(achievements$ | async)?.phoneContact"
+              id="contactMe"
+            >
+              Contacter le dev
+            </li>
           </ul>
         </li>
-        <li [class.AchievementDone]="(achievements$ | async)?.guestBook" id="guestBookHouse">
+        <li
+          [class.AchievementDone]="(achievements$ | async)?.guestBook"
+          id="guestBookHouse"
+        >
           <a>Enqueter sur le livre d'or </a>
           <ul>
-            <li [class.AchievementDone]="(achievements$ | async)?.guestBookComment" id="postComment">Déposer un commentaire</li>
+            <li
+              [class.AchievementDone]="
+                (achievements$ | async)?.guestBookComment
+              "
+              id="postComment"
+            >
+              Déposer un commentaire
+            </li>
           </ul>
         </li>
-        <li [class.AchievementDone]="(achievements$ | async)?.achievementVarious" id="variousHouse">
+        <li
+          [class.AchievementDone]="(achievements$ | async)?.achievementVarious"
+          id="variousHouse"
+        >
           <a>Aller à la maison divers </a>
         </li>
-        <li [class.AchievementDone]="(achievements$ | async)?.achievementCredit" id="creditHouse"><a>Voir les credits</a></li>
+        <li
+          [class.AchievementDone]="(achievements$ | async)?.achievementCredit"
+          id="creditHouse"
+        >
+          <a>Voir les credits</a>
+        </li>
       </ul>
     </div>
     <h3 (click)="changeSection('save')">(s')enregistrer</h3>
     <div *ngIf="!isSmartphone || currentSection === 'save'">
       <form (ngSubmit)="onSubmit()">
+        <button
+          id="changeLoginPassButton"
+          type="button"
+          (click)="onChangeUser()"
+          class=""
+          *ngIf="isAuthenticated"
+        >
+          Changer de héros <small>(changer pseudo/pass)</small>
+        </button>
+        <div *ngIf="changeLoginPassError" class="error">
+          {{ changeLoginPassError }}
+        </div>
         <label for="pseudo">Pseudo:</label>
         <input
           placeholder="votre pseudo, ex: Link"
@@ -66,7 +122,7 @@
         />
 
         <button
-        id="signUpButton"
+          id="signUpButton"
           type="button"
           (click)="onSignUp()"
           class=""
@@ -79,19 +135,7 @@
           {{ signUpError }}
         </div>
         <button
-        id="changeLoginPassButton"
-          type="button"
-          (click)="onChangeUser()"
-          class=""
-          *ngIf="isAuthenticated"
-        >
-          Changer de héros <small>(changer pseudo/pass)</small>
-        </button>
-        <div *ngIf="changeLoginPassError" class="error">
-          {{ changeLoginPassError }}
-        </div>
-        <button
-        id="logOutButton"
+          id="logOutButton"
           type="button"
           (click)="onLogout()"
           class=""
@@ -100,7 +144,7 @@
           Quitter <small>(logout)</small>
         </button>
         <button
-        id="deleteUserButton"
+          id="deleteUserButton"
           type="button"
           (click)="onDeleteUser()"
           class=""
@@ -109,7 +153,7 @@
           Supprimer la partie <small>(Supprimer utilisateur)</small>
         </button>
         <button
-        id="loginButton"
+          id="loginButton"
           type="button"
           (click)="onLogin()"
           class=""
