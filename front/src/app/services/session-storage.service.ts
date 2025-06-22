@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../models/achievement.model';
 import { BehaviorSubject } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ export class SessionStorageService {
 
   // BehaviorSubject for reactive updates
   public achievements$ = new BehaviorSubject<Achievement | null>(this.getSessionStorageAchievements());
+
+  constructor(private apiService: ApiService) {}
 
   setAchievements(achievements: Achievement): void {
     sessionStorage.setItem(this.achievementsKey, JSON.stringify(achievements));
@@ -34,6 +37,19 @@ export class SessionStorageService {
   clearAchievements(): void {
     sessionStorage.removeItem(this.achievementsKey);
     this.achievements$.next(null);
+  }
+
+  syncPseudoWithToken() {
+    const token = localStorage.getItem('accessToken');
+    const pseudo = sessionStorage.getItem('pseudo');
+    if (token && !pseudo) {
+      this.apiService.getCurrentUser().subscribe(user => {
+        if (user && user.pseudo) {
+          sessionStorage.setItem('pseudo', user.pseudo);
+          console.log('Pseudo synced with token:', user.pseudo);
+        }
+      });
+    }
   }
 }
 

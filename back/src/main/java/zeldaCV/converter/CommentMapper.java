@@ -10,11 +10,13 @@ public class CommentMapper {
     // DTO -> Bean
     public static CommentBean dtoToBean(CommentDTO commentDto) {
         CommentBean commentBean = new CommentBean();
-        commentBean.setId(commentDto.getId());
+        if (commentDto.getId() != null) {
+            commentBean.setId(commentDto.getId());
+        }
         commentBean.setComment(commentDto.getComment());
         commentBean.setCoordinateX(commentDto.getCoordinateX());
         commentBean.setCoordinateY(commentDto.getCoordinateY());
-        commentBean.setUserId(commentDto.getUserId());
+        commentBean.setDate(new java.sql.Date(System.currentTimeMillis()));
         return commentBean;
     }
 
@@ -26,6 +28,7 @@ public class CommentMapper {
         commentEntity.setCoordinateX(commentBean.getCoordinateX());
         commentEntity.setCoordinateY(commentBean.getCoordinateY());
         commentEntity.setId(commentBean.getUserId());
+        commentEntity.setDate(new java.sql.Date(System.currentTimeMillis()));
         return commentEntity;
     }
 
@@ -37,6 +40,8 @@ public class CommentMapper {
         commentbean.setCoordinateX(commentEntity.getCoordinateX());
         commentbean.setCoordinateY(commentEntity.getCoordinateY());
         commentbean.setUserId(commentEntity.getUser().getId());
+        commentbean.setUserPseudo(commentEntity.getUser().getPseudo());
+        commentbean.setDate(commentEntity.getDate());
         return commentbean;
     }
 
@@ -47,7 +52,8 @@ public class CommentMapper {
         commentDto.setComment(commentBean.getComment());
         commentDto.setCoordinateX(commentBean.getCoordinateX());
         commentDto.setCoordinateY(commentBean.getCoordinateY());
-        commentDto.setUserId(commentBean.getUserId());
+        commentDto.setUserPseudo(commentBean.getUserPseudo());
+        commentDto.setDate(commentBean.getDate());
         return commentDto;
     }
 }

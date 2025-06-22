@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -62,7 +63,7 @@ public class CommentController {
                         "  \"coordinateY\": 1000\n" +
                         "}"
             ))))
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDto) {
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDto, Principal principal) {
         CommentDTO updatedCommentDto = commentService.updateComment(id, commentDto);
         return ResponseEntity.ok(updatedCommentDto);
     }

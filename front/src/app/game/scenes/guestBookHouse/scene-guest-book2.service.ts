@@ -109,11 +109,12 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       this.player,
       this
     );
+
+    this.commentService.displayComments(this.scaleOfTheGame, this);
   }
 
   override update() {
     this.movementService.movePlayer(this.player, this.scaleOfTheGame);
-    this.commentService.displayComments(this.scaleOfTheGame, this);
   }
 
   getScaleOfTheGame() {

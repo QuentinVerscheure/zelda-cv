@@ -1,5 +1,7 @@
 package zeldaCV.model;
 
+import java.sql.Date;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +30,9 @@ public class CommentEntity {
 
     @Column(name = "coordinateY")
     private int coordinateY;
+
+    @Column(name= "date")
+    private Date date;
 
     // Relation ManyToOne avec UserEntity
     @ManyToOne

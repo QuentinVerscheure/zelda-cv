@@ -1,4 +1,10 @@
-import { Component, HostListener, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ChangeDetectorRef,
+  NgZone,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../services/config.service';
@@ -9,6 +15,7 @@ import { Achievement } from '../../models/achievement.model';
 import { AchievementService } from '../../services/achievement.service';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { BehaviorSubject } from 'rxjs';
+import { MenuMessageService } from './menu-message.service';
 
 @Component({
   selector: 'app-menu',
@@ -39,6 +46,7 @@ export class MenuComponent implements OnInit {
     private apiService: ApiService,
     private achievementService: AchievementService,
     private sessionStorageService: SessionStorageService,
+    private menuMessageService: MenuMessageService
   ) {
     this.achievements$ = this.sessionStorageService.achievements$;
   }
@@ -47,10 +55,22 @@ export class MenuComponent implements OnInit {
     this.configService.config$.subscribe((config) => {
       this.config = config;
     });
+    // if user try to create a message in guessbook without authentification
+    this.menuMessageService.authMessage$.subscribe((message) => {
+      if (message) {
+        this.loginError = message;
+        this.menuOpen = true;
+        this.currentSection = 'save';
+      }
+    });
     this.checkAuth();
 
+    // initialize the achievements BehaviorSubject with the current achievements value.
+    //if achievement is update, modify the display in menu  
     if (!this.sessionStorageService.getAchievements()) {
-      this.sessionStorageService.achievements$.next(this.sessionStorageService.getAchievements());
+      this.sessionStorageService.achievements$.next(
+        this.sessionStorageService.getAchievements()
+      );
     }
   }
 
@@ -59,12 +79,14 @@ export class MenuComponent implements OnInit {
   }
 
   toggleMenu() {
+    this.cleanErrorMessages();
     this.menuOpen = !this.menuOpen;
   }
 
   onSubmit() {}
 
   changeSection(section: string) {
+    this.cleanErrorMessages();
     this.currentSection = section;
   }
 
@@ -107,7 +129,11 @@ export class MenuComponent implements OnInit {
         if (response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
           this.cleanErrorMessages();
-          this.ToggleTemporaryClassToButton('signUpButton', 'buttonSuccess', "buttonReturnNormal");
+          this.ToggleTemporaryClassToButton(
+            'signUpButton',
+            'buttonSuccess',
+            'buttonReturnNormal'
+          );
           this.ToggleFadedAnim(true, 'loginButton', 'signUpButton');
         }
       },
@@ -128,16 +154,22 @@ export class MenuComponent implements OnInit {
         if (response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
         }
+        sessionStorage.setItem('pseudo', this.pseudo);
         this.cleanErrorMessages();
-        this.ToggleTemporaryClassToButton('loginButton', 'buttonSuccess', "buttonReturnNormal");
+        this.ToggleTemporaryClassToButton(
+          'loginButton',
+          'buttonSuccess',
+          'buttonReturnNormal'
+        );
         this.ToggleFadedAnim(true, 'loginButton', 'signUpButton');
 
         // synchronyse an unlogin user's achievements with database's user's achievement when he authenticates
         this.apiService.getUserAchievement().subscribe({
           next: (apiAchievement) => {
-            const merged = this.achievementService.mergeAchievementsAndSave(apiAchievement);
+            const merged =
+              this.achievementService.mergeAchievementsAndSave(apiAchievement);
             this.apiService.updateAchievement(merged).subscribe();
-          }
+          },
         });
       },
       error: (err) => {
@@ -147,6 +179,7 @@ export class MenuComponent implements OnInit {
       },
     });
   }
+
   onChangeUser() {
     const login: LoginDTO = {
       pseudo: this.pseudo,
@@ -157,35 +190,60 @@ export class MenuComponent implements OnInit {
         if (response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
         }
+        sessionStorage.setItem('pseudo', this.pseudo);
         this.cleanErrorMessages();
-        this.ToggleTemporaryClassToButton('changeLoginPassButton', 'buttonSuccess', "buttonReturnNormal");
+        this.ToggleTemporaryClassToButton(
+          'changeLoginPassButton',
+          'buttonSuccess',
+          'buttonReturnNormal'
+        );
         this.isAuthenticated = true;
       },
       error: (err) => {
         this.cleanErrorMessages();
         this.changeLoginPassError =
-          err.error?.error || 'Erreur lors du changement de mot de passe/pseudo';
+          err.error?.error ||
+          'Erreur lors du changement de mot de passe/pseudo';
       },
     });
   }
   onLogout() {
     localStorage.removeItem('accessToken');
     this.cleanErrorMessages();
-    this.ToggleTemporaryClassToButton('logOutButton', 'buttonSuccess', "buttonReturnNormal");
-    this.ToggleFadedAnim(false,'deleteUserButton', 'changeLoginPassButton', 'logOutButton');
+    this.ToggleTemporaryClassToButton(
+      'logOutButton',
+      'buttonSuccess',
+      'buttonReturnNormal'
+    );
+    this.ToggleFadedAnim(
+      false,
+      'deleteUserButton',
+      'changeLoginPassButton',
+      'logOutButton'
+    );
   }
 
-  onDeleteUser(){
+  onDeleteUser() {
     this.apiService.deleteUser().subscribe({
       next: () => {
         localStorage.removeItem('accessToken');
         this.cleanErrorMessages();
-        this.ToggleTemporaryClassToButton('deleteUserButton', 'buttonSuccess', "buttonReturnNormal");
-        this.ToggleFadedAnim(false,'deleteUserButton', 'changeLoginPassButton', 'logOutButton');
+        this.ToggleTemporaryClassToButton(
+          'deleteUserButton',
+          'buttonSuccess',
+          'buttonReturnNormal'
+        );
+        this.ToggleFadedAnim(
+          false,
+          'deleteUserButton',
+          'changeLoginPassButton',
+          'logOutButton'
+        );
       },
       error: (err) => {
         this.cleanErrorMessages();
-        this.loginError = err.error?.error || 'Erreur lors de la suppression du compte';
+        this.loginError =
+          err.error?.error || 'Erreur lors de la suppression du compte';
       },
     });
   }
@@ -196,7 +254,11 @@ export class MenuComponent implements OnInit {
     this.changeLoginPassError = null;
   }
 
-  ToggleTemporaryClassToButton(buttonId: string, className1: string, className2: string) {
+  ToggleTemporaryClassToButton(
+    buttonId: string,
+    className1: string,
+    className2: string
+  ) {
     const btn = document.getElementById(buttonId);
     if (btn) {
       btn.classList.add(className1);
@@ -209,7 +271,7 @@ export class MenuComponent implements OnInit {
   }
 
   ToggleFadedAnim(isAuthenticated: boolean, ...buttonIds: string[]) {
-    buttonIds.forEach(buttonId => {
+    buttonIds.forEach((buttonId) => {
       const btn = document.getElementById(buttonId);
       if (btn) {
         btn.classList.add('fade-anim');
@@ -220,5 +282,4 @@ export class MenuComponent implements OnInit {
       }
     });
   }
-  
 }

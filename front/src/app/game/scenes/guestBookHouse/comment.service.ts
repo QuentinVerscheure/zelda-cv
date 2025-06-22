@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { guestBookCommentary } from '../../../models/guestBookCommentary.model';
 import { AchievementService } from '../../../services/achievement.service';
 import { Achievement } from '../../../models/achievement.model';
+import { ApiService } from '../../../services/api.service';
+import { GuestBookComment } from '../../../models/guestBookComment.model';
+import { MenuMessageService } from '../../../components/menu/menu-message.service';
+import { CommentDTO } from '../../../models/dto/comment.dto';
+import { CommentContainer } from '../../../models/commentContainer.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +13,17 @@ import { Achievement } from '../../../models/achievement.model';
 export class CommentService {
   private commentContainers: Phaser.GameObjects.Container[] = [];
 
-  constructor(    private achievementService: AchievementService) {}
+  constructor(
+    private achievementService: AchievementService,
+    private apiService: ApiService,
+    private menuMessageService: MenuMessageService
+  ) {}
 
   displayComments(scaleOfTheGame: number, scene: Phaser.Scene) {
-    this.mockMessages.forEach((message) => {
-      this.createComment(message, scaleOfTheGame, scene);
+    this.apiService.getAllComments().subscribe((guestBookDtos) => {
+      guestBookDtos.forEach((guestBookDto) => {
+        this.createComment(guestBookDto, scaleOfTheGame, scene);
+      });
     });
   }
 
@@ -37,8 +47,19 @@ export class CommentService {
     icon.body.immovable = true;
 
     icon.on('pointerdown', () => {
-      this.achievementService.mergeAchievementsAndSave({ guestBookComment: true } as Achievement);
-      this.showForm();
+      let pseudo = sessionStorage.getItem('pseudo');
+      const token = localStorage.getItem('accessToken');
+
+      if (!pseudo || !token) {
+        const errorMessage =
+          'Merci de vous authentifier/inscrire avant de poster un message';
+        this.menuMessageService.showAuthMessage(errorMessage);
+      } else {
+        this.achievementService.mergeAchievementsAndSave({
+          guestBookComment: true,
+        } as Achievement);
+        this.showForm();
+      }
     });
 
     scene.physics.add.collider(player, icon);
@@ -51,21 +72,39 @@ export class CommentService {
    * @param guestBookCommentary - content of one message
    */
   createComment(
-    message: guestBookCommentary,
+    guestBookComment: GuestBookComment,
     scaleOfTheGame: number,
     scene: Phaser.Scene
   ) {
+    let dateObj: Date;
+    if (guestBookComment.date instanceof Date) {
+      dateObj = guestBookComment.date;
+    } else if (
+      typeof guestBookComment.date === 'string' ||
+      typeof guestBookComment.date === 'number'
+    ) {
+      dateObj = new Date(guestBookComment.date);
+    } else {
+      dateObj = new Date();
+    }
+
     const formattedText = `${
-      message.user
-    }   -   (${message.date.toLocaleDateString()})\n\n${message.message}`;
+      guestBookComment.userPseudo
+    }   -   (${dateObj.toLocaleDateString()})\n\n${guestBookComment.comment}`;
 
     const fixedWidth = 131 * scaleOfTheGame; //fixe width of the message. Do not change
     const fixedHeight = 44 * scaleOfTheGame; //fixe height of the message. Do not change
 
-    const container = scene.add.container(
-      message.x * scaleOfTheGame,
-      message.y * scaleOfTheGame
+    const container : CommentContainer = scene.add.container(
+      guestBookComment.coordinateX * scaleOfTheGame,
+      guestBookComment.coordinateY * scaleOfTheGame,
     );
+
+    container.date = dateObj;
+
+    if (guestBookComment.id != null) {
+      (container as CommentContainer).commentId = guestBookComment.id; // Attach the id of the comment directly to the container
+    }
 
     const backgroundGraphics = this.createBackgroundGraphics(
       scene,
@@ -111,7 +150,7 @@ export class CommentService {
     text.setOrigin(0, 0);
     text.setDepth(1);
 
-    if (message.newComment) {
+    if (guestBookComment.newComment || guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
       container.setInteractive(
         new Phaser.Geom.Rectangle(0, 0, fixedWidth, fixedHeight),
         Phaser.Geom.Rectangle.Contains
@@ -119,12 +158,56 @@ export class CommentService {
 
       scene.input.setDraggable(container);
 
+      //when comment is dragged, check if it overlaps with the restricted zone (visuel uniquement)
       container.on(
         'drag',
         (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
           container.x = dragX;
           container.y = dragY;
           this.checkOverlap(container, fixedWidth, fixedHeight, scaleOfTheGame);
+        }
+      );
+      // when comment is dropped, check if it overlaps with the restricted zone (visual only)
+      container.on(
+        'dragend',
+        (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+          if (
+            !this.checkOverlap(
+              container,
+              fixedWidth,
+              fixedHeight,
+              scaleOfTheGame
+            )
+          ) {
+            // If overlap, do nothing
+            return;
+          }
+          const commentId = (container as CommentContainer).commentId;
+          const commentDto: CommentDTO = {
+            comment: guestBookComment.comment,
+            coordinateX: container.x/scaleOfTheGame,
+            coordinateY: container.y/scaleOfTheGame,
+            date: (container as CommentContainer).date,
+            id: commentId,
+          };
+          const token = localStorage.getItem('accessToken');
+          if (!token) {
+            this.menuMessageService.showAuthMessage(
+              'Vous devez être authentifié pour modifier un commentaire.'
+            );
+            return;
+          }
+
+          if (commentId) {
+            this.apiService.updateComment(commentId, commentDto).subscribe();
+          } else {
+            this.apiService
+              .createComment(commentDto)
+              .subscribe((createdCommentDto: CommentDTO) => {
+                (container as CommentContainer).commentId =
+                  createdCommentDto.id;
+              });
+          }
         }
       );
     }
@@ -152,7 +235,7 @@ export class CommentService {
     width: number,
     height: number,
     scaleOfTheGame: number
-  ) {
+  ): boolean {
     const containerBounds = new Phaser.Geom.Rectangle(
       container.x,
       container.y,
@@ -161,7 +244,6 @@ export class CommentService {
     );
 
     let isOverlapping = false;
-
     // Check overlap with the central restricted zone
     const restrictedZone = new Phaser.Geom.Rectangle(
       -10 * scaleOfTheGame,
@@ -199,6 +281,7 @@ export class CommentService {
     });
 
     this.updateCommentAppearance(container, width, height, isOverlapping);
+    return !isOverlapping;
   }
 
   /**
@@ -233,41 +316,4 @@ export class CommentService {
       form.classList.remove('hidden');
     }
   }
-
-  /**
-   *  mock message to delete when the database will be implemented
-   */
-  private mockMessages: guestBookCommentary[] = [
-    {
-      user: 'test1',
-      message:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum in tincidunt odio. Vivamus id justo sed ante viverra cursus. Etiam eget finibus quam. Proin vulputate dictum feugiat. Int',
-      date: new Date('2022-11-05T10:30:00'),
-      x: -70,
-      y: 150,
-    },
-    {
-      user: 'test2',
-      message:
-        'Lorem ipsum odor amet, consectetuer adipiscing elit. Elementum vel eleifend vestibulum accumsan quisque urna tincidunt potenti. Nostra tristique eleifend class tortor enim integer taciti lacus. Conubia pretium velit montes odio amet inceptos sit vel. Iaculis arcu dolor netus ',
-      date: new Date('2023-12-11T10:30:00'),
-      x: 200,
-      y: 150,
-    },
-    {
-      user: 'test3',
-      message:
-        'Lorem ipsum odor amet, consectetuer adipiscing elit. Elementum vel eleifend vestibulum accumsan quisque urna tincidunt potenti. Nostra tristique eleifend class tortor enim integer taciti lacus. Conubia pretium velit montes odio amet inceptos sit vel. Iaculis arcu dolor netus vestibulum fermentum. Ornare libero convallis bibendum, praesent ',
-      date: new Date('2024-06-30T10:30:00'),
-      x: 250,
-      y: 50,
-    },
-    {
-      user: 'test4',
-      message: 'Lorem ipsum odor amet',
-      date: new Date('2023-12-25T10:30:00'),
-      x: 0,
-      y: 200,
-    },
-  ];
 }

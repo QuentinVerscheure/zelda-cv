@@ -42,7 +42,7 @@ export class CoreComponent implements OnInit {
     private scenePortfolio2Service: ScenePortfolio2Service,
     private housesDataService: HousesDataService,
     private configService: ConfigService,
-    private achievementService: AchievementService, // Ajout de l'injection du service
+    private achievementService: AchievementService,
   ) {}
 
   ngOnInit(): void {
@@ -64,12 +64,13 @@ export class CoreComponent implements OnInit {
           autoCenter: Phaser.Scale.CENTER_BOTH,
         },
         scene: [
+                    this.sceneGuestBook2,
           this.scenePlayerHouse, //1st scene will be load at the start of the game
           this.sceneWorld,
           this.sceneContact,
           this.sceneCV,
           this.sceneGuestBook1,
-          this.sceneGuestBook2,
+          // this.sceneGuestBook2,
           this.sceneLink,
           this.sceneVarious,
           this.sceneCreditService,

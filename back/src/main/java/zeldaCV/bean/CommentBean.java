@@ -1,4 +1,6 @@
 package zeldaCV.bean;
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,5 @@ public class CommentBean {
     private int coordinateY;
     private Long userId;
     private String userPseudo;
+    private Date date;
 }

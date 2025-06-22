@@ -9,6 +9,7 @@ import { UserDTO } from '../models/user.model';
 import { MailDTO } from '../models/dto/mail.dto';
 import { LoginDTO, LoginResponseDTO } from '../models/dto/login.dto';
 import { Achievement } from '../models/achievement.model';
+import { GuestBookDto } from '../models/dto/guestBook.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,8 @@ export class ApiService {
   }
 
   // --- Comment APIs ---
-  getAllComments(): Observable<CommentDTO[]> {
-    return this.http.get<CommentDTO[]>(`${this.baseUrl}/comments`);
+  getAllComments(): Observable<GuestBookDto[]> {
+    return this.http.get<GuestBookDto[]>(`${this.baseUrl}/comments`);
   }
 
   createComment(comment: CommentDTO): Observable<CommentDTO> {
@@ -39,6 +40,8 @@ export class ApiService {
   }
 
   updateComment(id: number, comment: CommentDTO): Observable<CommentDTO> {
+    const headers = this.getAuthHeaders();
+    // DEBUG: log temporaire pour vérifier le token
     return this.http.put<CommentDTO>(
       `${this.baseUrl}/comments/${id}`,
       comment,
@@ -77,7 +80,6 @@ export class ApiService {
   }
 
   updateAchievement(achievement: Achievement): Observable<Achievement> {
-    console.log('Updating achievement:', achievement);
     return this.http.put<Achievement>(
       `${this.baseUrl}/achievements`,
       achievement,
@@ -94,5 +96,12 @@ export class ApiService {
 
   login(credentials: LoginDTO): Observable<LoginResponseDTO> {
     return this.http.post<LoginResponseDTO>(`${this.baseUrl}/auth/login`, credentials);
+  }
+
+  getCurrentUser(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(
+      `${this.baseUrl}/users`,
+      { headers: this.getAuthHeaders() }
+    );
   }
 }

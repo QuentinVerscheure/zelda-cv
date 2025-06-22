@@ -70,7 +70,9 @@ public class CommentServiceImpl implements CommentService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String pseudo = authentication != null ? authentication.getName() : null;
-
+        System.out.println("DEBUG: authentication=" + authentication);
+        System.out.println("DEBUG: authentication.getName()=" + (authentication != null ? authentication.getName() : "null"));
+        System.out.println("DEBUG: authentication.isAuthenticated()=" + (authentication != null ? authentication.isAuthenticated() : "null"));
         UserEntity user = userRepository.findByPseudo(pseudo)
             .orElseThrow(() -> new RuntimeException("User not found"));
 

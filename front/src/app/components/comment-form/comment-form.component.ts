@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommentService } from '../../game/scenes/guestBookHouse/comment.service';
-import { guestBookCommentary } from '../../models/guestBookCommentary.model';
 import { SceneGuestBookService2 } from '../../game/scenes/guestBookHouse/scene-guest-book2.service';
+import { GuestBookComment } from '../../models/guestBookComment.model';
 
 @Component({
   selector: 'app-comment-form',
@@ -18,21 +18,23 @@ export class CommentFormComponent {
   ) {}
 
   onSubmit(form: NgForm) {
-    let message: guestBookCommentary = {
-      user: 'newUser',
-      message: form.value.message,
-      date: new Date(),
-      x: 38,
-      y: 34,
-      newComment: true,
-    };
-
-    this.commentService.createComment(
-      message,
-      this.sceneGuestBookService2.getScaleOfTheGame(),
-      this.sceneGuestBookService2
-    );
-    this.hideForm();
+    let pseudo = sessionStorage.getItem('pseudo')!;
+    if (pseudo) {
+      let guestBookComment: GuestBookComment = {
+        userPseudo: pseudo,
+        comment: form.value.message,
+        date: new Date(),
+        coordinateX: 38,
+        coordinateY: 34,
+        newComment: true,
+      };
+      this.commentService.createComment(
+        guestBookComment,
+        this.sceneGuestBookService2.getScaleOfTheGame(),
+        this.sceneGuestBookService2
+      );
+      this.hideForm();
+    }
   }
 
   //showForm() in comment.service
