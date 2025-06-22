@@ -216,6 +216,65 @@ export class CommentService {
       );
     }
 
+    // allow the comment to be edited by the user
+    if (guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
+      text.setInteractive({ useHandCursor: true });
+      let isEditing = false;
+
+      //recreate the operation of a keyboard in order to modify the comment directly in the game 
+      text.on('pointerdown', () => {
+        if (isEditing) return;
+        isEditing = true;
+
+        // disable player movement while editing
+        if (scene && 'isEditingComment' in scene) {
+          (scene as any).isEditingComment = true;
+        }
+
+        text.setColor('#007bff');
+        let currentText = guestBookComment.comment;
+
+        if (scene.input.keyboard) {
+          const originalText = guestBookComment.comment;
+          const keyListener = (event: KeyboardEvent) => {
+            if (!isEditing) return;
+
+            if (event.key === 'Enter') {
+              isEditing = false;
+              text.setColor('#000000');
+              guestBookComment.comment = currentText;
+              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${currentText}`);
+              scene.input.keyboard?.off('keydown', keyListener);
+              // reactivate player movement
+              if (scene && 'isEditingComment' in scene) {
+                (scene as any).isEditingComment = false;
+              }
+              if (guestBookComment.id !== undefined) {
+                this.apiService.updateComment(guestBookComment.id, guestBookComment).subscribe();
+              }
+            } else if (event.key === 'Escape') {
+              isEditing = false;
+              text.setColor('#000000');
+              currentText = originalText;
+              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${originalText}`);
+              scene.input.keyboard?.off('keydown', keyListener);
+              // reactivate player movement
+              if (scene && 'isEditingComment' in scene) {
+                (scene as any).isEditingComment = false;
+              }
+            } else if (event.key === 'Backspace') {
+              currentText = currentText.slice(0, -1);
+              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${currentText}_`);
+            } else if (event.key.length === 1) {
+              currentText += event.key;
+              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${currentText}_`);
+            }
+          };
+          scene.input.keyboard.on('keydown', keyListener);
+        }
+      });
+    }
+
     this.commentContainers.push(container);
   }
 

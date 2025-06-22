@@ -14,6 +14,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
 
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  public isEditingComment: boolean = false; // Ajouté
 
   constructor(
     private movementService: MovementService,
@@ -113,8 +114,11 @@ export class SceneGuestBookService2 extends Phaser.Scene {
     this.commentService.displayComments(this.scaleOfTheGame, this);
   }
 
+  //move the player in the scene if user is not editing a comment
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    if (!this.isEditingComment) {
+      this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    }
   }
 
   getScaleOfTheGame() {
