@@ -75,9 +75,3 @@ Be carefull to change the token if you modify your name or pass and don't use th
 
 ![Database Schema](src/main/resources/static/shemaDB.png)
 
-CORS : configure précisément les origines autorisées (pas de "*" en production, mais l’URL de ton front).
-Variables d’environnement : adapte les URLs d’API, clés, secrets, etc. pour l’environnement de production.
-Sécurité : désactive les logs sensibles, active HTTPS, vérifie les permissions et les accès.
-Optimisation : compile ton front en mode production (ng build --prod), optimise les ressources statiques.
-Configuration backend : adapte les propriétés Spring (application-prod.properties), configure la base de données, les emails, etc.
-Tests : vérifie que tout fonctionne bien sur le serveur (API, authentification, envoi de mail, etc.).
