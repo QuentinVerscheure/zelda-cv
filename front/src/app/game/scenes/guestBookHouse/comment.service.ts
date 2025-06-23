@@ -30,7 +30,12 @@ export class CommentService {
   }
 
   /**
-   *  create the icon use to display the create comment form
+   *  create a clickable icon in the scene
+   * @param x - x position of the icon
+   * @param y - y position of the icon
+   * @param scaleOfTheGame - scale of the game
+   * @param player - the player object for collisions
+   * @param scene - the current scene
    */
   createClickableIcon(
     x: number,
@@ -70,14 +75,17 @@ export class CommentService {
   }
 
   /**
-   *  create a message from the database in the scene
-   * @param guestBookCommentary - content of one message
+   *  create a comment in the scene
+   * @param guestBookComment - the comment to create
+   * @param scaleOfTheGame - scale of the game
+   * @param scene - the current scene
    */
   createComment(
     guestBookComment: GuestBookComment,
     scaleOfTheGame: number,
     scene: Phaser.Scene
   ) {
+    //format the date of the comment from DB or create a new date if not provided
     let dateObj: Date;
     if (guestBookComment.date instanceof Date) {
       dateObj = guestBookComment.date;
@@ -94,8 +102,14 @@ export class CommentService {
       guestBookComment.userPseudo
     }   -   (${dateObj.toLocaleDateString()})\n\n${guestBookComment.comment}`;
 
-    const fixedWidth = 131 * scaleOfTheGame; //fixe width of the message. Do not change
-    const fixedHeight = 44 * scaleOfTheGame; //fixe height of the message. Do not change
+    // fixe dimentions of the message. DO NOT CHANGE. 
+    // the back system will continue to check collision with this original defined width and height
+    // also if you change it in back, the back can't remember the dimentions of the olds messages and will not be able 
+    // to check collision with old and new dimentions
+    // in front, it's a visual detection but back will take the origin of the message and calculate
+    // the dimention of the message to check collision
+    const fixedWidth = 131 * scaleOfTheGame; 
+    const fixedHeight = 44 * scaleOfTheGame; 
 
     const container : CommentContainer = scene.add.container(
       guestBookComment.coordinateX * scaleOfTheGame,
@@ -135,7 +149,7 @@ export class CommentService {
     borderGraphics.strokeRect(0, 0, fixedWidth, fixedHeight);
     container.add(borderGraphics);
 
-    // Ajoute ce bloc à la place de la création/ajout du trashIcon
+    //is lessage have been created by the user, add a trash icon to delete it
     if (guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
       const trashIcon = scene.add
         .image(fixedWidth - 20, 20, 'trashIcon')
@@ -154,6 +168,7 @@ export class CommentService {
       });
     }
 
+    //if new comment or comment created by the user, allow to drag and drop the comment
     text.setOrigin(0, 0);
     text.setDepth(1);
     if (guestBookComment.newComment || guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
@@ -161,10 +176,9 @@ export class CommentService {
         new Phaser.Geom.Rectangle(0, 0, fixedWidth, fixedHeight),
         Phaser.Geom.Rectangle.Contains
       );
-
       scene.input.setDraggable(container);
 
-      //when comment is dragged, check if it overlaps with the restricted zone (visuel uniquement)
+      //when comment is dragged, check if it overlaps with the restricted zone (check base on visual detection)
       container.on(
         'drag',
         (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
@@ -173,7 +187,7 @@ export class CommentService {
           this.checkOverlap(container, fixedWidth, fixedHeight, scaleOfTheGame);
         }
       );
-      // when comment is dropped, check if it overlaps with the restricted zone (visual only)
+      // when comment is dropped, check if it overlaps with the restricted zone (check base on visual detection)
       container.on(
         'dragend',
         (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
@@ -188,6 +202,7 @@ export class CommentService {
             // If overlap, do nothing
             return;
           }
+          
           const commentId = (container as CommentContainer).commentId;
           const commentDto: CommentDTO = {
             comment: guestBookComment.comment,
@@ -223,7 +238,7 @@ export class CommentService {
       text.setInteractive({ useHandCursor: true });
       let isEditing = false;
 
-      //recreate the operation of a keyboard in order to modify the comment directly in the game 
+      //recreate the edition of text in order to modify the comment directly in the game 
       text.on('pointerdown', () => {
         if (isEditing) return;
         isEditing = true;
@@ -293,7 +308,12 @@ export class CommentService {
   }
 
   /**
-   *  check if the drag and drop message overlaps another message
+   *  check if the comment container overlaps with the restricted zone or other comments
+   * @param container - the comment container to check
+   * @param width - width of the comment container
+   * @param height - height of the comment container
+   * @param scaleOfTheGame - scale of the game
+   * @returns true if the comment container does not overlap with any restricted zone or other comments
    */
   checkOverlap(
     container: Phaser.GameObjects.Container,
@@ -350,7 +370,11 @@ export class CommentService {
   }
 
   /**
-   *  update the appearance of the message if he overlap something forbidden
+   *  update the appearance of the comment container based on whether it overlaps with restricted zones or other comments
+   * @param container - the comment container to update
+   * @param width - width of the comment container
+   * @param height - height of the comment container
+   * @param isOverlapping - true if the comment container overlaps with restricted zones or other comments
    */
   updateCommentAppearance(
     container: Phaser.GameObjects.Container,

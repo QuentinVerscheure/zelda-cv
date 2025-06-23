@@ -18,6 +18,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
     /**
      * Returns all comments from the DB that are within the rectangle defined by
      * (X - width, X + width) and (Y - height, Y + height) around the given commentBean.
+     * usefull for collision detection when a new comment is created.
      */
     @Query("SELECT c FROM CommentEntity c WHERE " +
            "c.coordinateX BETWEEN :minX AND :maxX AND " +

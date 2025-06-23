@@ -26,7 +26,7 @@ export class ApiService {
     });
   }
 
-  // --- Comment APIs ---
+
   getAllComments(): Observable<GuestBookDto[]> {
     return this.http.get<GuestBookDto[]>(`${this.baseUrl}/comments`);
   }
@@ -41,7 +41,6 @@ export class ApiService {
 
   updateComment(id: number, comment: CommentDTO): Observable<CommentDTO> {
     const headers = this.getAuthHeaders();
-    // DEBUG: log temporaire pour vérifier le token
     return this.http.put<CommentDTO>(
       `${this.baseUrl}/comments/${id}`,
       comment,
@@ -75,9 +74,9 @@ export class ApiService {
     );
   }
 
-  sendMailToOwner(mail: MailDTO): Observable<string> {
-    return this.http.post<string>(`${this.baseUrl}/sendMailToOwner/`, mail);
-  }
+  // sendMailToOwner(mail: MailDTO): Observable<string> {
+  //   return this.http.post<string>(`${this.baseUrl}/sendMailToOwner/`, mail);
+  // }
 
   updateAchievement(achievement: Achievement): Observable<Achievement> {
     return this.http.put<Achievement>(

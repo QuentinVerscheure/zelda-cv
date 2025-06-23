@@ -27,8 +27,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //if the user have token in localStorage, he may not have pseudo in sessionStorage
-    //so we sync the pseudo with the token
     this.sessionStorageService.syncPseudoWithToken();
   }
 }

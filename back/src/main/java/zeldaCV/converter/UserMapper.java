@@ -10,7 +10,6 @@ import zeldaCV.model.UserEntity;
 
 public class UserMapper {
 
-        // DTO -> Bean
         public static UserBean dtoToBean(UserDTO userDTO) {
                 UserBean userBean = new UserBean();
                 userBean.setId(userDTO.getId());
@@ -23,7 +22,6 @@ public class UserMapper {
                 return userBean;
         }
 
-        // Bean -> Entity
         public static UserEntity beanToEntity(UserBean userBean) {
                 UserEntity userEntity = new UserEntity();
                 AchievementEntity achievementEntity = new AchievementEntity();
@@ -42,7 +40,6 @@ public class UserMapper {
                 return userEntity;
         }
 
-        // Entity -> Bean
         public static UserBean entityToBean(UserEntity userEntity) {
                 return new UserBean(
                                 userEntity.getId(),
@@ -58,7 +55,6 @@ public class UserMapper {
                                                                 .collect(Collectors.toList()));
         }
 
-        // Bean -> DTO
         public static UserDTO beanToDto(UserBean bean) {
                 if (bean == null) {
                         return null;

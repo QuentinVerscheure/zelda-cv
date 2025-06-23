@@ -60,10 +60,10 @@ public class AchievementServiceImpl implements AchievementService {
         java.util.function.Function<String, String> capitalize = str ->
             str.substring(0, 1).toUpperCase() + str.substring(1);
 
+            // browse fields and check if the new value is true by invoking the getter method
         for (String field : fields) {
             try {
                 String methodSuffix = capitalize.apply(field);
-                // Utilise dbAchievementBean pour le setter, pas AchievementEntity.class
                 boolean oldValue = (boolean) AchievementEntity.class.getMethod("is" + methodSuffix).invoke(achievementEntity);
                 boolean newValue = (boolean) AchievementBean.class.getMethod("is" + methodSuffix).invoke(newAchievementBean);
 

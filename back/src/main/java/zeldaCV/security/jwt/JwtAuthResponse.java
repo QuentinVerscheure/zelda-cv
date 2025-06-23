@@ -1,6 +1,5 @@
 package zeldaCV.security.jwt;
 
-// DTO for JWT response
 public class JwtAuthResponse {
     private String accessToken;
 

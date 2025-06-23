@@ -4,7 +4,7 @@ import zeldaCV.bean.AchievementBean;
 
 public class Achievement {
     /**
-     * Verifies the user's achievements.
+     * Verify the user's achievements.
      * This method takes an {@link AchievementBean} and checks that achievements are
      * valid betwen them
      *

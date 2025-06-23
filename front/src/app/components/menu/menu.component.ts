@@ -254,6 +254,12 @@ export class MenuComponent implements OnInit {
     this.changeLoginPassError = null;
   }
 
+  /**
+   * Toggle a temporary class to a button (for visual feedback)
+   * @param buttonId - The ID of the button to toggle classes on
+   * @param className1 - The class to add temporarily
+   * @param className2 - The class to remove temporarily
+   */
   ToggleTemporaryClassToButton(
     buttonId: string,
     className1: string,
@@ -270,6 +276,11 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  /**
+   * Toggle faded animation for buttons based on authentication status
+   * @param isAuthenticated - The authentication status
+   * @param buttonIds - The IDs of the buttons to toggle the animation on
+   */
   ToggleFadedAnim(isAuthenticated: boolean, ...buttonIds: string[]) {
     buttonIds.forEach((buttonId) => {
       const btn = document.getElementById(buttonId);

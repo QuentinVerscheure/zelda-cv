@@ -11,6 +11,7 @@ import java.util.Properties;
 public class JavaMailSenderConfig {
 
     @Bean
+    //mail not implemented yet (back not tested, front not implemented)
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("localhost");

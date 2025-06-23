@@ -22,9 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 import zeldaCV.dto.LoginDTO;
 import zeldaCV.dto.UserDTO;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -52,19 +49,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        List<UserEntity> users = userRepository.findAll();
-        return users.stream()
-                .map(UserMapper::entityToBean)
-                .map(UserMapper::beanToDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public UserResponseDTO createUser(UserDTO userDto) {
         UserBean userBean = UserMapper.dtoToBean(userDto);
 
-        // Check for forbidden pseudo
         if (Pseudo.isForbidden(userBean.getPseudo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username is not allowed. Please choose another one.");
         }

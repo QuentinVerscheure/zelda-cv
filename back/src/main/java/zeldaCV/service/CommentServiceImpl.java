@@ -26,11 +26,12 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private UserRepository userRepository;
 
-    // size fix of the comment rectangle
+    // fixe dimentions of the message. DO NOT CHANGE. 
+    // if you change it, the back can't remember the dimentions of the olds messages and will not be able 
+    // to check collision with old and new dimentions
     private static final int COMMENT_WIDTH = 131;
     private static final int COMMENT_HEIGHT = 44;
 
-    // Auto-generated constructor stub
     public CommentServiceImpl(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
@@ -70,9 +71,6 @@ public class CommentServiceImpl implements CommentService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String pseudo = authentication != null ? authentication.getName() : null;
-        System.out.println("DEBUG: authentication=" + authentication);
-        System.out.println("DEBUG: authentication.getName()=" + (authentication != null ? authentication.getName() : "null"));
-        System.out.println("DEBUG: authentication.isAuthenticated()=" + (authentication != null ? authentication.isAuthenticated() : "null"));
         UserEntity user = userRepository.findByPseudo(pseudo)
             .orElseThrow(() -> new RuntimeException("User not found"));
 

@@ -28,11 +28,9 @@ public class UserEntity {
     @Column(name = "pass", nullable = false)
     private String pass;
 
-    // Relation OneToMany with CommentEntity
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentEntity> comments;
 
-    // Relation OneToOne with AchievementEntity
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private AchievementEntity achievement;
 }

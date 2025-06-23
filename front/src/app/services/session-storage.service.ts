@@ -39,6 +39,11 @@ export class SessionStorageService {
     this.achievements$.next(null);
   }
 
+  /**
+   * Syncs the pseudo from the current user token with session storage.
+   * usefull when the user comeback, token is still available (localStorage) but not the 
+   * pseudo (sessionStorage).
+   */
   syncPseudoWithToken() {
     const token = localStorage.getItem('accessToken');
     const pseudo = sessionStorage.getItem('pseudo');

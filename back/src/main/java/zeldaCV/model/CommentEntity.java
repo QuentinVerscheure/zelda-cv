@@ -34,7 +34,6 @@ public class CommentEntity {
     @Column(name= "date")
     private Date date;
 
-    // Relation ManyToOne avec UserEntity
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
