@@ -76,3 +76,5 @@ Be carefull to change the token if you modify your name or pass and don't use th
 
 ![Database Schema](src/main/resources/static/shemaDB.png)
 
+./mvnw clean package -DskipTests
+java -jar Zelda-cv-1.0.0.jar --spring.profiles.active=prod
