@@ -65,6 +65,7 @@ This project use :
   - Spring DevTools.
   
 Run `mvn spring-boot:run` for a development server. 
+Run `java -jar your-app.jar --spring.profiles.active=prod` for a production .jar
 
 Swagger available to: http://localhost:8080/swagger-ui/index.html
 To use it, create a acount with `POST /api/users Create a new user` then authenticate with `POST /api/auth/login`

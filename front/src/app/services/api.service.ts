@@ -10,12 +10,13 @@ import { MailDTO } from '../models/dto/mail.dto';
 import { LoginDTO, LoginResponseDTO } from '../models/dto/login.dto';
 import { Achievement } from '../models/achievement.model';
 import { GuestBookDto } from '../models/dto/guestBook.dto';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
