@@ -14,7 +14,7 @@ import zeldaCV.security.jwt.JwtAuthResponse;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping({"/api/auth","/auth"})
 public class AuthController {
 
     private final AuthService authService;

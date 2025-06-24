@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping({"/api/users", "/users"})
 @Tag(name = "users", description = "Operations related to a users")
 public class UserController {
 

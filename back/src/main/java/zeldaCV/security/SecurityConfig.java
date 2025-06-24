@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -34,15 +35,15 @@ public class SecurityConfig {
         http
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("GET", "/api/comments").permitAll()
-                .requestMatchers("POST", "/api/comments").authenticated() 
-                .requestMatchers("PUT", "/api/comments/**").authenticated()
-                .requestMatchers("DELETE", "/api/comments/**").authenticated()
-                .requestMatchers("GET", "/api/users/**").permitAll()
-                .requestMatchers("POST", "/api/users").permitAll()
-                .requestMatchers("GET", "/api/achievements/**").permitAll()
-                .requestMatchers("POST", "/api/auth/login").permitAll()
-                .requestMatchers("POST", "/api/sendMailToOwner/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/comments").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/comments").authenticated() 
+                .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/comments/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/achievements/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/sendMailToOwner/**").permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers(
                         "/v3/api-docs/**",
