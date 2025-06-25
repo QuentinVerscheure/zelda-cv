@@ -96,23 +96,25 @@
           type="button"
           (click)="onChangeUser()"
           class=""
-          *ngIf="isAuthenticated"
+          *ngIf="isAuthenticated && !tryToDeleteUser"
         >
           Changer de héros <small>(changer pseudo/pass)</small>
         </button>
         <div *ngIf="changeLoginPassError" class="error">
           {{ changeLoginPassError }}
         </div>
-        <label for="pseudo">Pseudo:</label>
+        <label *ngIf="!tryToDeleteUser" for="pseudo">Pseudo:</label>
         <input
+        *ngIf="!tryToDeleteUser"
           placeholder="votre pseudo, ex: Link"
           id="pseudo"
           name="pseudo"
           [(ngModel)]="pseudo"
           required
         />
-        <label for="password">Mot de passe:</label>
+        <label *ngIf="!tryToDeleteUser" for="password">Mot de passe:</label>
         <input
+        *ngIf="!tryToDeleteUser"
           placeholder="votre mot de passe, ex: Zelda"
           type="password"
           id="password"
@@ -126,7 +128,7 @@
           type="button"
           (click)="onSignUp()"
           class=""
-          *ngIf="!isAuthenticated"
+          *ngIf="!isAuthenticated && !tryToDeleteUser"
         >
           Sauvegarder <small>(sign up)</small>
         </button>
@@ -139,18 +141,41 @@
           type="button"
           (click)="onLogout()"
           class=""
-          *ngIf="isAuthenticated"
+          *ngIf="isAuthenticated && !tryToDeleteUser"
         >
           Quitter <small>(logout)</small>
         </button>
         <button
-          id="deleteUserButton"
-          type="button"
-          (click)="onDeleteUser()"
+          id="triggerdeleteUserButton"
+          type="triggerbutton"
+          (click)="onTriggerDeleteUser()"
           class=""
-          *ngIf="isAuthenticated"
+          *ngIf="isAuthenticated && !tryToDeleteUser"
         >
           Supprimer la partie <small>(Supprimer utilisateur)</small>
+        </button>
+        <div *ngIf="tryToDeleteUser">
+          <p>
+            Cette action est irréversible et supprimera également tous vos messages. Voulez-vous vraiment continuer&nbsp;?
+          </p>
+        </div>
+        <button
+          id="deleteUserButtonYes"
+          type="button"
+          (click)="onDeleteUserYes()"
+          class=""
+          *ngIf="isAuthenticated && tryToDeleteUser"
+        >
+          finish him <small>(oui)</small>
+        </button>
+        <button
+          id="deleteUserButtonNo"
+          type="button"
+          (click)="onDeleteUserNo()"
+          class=""
+          *ngIf="isAuthenticated && tryToDeleteUser"
+        >
+          It's dangerous to go alone! <small>(non)</small>
         </button>
         <button
           id="loginButton"
@@ -161,7 +186,7 @@
         >
           Charger <small>(login)</small>
         </button>
-        <div *ngIf="loginError" class="error">
+        <div *ngIf="loginError && !tryToDeleteUser" class="error">
           {{ loginError }}
         </div>
       </form>

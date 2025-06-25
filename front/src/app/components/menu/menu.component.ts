@@ -38,6 +38,7 @@ export class MenuComponent implements OnInit {
   loginError: string | null = null;
   changeLoginPassError: string | null = null;
   isAuthenticated: boolean = false;
+  tryToDeleteUser: boolean = false;
 
   achievements$: BehaviorSubject<Achievement | null>;
 
@@ -66,7 +67,7 @@ export class MenuComponent implements OnInit {
     this.checkAuth();
 
     // initialize the achievements BehaviorSubject with the current achievements value.
-    //if achievement is update, modify the display in menu  
+    //if achievement is update, modify the display in menu
     if (!this.sessionStorageService.getAchievements()) {
       this.sessionStorageService.achievements$.next(
         this.sessionStorageService.getAchievements()
@@ -134,7 +135,7 @@ export class MenuComponent implements OnInit {
             'buttonSuccess',
             'buttonReturnNormal'
           );
-          this.ToggleFadedAnim(true, 'loginButton', 'signUpButton');
+          this.ToggleFadedAnimAuth(true, 'loginButton', 'signUpButton');
         }
       },
       error: (err) => {
@@ -161,7 +162,7 @@ export class MenuComponent implements OnInit {
           'buttonSuccess',
           'buttonReturnNormal'
         );
-        this.ToggleFadedAnim(true, 'loginButton', 'signUpButton');
+        this.ToggleFadedAnimAuth(true, 'loginButton', 'signUpButton');
 
         // synchronyse an unlogin user's achievements with database's user's achievement when he authenticates
         this.apiService.getUserAchievement().subscribe({
@@ -215,7 +216,7 @@ export class MenuComponent implements OnInit {
       'buttonSuccess',
       'buttonReturnNormal'
     );
-    this.ToggleFadedAnim(
+    this.ToggleFadedAnimAuth(
       false,
       'deleteUserButton',
       'changeLoginPassButton',
@@ -223,19 +224,28 @@ export class MenuComponent implements OnInit {
     );
   }
 
-  onDeleteUser() {
+  onTriggerDeleteUser() {
+    this.cleanErrorMessages();
+    this.tryToDeleteUser = true;
+    this.ToggleTemporaryClassToButton(
+      'deleteUserButton',
+      'buttonWarning',
+      'buttonReturnNormal'
+    );
+    this.ToggleFadedAnimAuth(
+      false,
+      'deleteUserButton',
+    );
+    this.tryToDeleteUser = true;
+  }
+
+  onDeleteUserYes() {
     this.apiService.deleteUser().subscribe({
       next: () => {
         localStorage.removeItem('accessToken');
         this.cleanErrorMessages();
-        this.ToggleTemporaryClassToButton(
-          'deleteUserButton',
-          'buttonSuccess',
-          'buttonReturnNormal'
-        );
-        this.ToggleFadedAnim(
+        this.ToggleFadedAnimAuth(
           false,
-          'deleteUserButton',
           'changeLoginPassButton',
           'logOutButton'
         );
@@ -246,6 +256,23 @@ export class MenuComponent implements OnInit {
           err.error?.error || 'Erreur lors de la suppression du compte';
       },
     });
+    this.tryToDeleteUser = false;
+  }
+
+    onDeleteUserNo() {
+        this.cleanErrorMessages();
+        this.ToggleTemporaryClassToButton(
+          'deleteUserButton',
+          'buttonSuccess',
+          'buttonReturnNormal'
+        );
+        this.ToggleFadedAnimAuth(
+          false,
+          'deleteUserButton',
+          'changeLoginPassButton',
+          'logOutButton'
+        );
+        this.tryToDeleteUser = false;
   }
 
   cleanErrorMessages() {
@@ -281,7 +308,7 @@ export class MenuComponent implements OnInit {
    * @param isAuthenticated - The authentication status
    * @param buttonIds - The IDs of the buttons to toggle the animation on
    */
-  ToggleFadedAnim(isAuthenticated: boolean, ...buttonIds: string[]) {
+  ToggleFadedAnimAuth(isAuthenticated: boolean, ...buttonIds: string[]) {
     buttonIds.forEach((buttonId) => {
       const btn = document.getElementById(buttonId);
       if (btn) {

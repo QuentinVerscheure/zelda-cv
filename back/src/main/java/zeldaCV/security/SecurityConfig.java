@@ -70,8 +70,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        // Utilise la propriété selon le profil actif
-        config.addAllowedOrigin(allowedOrigin);
+        // Correction : utiliser addAllowedOriginPattern pour supporter "*" avec credentials
+        if ("*".equals(allowedOrigin)) {
+            config.addAllowedOriginPattern("*");
+        } else {
+            config.addAllowedOrigin(allowedOrigin);
+        }
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
