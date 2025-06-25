@@ -70,7 +70,6 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        // Correction : utiliser addAllowedOriginPattern pour supporter "*" avec credentials
         if ("*".equals(allowedOrigin)) {
             config.addAllowedOriginPattern("*");
         } else {

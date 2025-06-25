@@ -13,6 +13,8 @@
       placeholder="Ecrivez votre message ici"
       ngModel
       required
+      (focus)="disablePhaserKeyDownEvent()"
+      (blur)="enablePhaserKeyDownEvent()"
     ></textarea>
   </div>
   <button type="submit" [disabled]="!loginForm.valid">Créer le message</button>

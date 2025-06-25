@@ -83,7 +83,14 @@ export class MovementService {
   /**
    * Do the action associate to a specific input
    */
-  movePlayer(player: Phaser.Physics.Arcade.Sprite, scaleOfTheGame: number) {
+  movePlayer(player: Phaser.Physics.Arcade.Sprite, scaleOfTheGame: number, scene?: Phaser.Scene) {
+    // disable the movement if the player is editing a comment
+    if (scene && (scene as any).isEditingComment) {
+      player.setVelocity(0, 0);
+      player.stop();
+      return;
+    }
+
     let isMoving = false; // Use for stopping the animation after the release of the key
     let direction = ''; // Use for choosing the frame of the static player asset
 
@@ -184,6 +191,25 @@ export class MovementService {
         default:
           break;
       }
+    }
+  }
+
+  disableMovementKeys() {
+    if (this.keys) {
+      Object.values(this.keys).forEach(key => key?.reset());
+      Object.values(this.keys).forEach(key => key && (key.enabled = false));
+    }
+    if (this.cursors) {
+      Object.values(this.cursors).forEach(key => key && (key.enabled = false));
+    }
+  }
+
+  enableMovementKeys() {
+    if (this.keys) {
+      Object.values(this.keys).forEach(key => key && (key.enabled = true));
+    }
+    if (this.cursors) {
+      Object.values(this.cursors).forEach(key => key && (key.enabled = true));
     }
   }
 }
