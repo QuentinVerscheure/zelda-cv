@@ -24,12 +24,12 @@ export class MovementService {
     if (input.keyboard) {
       this.cursors = input.keyboard.createCursorKeys();
       // Mobility input
-      this.keys = input.keyboard.addKeys('Z,Q,S,D') as {
-        Z: Phaser.Input.Keyboard.Key;
-        Q: Phaser.Input.Keyboard.Key;
-        S: Phaser.Input.Keyboard.Key;
-        D: Phaser.Input.Keyboard.Key;
-      };
+      // this.keys = input.keyboard.addKeys('Z,Q,S,D') as {
+      //   Z: Phaser.Input.Keyboard.Key;
+      //   Q: Phaser.Input.Keyboard.Key;
+      //   S: Phaser.Input.Keyboard.Key;
+      //   D: Phaser.Input.Keyboard.Key;
+      // };
     }
 
     // Check if the screen width is less than 1024px for trigger joystick
