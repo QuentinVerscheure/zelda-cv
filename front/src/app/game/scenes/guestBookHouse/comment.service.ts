@@ -6,6 +6,7 @@ import { GuestBookComment } from '../../../models/guestBookComment.model';
 import { MenuMessageService } from '../../../components/menu/menu-message.service';
 import { CommentDTO } from '../../../models/dto/comment.dto';
 import { CommentContainer } from '../../../models/commentContainer.model';
+import { SessionStorageService } from '../../../services/session-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,8 @@ export class CommentService {
   constructor(
     private achievementService: AchievementService,
     private apiService: ApiService,
-    private menuMessageService: MenuMessageService
+    private menuMessageService: MenuMessageService,
+    private sessionStorageService: SessionStorageService
   ) {}
 
   displayComments(scaleOfTheGame: number, scene: Phaser.Scene) {
@@ -54,6 +56,7 @@ export class CommentService {
     icon.body.immovable = true;
 
     icon.on('pointerdown', () => {
+      this.sessionStorageService.syncPseudoWithToken();
       let pseudo = sessionStorage.getItem('pseudo');
       const token = localStorage.getItem('accessToken');
 

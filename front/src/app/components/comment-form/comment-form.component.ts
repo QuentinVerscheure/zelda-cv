@@ -16,7 +16,7 @@ export class CommentFormComponent {
   constructor(
     private sceneGuestBookService2: SceneGuestBookService2,
     private commentService: CommentService,
-    private movementService: MovementService // <-- injecte le service
+    private movementService: MovementService
   ) {}
 
   onSubmit(form: NgForm) {
