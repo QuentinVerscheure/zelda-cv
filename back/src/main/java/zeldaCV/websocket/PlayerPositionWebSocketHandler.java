@@ -22,6 +22,7 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(@org.springframework.lang.NonNull WebSocketSession session) {
         sessions.add(session);
+        System.out.println("[WebSocket] New connection: sessionId=" + session.getId() + " | total=" + sessions.size());
     }
 
     @Override
@@ -29,6 +30,7 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
             @org.springframework.lang.NonNull CloseStatus status) {
         sessions.remove(session);
         playerPositions.remove(session.getId());
+        System.out.println("[WebSocket] Connection closed: sessionId=" + session.getId() + " | total=" + sessions.size());
     }
 
     @Override
@@ -36,10 +38,10 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
             @org.springframework.lang.NonNull TextMessage message) throws Exception {
         PlayerPositionDTO playerPosition;
         try {
-            
             playerPosition = objectMapper.readValue(message.getPayload(), PlayerPositionDTO.class);
             playerPositions.put(session.getId(), playerPosition);
         } catch (Exception e) {
+            System.err.println("[WebSocket] Error parsing message from sessionId=" + session.getId() + ": " + e.getMessage());
             e.printStackTrace();
             return;
         }
@@ -82,6 +84,7 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
                 String json = objectMapper.writeValueAsString(topPlayersDTO);
                 session.sendMessage(new TextMessage(json));
             } catch (Exception e) {
+                System.err.println("[WebSocket] Error sending to sessionId=" + session.getId() + ": " + e.getMessage());
                 e.printStackTrace();
             }
         }
