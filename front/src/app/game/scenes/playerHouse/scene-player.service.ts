@@ -4,6 +4,9 @@ import { CollisionService } from '../../core/collision.service';
 import { PlayerService } from '../../core/player.service';
 import { NpcService } from '../../core/npc.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { WebsocketPlayerService } from '../../../services/websocket-player.service';
+import { PlayerPositionDTO } from '../../../models/dto/top-players.dto';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,18 +16,20 @@ export class ScenePlayerService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
 
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  // Map of other players displayed in the scene for destroy sprite of disconnected players
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private npcService: NpcService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'scenePlayerHouse' });
   }
 
   preload() {
-
     this.load.image(
       'Player_background',
       'assets/game/Player_House_background.png'
@@ -103,6 +108,14 @@ export class ScenePlayerService extends Phaser.Scene {
       false,
       0.5,
       'young_man_text'
+    );
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'scenePlayerHouse'
     );
   }
 

@@ -5,6 +5,7 @@ import { PlayerService } from '../../core/player.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { Achievement } from '../../../models/achievement.model';
 import { AchievementService } from '../../../services/achievement.service';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +14,14 @@ export class SceneGuestBookService1 extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private achievementService: AchievementService
+    private achievementService: AchievementService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'sceneGuestBook1' });
   }
@@ -99,6 +102,14 @@ export class SceneGuestBookService1 extends Phaser.Scene {
       0,
       224,
       1482
+    );
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'sceneGuestBook1'
     );
   }
 

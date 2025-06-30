@@ -9,6 +9,7 @@ import {
   portfolio2Data,
 } from '../../../models/portfolioData.model';
 import { PortfolioContentService } from './portfolio-content.service';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,13 +19,15 @@ export class ScenePortfolio2Service extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   private moreElement: MoreElements[] | undefined;
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private housesDataService: HousesDataService,
-    private portfolioContentService: PortfolioContentService
+    private portfolioContentService: PortfolioContentService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'scenePortfolio2' });
   }
@@ -112,6 +115,14 @@ export class ScenePortfolio2Service extends Phaser.Scene {
     } else {
       console.log('error, portfolioData not load from file');
     }
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'scenePortfolio2'
+    );
   }
 
   override update() {

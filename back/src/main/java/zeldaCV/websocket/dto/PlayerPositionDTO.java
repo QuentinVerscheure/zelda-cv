@@ -12,4 +12,5 @@ public class PlayerPositionDTO {
     private double x;
     private double y;
     private String scene; 
+    private String uuid;
 }

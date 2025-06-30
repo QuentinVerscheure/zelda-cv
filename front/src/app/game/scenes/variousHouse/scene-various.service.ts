@@ -8,6 +8,7 @@ import { VariousContentConfig } from '../../../models/various_Data.model';
 import { HousesDataService } from '../../core/houses-data.service';
 import { AchievementService } from '../../../services/achievement.service';
 import { Achievement } from '../../../models/achievement.model';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ export class SceneVariousService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   private variousData: VariousContentConfig | undefined;
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
@@ -24,7 +26,8 @@ export class SceneVariousService extends Phaser.Scene {
     private playerService: PlayerService,
     private variousContentService: VariousContentService,
     private achievementService: AchievementService,
-    private housesDataService: HousesDataService
+    private housesDataService: HousesDataService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'sceneVarious' });
   }
@@ -103,6 +106,14 @@ export class SceneVariousService extends Phaser.Scene {
       266,
       217,
       1350
+    );
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'sceneVarious'
     );
 
     if (this.variousData) {

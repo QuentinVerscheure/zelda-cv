@@ -5,6 +5,9 @@ import { PlayerService } from '../../core/player.service';
 import { SceneTransitionCollisionData } from '../../../models/SceneTransitionCollisionData.model';
 import { NpcService } from '../../core/npc.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
+import { WebsocketPlayerService } from '../../../services/websocket-player.service';
+import { PlayerPositionDTO } from '../../../models/dto/top-players.dto';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +17,15 @@ export class SceneWorldService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number =
     ScaleOfTheGameService.getScaleOfTheGame() / 2;
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private npcService: NpcService
+    private npcService: NpcService,
+    private websocketPlayerService: WebsocketPlayerService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'sceneWorld' });
   }
@@ -238,6 +244,14 @@ export class SceneWorldService extends Phaser.Scene {
       this.player,
       false,
       0.5
+    );
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'sceneWorld'
     );
   }
 

@@ -9,7 +9,7 @@ import { HousesDataService } from '../../core/houses-data.service';
 import { LinkContentService } from './link-content.service';
 import { AchievementService } from '../../../services/achievement.service';
 import { Achievement } from '../../../models/achievement.model';
-
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,15 +19,17 @@ export class SceneLinkService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   private linkData: LinkData | undefined;
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private collisionService: CollisionService,
     private playerService: PlayerService,
     private npcService: NpcService,
-        private achievementService: AchievementService,
+    private achievementService: AchievementService,
     private housesDataService: HousesDataService,
     private linkContentService: LinkContentService,
-    private movementService: MovementService
+    private movementService: MovementService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'sceneLink' });
   }
@@ -116,6 +118,14 @@ export class SceneLinkService extends Phaser.Scene {
       120,
       249,
       1345
+    );
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'sceneLink'
     );
 
     if (this.linkData) {

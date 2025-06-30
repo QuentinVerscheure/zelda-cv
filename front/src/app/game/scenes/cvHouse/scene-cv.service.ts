@@ -9,6 +9,7 @@ import { CvData } from '../../../models/cvData.model';
 import { HousesDataService } from '../../core/houses-data.service';
 import { Achievement } from '../../../models/achievement.model';
 import { AchievementService } from '../../../services/achievement.service';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class SceneCVService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   private cvData: CvData | undefined;
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
@@ -26,7 +28,8 @@ export class SceneCVService extends Phaser.Scene {
     private playerService: PlayerService,
     private npcService: NpcService,
     private housesDataService: HousesDataService,
-    private achievementService: AchievementService
+    private achievementService: AchievementService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'sceneCV' });
   }
@@ -146,6 +149,14 @@ export class SceneCVService extends Phaser.Scene {
     } else {
       console.log('error, cvData not load from file');
     }
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'sceneCV'
+    );
   }
 
   override update() {

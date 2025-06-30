@@ -11,6 +11,7 @@ import {
 import { HousesDataService } from '../../core/houses-data.service';
 import { AchievementService } from '../../../services/achievement.service';
 import { Achievement } from '../../../models/achievement.model';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class ScenePortfolioService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   private portfolioData: PortfolioDatas | undefined;
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
@@ -27,7 +29,8 @@ export class ScenePortfolioService extends Phaser.Scene {
     private playerService: PlayerService,
     private achievementService: AchievementService,
     private portfolioContentService: PortfolioContentService,
-    private housesDataService: HousesDataService
+    private housesDataService: HousesDataService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'scenePortfolio1' });
   }
@@ -102,6 +105,14 @@ export class ScenePortfolioService extends Phaser.Scene {
     );
 
     this.movementService.initializeInput(this);
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'scenePortfolio1'
+    );
 
     //table of all transiton between scenes. do not modify if you have not modify the background picture
     const transitions = [

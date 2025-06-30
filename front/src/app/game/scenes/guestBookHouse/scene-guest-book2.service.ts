@@ -5,6 +5,7 @@ import { PlayerService } from '../../core/player.service';
 import { CommentService } from './comment.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { NpcService } from '../../core/npc.service';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
 
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   public isEditingComment: boolean = false; // Ajouté
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
@@ -23,6 +25,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
     private playerService: PlayerService,
     private commentService: CommentService,
     private npcService: NpcService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'sceneGuestBook2' });
   }
@@ -132,6 +135,14 @@ export class SceneGuestBookService2 extends Phaser.Scene {
       false,
       0.25,
       'fairy_text'
+    );
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'sceneGuestBook2'
     );
   }
 

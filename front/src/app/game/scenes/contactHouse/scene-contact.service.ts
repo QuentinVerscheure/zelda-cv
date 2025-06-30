@@ -5,6 +5,7 @@ import { PlayerService } from '../../core/player.service';
 import { AchievementService } from '../../../services/achievement.service';
 import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
 import { Achievement } from '../../../models/achievement.model';
+import { PlayerSyncService } from '../../../services/player-sync.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +14,14 @@ export class SceneContactService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,
     private collisionService: CollisionService,
     private playerService: PlayerService,
-    private achievementService: AchievementService
+    private achievementService: AchievementService,
+    private playerSyncService: PlayerSyncService
   ) {
     super({ key: 'sceneContact' });
   }
@@ -89,6 +92,14 @@ export class SceneContactService extends Phaser.Scene {
 
     //create the clickable icon who display the contact form
     this.createSendMailIcon(95, 90, this.scaleOfTheGame, this.player);
+
+    // Synchronize user's position and other players's position for websocket
+    this.playerSyncService.syncPlayers(
+      this,
+      this.player,
+      this.scaleOfTheGame,
+      'sceneContact'
+    );
   }
 
   override update() {

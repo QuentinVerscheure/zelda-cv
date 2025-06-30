@@ -15,7 +15,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
 
-    // Use session id as the unique key for all users (pseudo or anonymous)
     private final Map<String, PlayerPositionDTO> playerPositions = new ConcurrentHashMap<>();
     private final Set<WebSocketSession> sessions = new CopyOnWriteArraySet<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -37,6 +36,7 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
             @org.springframework.lang.NonNull TextMessage message) throws Exception {
         PlayerPositionDTO playerPosition;
         try {
+            
             playerPosition = objectMapper.readValue(message.getPayload(), PlayerPositionDTO.class);
             playerPositions.put(session.getId(), playerPosition);
         } catch (Exception e) {
@@ -45,7 +45,7 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    // Send updated positions of top30 players to all clients at a fixed interval
+    // Send updated positions of top50 players to all clients at a fixed interval
     @Scheduled(fixedRate = 200)
     public void broadcastTopPlayers() {
         for (WebSocketSession session : sessions) {
@@ -55,18 +55,18 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
 
             String currentScene = currentPlayer.getScene();
 
-            // First pass: collect up to 30 players with pseudo
-            List<PlayerPositionDTO> result = new ArrayList<>(30);
+            // First pass: collect up to 50 players with pseudo
+            List<PlayerPositionDTO> result = new ArrayList<>(50);
             playerPositions.entrySet().stream()
                 .filter(entry -> !entry.getKey().equals(session.getId()))
                 .map(Map.Entry::getValue)
                 .filter(p -> Objects.equals(p.getScene(), currentScene))
                 .filter(p -> p.getPseudo() != null && !p.getPseudo().isEmpty())
-                .limit(30)
+                .limit(50)
                 .forEach(result::add);
 
-            // Second pass: if less than 30, complete with others (no pseudo)
-            if (result.size() < 30) {
+            // Second pass: if less than 50, complete with others (no pseudo)
+            if (result.size() < 50) {
                 playerPositions.entrySet().stream()
                     .filter(entry -> !entry.getKey().equals(session.getId()))
                     .map(Map.Entry::getValue)
