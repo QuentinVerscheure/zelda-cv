@@ -48,10 +48,17 @@ export class SessionStorageService {
     const token = localStorage.getItem('accessToken');
     const pseudo = sessionStorage.getItem('pseudo');
     if (token && !pseudo) {
-      this.apiService.getCurrentUser().subscribe(user => {
-        if (user && user.pseudo) {
-          sessionStorage.setItem('pseudo', user.pseudo);
-          console.log('Pseudo synced with token:', user.pseudo);
+      this.apiService.getCurrentUser().subscribe({
+        next: user => {
+          if (user && user.pseudo) {
+            sessionStorage.setItem('pseudo', user.pseudo);
+            console.log('Pseudo synced with token:', user.pseudo);
+          }
+        },
+        error: err => {
+          console.error('Erreur lors de la récupération du pseudo:', err);
+          // if error, remove the token
+          localStorage.removeItem('accessToken');
         }
       });
     }
