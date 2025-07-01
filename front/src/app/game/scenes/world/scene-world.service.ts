@@ -17,7 +17,6 @@ export class SceneWorldService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number =
     ScaleOfTheGameService.getScaleOfTheGame() / 2;
-  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,

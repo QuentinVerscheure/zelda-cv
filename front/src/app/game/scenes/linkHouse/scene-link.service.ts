@@ -19,7 +19,6 @@ export class SceneLinkService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   private linkData: LinkData | undefined;
-  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private collisionService: CollisionService,

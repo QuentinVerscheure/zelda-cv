@@ -21,7 +21,6 @@ export class ScenePortfolioService extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
   private portfolioData: PortfolioDatas | undefined;
-  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private movementService: MovementService,

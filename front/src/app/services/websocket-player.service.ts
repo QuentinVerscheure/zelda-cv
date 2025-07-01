@@ -3,6 +3,7 @@ import { BehaviorSubject, interval, Subscription } from 'rxjs';
 import { PlayerPositionDTO, TopPlayersDTO } from '../models/dto/top-players.dto';
 import { escapeString } from '../utils/sanitize-string.util';
 import { v4 as uuidv4 } from 'uuid';
+import { ScaleOfTheGameService } from '../game/core/scale-of-the-game.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,8 @@ export class WebsocketPlayerService implements OnDestroy {
   // Reference to the Phaser player sprite
   private playerRef: Phaser.Physics.Arcade.Sprite | null = null;
   private currentScene: string = '';
+
+  private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
 
   // add a unique identifier for the user
   // This will be used to identify an unregister and unname player in the WebSocket communication
@@ -66,8 +69,14 @@ export class WebsocketPlayerService implements OnDestroy {
       try {
         const data: TopPlayersDTO = JSON.parse(event.data);
         const sanitizedPlayers = this.sanitizePlayers(data.players);
+        // Corrige les coordonnées avec scaleOfTheGame
+        const scaledPlayers = sanitizedPlayers.map(player => ({
+          ...player,
+          x: player.x * this.scaleOfTheGame,
+          y: player.y * this.scaleOfTheGame
+        }));
         this.ngZone.run(() => {
-          this.topPlayers$.next(sanitizedPlayers);
+          this.topPlayers$.next(scaledPlayers);
         });
       } catch {
         // Si erreur, affiche la donnée brute
@@ -104,8 +113,9 @@ export class WebsocketPlayerService implements OnDestroy {
     this.sendIntervalSub = interval(200).subscribe(() => {
       // Update position just before sending
       if (this.ws && this.ws.readyState === WebSocket.OPEN && this.playerRef && this.myPosition) {
-        this.myPosition.x = this.playerRef.x;
-        this.myPosition.y = this.playerRef.y;
+        // /this.scaleOfTheGame because the position in player object is scale with a diff desktop/smartphone scaleOfTheGame.
+        this.myPosition.x = this.playerRef.x / this.scaleOfTheGame;
+        this.myPosition.y = this.playerRef.y / this.scaleOfTheGame;
         this.myPosition.pseudo = sessionStorage.getItem('pseudo') || '';
         this.myPosition.scene = this.currentScene;
         this.myPosition.uuid = this.uuid;

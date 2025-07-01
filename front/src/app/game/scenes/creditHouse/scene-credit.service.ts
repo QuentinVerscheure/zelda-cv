@@ -14,7 +14,6 @@ export class SceneCreditService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
-  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
 
   constructor(
     private collisionService: CollisionService,

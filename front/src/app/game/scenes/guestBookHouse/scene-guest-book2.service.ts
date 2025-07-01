@@ -16,8 +16,7 @@ export class SceneGuestBookService2 extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
 
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
-  public isEditingComment: boolean = false; // Ajouté
-  private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
+  public isEditingComment: boolean = false;
 
   constructor(
     private movementService: MovementService,
