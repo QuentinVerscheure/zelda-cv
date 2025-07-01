@@ -45,7 +45,7 @@ export class PlayerSyncService {
     sceneName: string
   ) {
     if (this.uuid) {
-      this.websocketPlayerService.setPlayerRef(player, sceneName, localStorage.getItem('pseudo') || '');
+      this.websocketPlayerService.setPlayerRef(player, sceneName);
       this.websocketPlayerService.connect();
       this.websocketPlayerService.startSending();
 

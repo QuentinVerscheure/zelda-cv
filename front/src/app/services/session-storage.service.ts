@@ -52,7 +52,6 @@ export class SessionStorageService {
         next: user => {
           if (user && user.pseudo) {
             sessionStorage.setItem('pseudo', user.pseudo);
-            console.log('Pseudo synced with token:', user.pseudo);
           }
         },
         error: err => {

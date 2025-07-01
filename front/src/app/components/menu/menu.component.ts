@@ -210,6 +210,7 @@ export class MenuComponent implements OnInit {
   }
   onLogout() {
     localStorage.removeItem('accessToken');
+    sessionStorage.removeItem('pseudo');
     this.cleanErrorMessages();
     this.ToggleTemporaryClassToButton(
       'logOutButton',

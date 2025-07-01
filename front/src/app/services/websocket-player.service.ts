@@ -83,12 +83,12 @@ export class WebsocketPlayerService implements OnDestroy {
   }
 
   // Sets the player reference and initializes the position if not already set
-  setPlayerRef(player: Phaser.Physics.Arcade.Sprite, sceneName: string, pseudo: string) {
+  setPlayerRef(player: Phaser.Physics.Arcade.Sprite, sceneName: string) {
     this.playerRef = player;
     this.currentScene = sceneName;
     if (!this.myPosition) {
       this.myPosition = {
-        pseudo,
+        pseudo: sessionStorage.getItem('pseudo') || '',
         x: player.x,
         y: player.y,
         scene: sceneName,
@@ -106,6 +106,7 @@ export class WebsocketPlayerService implements OnDestroy {
       if (this.ws && this.ws.readyState === WebSocket.OPEN && this.playerRef && this.myPosition) {
         this.myPosition.x = this.playerRef.x;
         this.myPosition.y = this.playerRef.y;
+        this.myPosition.pseudo = sessionStorage.getItem('pseudo') || '';
         this.myPosition.scene = this.currentScene;
         this.myPosition.uuid = this.uuid;
         this.ws.send(JSON.stringify(this.myPosition));
