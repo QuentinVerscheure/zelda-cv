@@ -73,6 +73,10 @@ export class MenuComponent implements OnInit {
         this.sessionStorageService.getAchievements()
       );
     }
+    this.checkIfSmartphone();
+    if (this.isSmartphone) {
+      this.menuOpen = false;
+    }
   }
 
   checkAuth() {

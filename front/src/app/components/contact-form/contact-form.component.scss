@@ -43,20 +43,57 @@
     textarea {
       font-family: Pixelify_Sans;
       width: 100%;
-      min-height: 150px;
       margin-top: 10px;
+      box-sizing: border-box;
+      resize: vertical;
     }
     label,
     input {
       display: block;
       width: 100%;
+      box-sizing: border-box;
     }
     input {
-      width: 250px;
+      width: 100%;
       margin-bottom: 20px;
+      padding: 8px;
+      font-size: 16px;
     }
   }
 }
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  #contact-container {
+    width: 95vw;
+    height: 100vh;
+    padding: 10px;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .closeButton {
+      font-size: 32px;
+      right: 10px;
+    }
+
+    form {
+      button {
+        width: 100%;
+        margin: 10px 0;
+        font-size: 15px;
+      }
+      textarea {
+        min-height: 100px;
+      }
+      input {
+        padding: 6px;
+      }
+    }
+  }
+}
+
 .hidden {
   display: none;
 }
