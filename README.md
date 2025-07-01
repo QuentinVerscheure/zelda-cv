@@ -8,6 +8,10 @@ Unfortunately, I don't have permission from Nintendo to use their assets for my 
 Please, Nintendo, don't take legal action against me. This project doesn't generate any revenue, and I'm just a poor, lonesome developer.  
 If you want to contact me: quentin.verscheure@gmail.com
 
+a websocket multiplayer system allow you to see other users in real time in the map
+
+you can create a comment in the guestbook house by clicking on the book, create your comment and drag and drop it on some free space 
+
 ## Customization
 
 ### To customize this project for your personal use, you must modify:
@@ -58,11 +62,14 @@ This project use :
 
 - Apache Maven 3.9.9
 - Java version: 17.0.12, vendor: Oracle Corporation
-- Spring Boot 3.3.3 with depandencies:
-  - Spring Web.
-  - Spring Data JPA.
-  - MySQL Driver.
-  - Spring DevTools.
+- Spring Boot 3.3.3 with dependencies:
+  - Spring Web
+  - Spring Data JPA
+  - MySQL Driver
+  - Spring DevTools
+  - Spring Security (JWT euth)
+  - Springdoc OpenAPI (Swagger)
+  - WebSocket (multiplayer real time)
   
 Run `mvn spring-boot:run` for a development server. 
 Run `java -jar your-app.jar --spring.profiles.active=prod` for a production .jar
