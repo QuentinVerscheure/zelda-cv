@@ -194,6 +194,43 @@ export class MovementService {
     }
   }
 
+  /**
+   * Move and animate another player (from WebSocket)
+   */
+  moveOtherPlayer(
+    sprite: Phaser.Physics.Arcade.Sprite,
+    playerDTO: { x: number; y: number },
+    oldX?: number,
+    oldY?: number,
+    scene?: Phaser.Scene
+  ) {
+    // Animation direction based on position change
+    if (oldX !== undefined && oldY !== undefined) {
+      const dx = playerDTO.x - oldX;
+      const dy = playerDTO.y - oldY;
+      if (dx === 0 && dy === 0) {
+        // Immobile : stop animation
+        sprite.stop();
+      } else if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) sprite.play('walkingRight', true);
+        else if (dx < 0) sprite.play('walkingLeft', true);
+      } else if (Math.abs(dy) > 0) {
+        if (dy > 0) sprite.play('walkingDown', true);
+        else if (dy < 0) sprite.play('walkingTop', true);
+      }
+    }
+    // Smoothly move the sprite to the new position
+    if (scene && (sprite.x !== playerDTO.x || sprite.y !== playerDTO.y)) {
+      scene.tweens.add({
+        targets: sprite,
+        x: playerDTO.x,
+        y: playerDTO.y,
+        duration: 180, // slightly less than the send interval (200ms)
+        ease: 'Linear',
+      });
+    }
+  }
+
   disableMovementKeys() {
     if (this.keys) {
       Object.values(this.keys).forEach(key => key?.reset());

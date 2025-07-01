@@ -84,29 +84,7 @@ export class PlayerService {
         return origDestroy(...args);
       };
     } else {
-      // Animation direction based on position change
-      if (oldX !== undefined && oldY !== undefined) {
-        const dx = playerDTO.x - oldX;
-        const dy = playerDTO.y - oldY;
-        if (Math.abs(dx) > Math.abs(dy)) {
-          if (dx > 0) sprite.play('walkingRight', true);
-          else if (dx < 0) sprite.play('walkingLeft', true);
-        } else if (Math.abs(dy) > 0) {
-          if (dy > 0) sprite.play('walkingDown', true);
-          else if (dy < 0) sprite.play('walkingTop', true);
-        }
-      }
-      // smoothly move the sprite to the new position
-      // animation tween is an animation that smoothly moves the sprite between two points
-      if (sprite.x !== playerDTO.x || sprite.y !== playerDTO.y) {
-        scene.tweens.add({
-          targets: sprite,
-          x: playerDTO.x,
-          y: playerDTO.y,
-          duration: 180, // slightly less than the send interval (200ms)
-          ease: 'Linear',
-        });
-      }
+      this.movementService.moveOtherPlayer(sprite, playerDTO, oldX, oldY, scene);
     }
 
     // display the pseudo above the sprite if it exists
