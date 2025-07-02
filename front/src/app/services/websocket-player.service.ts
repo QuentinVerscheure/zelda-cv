@@ -11,7 +11,10 @@ import { ScaleOfTheGameService } from '../game/core/scale-of-the-game.service';
 export class WebsocketPlayerService implements OnDestroy {
   private ws: WebSocket | null = null;
   private sendIntervalSub: Subscription | null = null;
-  private readonly WS_URL = 'ws://localhost:8080/ws/positions';
+  private readonly WS_URL =
+    window.location.protocol === 'https:'
+      ? `wss://${window.location.hostname}/ws/positions`
+      : `ws://${window.location.hostname}/ws/positions`;
 
   private myPosition: PlayerPositionDTO | null = null;
   public topPlayers$ = new BehaviorSubject<PlayerPositionDTO[]>([]);
