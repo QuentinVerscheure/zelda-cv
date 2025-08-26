@@ -64,8 +64,8 @@ export class CoreComponent implements OnInit {
           autoCenter: Phaser.Scale.CENTER_BOTH,
         },
         scene: [
-          this.scenePlayerHouse, //1st scene will be load at the start of the game
-          this.sceneWorld,
+          this.sceneWorld,//1st scene will be load at the start of the game
+          this.scenePlayerHouse, 
           this.sceneContact,
           this.sceneCV,
           this.sceneGuestBook1,

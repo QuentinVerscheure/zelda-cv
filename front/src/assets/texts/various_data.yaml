@@ -43,10 +43,22 @@ boxes:
         text: "@gmail.com"
         xOffset: 25
         yOffset: 40
-  - title: ""
+  - title: "Projets personnels"
     x: 161
     y: 32
-    elements: []
+    elements: 
+      - type: "text"
+        text: "Création d'un jeu video via Unity (C#)"
+        xOffset: 10
+        yOffset: 20
+      - type: "text"
+        text: "Création de courts métrages d'animation 3D via Blender (20s)"
+        xOffset: 10
+        yOffset: 30
+      - type: "text"
+        text: "Modifications et impressions de modèles 3D via Blender ou Allplan"
+        xOffset: 10
+        yOffset: 45
   - title: "compétences diverses"
     x: 289
     y: 32

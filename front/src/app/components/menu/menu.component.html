@@ -11,7 +11,7 @@
     <div *ngIf="!isSmartphone || currentSection === 'quests'">
       <ul>
         <li class="AchievementDone" id="playerHouse">
-          <a>Parler au dev pour découvrir son monde</a>
+          <a>Visitez la map</a>
         </li>
         <li [class.AchievementDone]="(achievements$ | async)?.cv" id="cvHouse">
           <a>Visiter la CV House</a>

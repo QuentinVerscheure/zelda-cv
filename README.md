@@ -1,4 +1,5 @@
 # ZeldaCv
+You can visit the website at: [quentinverscheure.fr](https://quentinverscheure.fr)
 
 ## Credit
 
@@ -50,6 +51,20 @@ you can create a comment in the guestbook house by clicking on the book, create 
 ## Development
 
 ### front:
+
+#### To create or edit a scene with Tiled:
+
+- Create your PNG image.
+- Install and open Tiled.
+- Create a **New Map**. Set the **Tile Size** to 16x16 (optional), and set your image dimensions.
+- On the right, in the **Layers** panel, right-click and select **Add Tile Layer** (for tilemaps) or **Add Image Layer** (for background images).
+  - In the **Properties** panel on the left, set the image for the layer if using an Image Layer.
+- On the right, in the **Layers** panel, right-click and select **Add Object Layer** (for hitboxes or interactive objects).
+  - Ctrl + right-click to snap objects to the 16x16 grid (optional), and create your hitboxes using the **Insert Rectangle** tool.
+- Go to **File > Export As...** and choose **JSON** format.
+
+#### stack & usage
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.0.  
 It uses the [Phaser](https://phaser.io/) library to create the game.  
 It uses the [VirtualJoystickPlugin](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/virtualjoystick/) for the mobile version's joystick.
@@ -58,7 +73,8 @@ Run `ng serve` for a development server. Navigate to `http://localhost:4200/`. T
 Run `ng build` to generate the deployment files only if you modify code that isn't in the `assets` folder. The build artifacts will be stored in the `dist/` directory.
 
 ### back:
-This project use :
+
+#### stack & usage
 
 - Apache Maven 3.9.9
 - Java version: 17.0.12, vendor: Oracle Corporation
@@ -73,6 +89,8 @@ This project use :
   
 Run `mvn spring-boot:run` for a development server. 
 Run `java -jar your-app.jar --spring.profiles.active=prod` for a production .jar
+
+#### swagger
 
 Swagger available to: http://localhost:8080/swagger-ui/index.html
 To use it, create a acount with `POST /api/users Create a new user` then authenticate with `POST /api/auth/login`

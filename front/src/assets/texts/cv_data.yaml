@@ -24,11 +24,12 @@ cv:
     date: "avr. 2016 - août 2021 · (5 ans)" #string
     picture: "allplanLogo" #a name for the picture
     pictureUrl: "assets/logo/logo-allplan.png" #the url of the picture
-    text: "Consultant technique Allplan France, cadre niv VII"
+    text: "Consultant technique Allplan France, cadre niv VII. J’accompagnais les clients dans l’utilisation du logiciel de CAO BIM Allplan (architecture et génie civil) et des solutions associées (Bluebeam, Solibri, etc). \n \n Cette expérience m’a permis de développer une forte capacité d’écoute et de compréhension des besoins clients, ainsi qu’une sensibilité aux réalités du terrain."
     list: #a  bullet list (max +-10 or the text will go out of the box)
-      - text: "Expert technique : Expertise concernant les besoins du client et force de proposition sur les méthodes d’optimisations du dessin technique"
-      - text: "Formateur technique - logiciel de CAO Allplan : Conception et animation de sessions de formation sur le logiciel Allplan."
-      - text: "Avant-vente : Assistance à la présentation du logiciel Allplan lors des phases d’avant-vente"
+      - text: "Expert technique : propositions d’optimisation du dessin technique et accompagnement client."
+      - text: "Formateur logiciel : (Allplan, Bluebeam) : animation de sessions de 1 à 100 personnes, en présentiel et distanciel, de ½ journée à 1 semaine."
+      - text: "Participation à l’avant-vente en binôme avec les commerciaux."
+      - text: "Création de documentation technique (50 pages)."
   - 
     title1: "Formation:"
     subTitle1: "Formation Web et Web mobile"
@@ -43,27 +44,53 @@ cv:
       - text: "SQL, création/modification de BDD"
       - text: "JS"
       - text: "PHP"
-  - {}
-  - {}
+  -     
+    title1: "Formation:"
+    subTitle1: "Formation Web Designer"
+    picture: "cepegraLogo"
+    pictureUrl: "assets/logo/Logo-CEPEGRA.png"
+    date: "2015 · (8 mois)"
+    text: "Formation centrée sur le design d’interfaces web, la création de maquettes et l’utilisation d’outils graphiques, avec une forte sensibilité à l’accessibilité et l’ergonomie."
+    list:
+      - text: "Design UI/UX"
+      - text: "Création de maquettes / wireframes"
+      - text: "Outils de création graphique : Photoshop, Illustrator, Figma"
+      - text: "Sens esthétique / culture graphique"
+  - 
+      title1: "Expériences Professionnelles:"
+      subTitle1: "Alternance : VirageGroup"
+      date: "sept. 2022 - juill. 2024 · (2 ans)"
+      picture: "virageLogo"
+      pictureUrl: "assets/logo/Logo_Virage.png"
+      text: "Virage group est un éditeur de solution SASS de pilotage de portefeuille projets et plans stratégiques. Lors de mon alternance.\n\n2nd année :"
+      list:
+        - text: "Intégration à l’équipe de développement."
+        - text: "Support N3 (± 2 tickets/jour avec modification et push du code source dans le workflow de déploiement mensuel)"
+        - text: "Migration de pages Angular JS vers Angular + NgRx (1,5 M lignes de code) et Java natif vers Java Spring Hibernate (2 M lignes de code) (5 pages front+back avec reprise des règles métiers et compatible BD)."
+        - text: "Création de tests unitaires front + back pour chaque tâche réalisée."
+        - text: "Création de scripts SQL compatible SQL Server, PostgreSQL et Oracle (modification des bases clientes existantes)."
+        - text: "Participation à la comitologie Agile de l’équipe (code review, daily, pokersizing hebdomadaire)."
   - 
     title1: "Expériences Professionnelles:"
     subTitle1: "Alternance : VirageGroup"
     date: "sept. 2022 - juill. 2024 · (2 ans)"
     picture: "virageLogo"
     pictureUrl: "assets/logo/Logo_Virage.png"
-    text: "Virage group est un éditeur de solution SASS de pilotage de portefeuille projets et plans stratégiques. Lors de mon alternance"
+    text: "Virage group est un éditeur de solution SASS de pilotage de portefeuille projets et plans stratégiques.\n\n1ère année :"
     list:
-      - text: "Backend : JAVA avec framework Spring et ORM Hibernate"
-      - text: "Frontend: Angular avec bibliothèque NgRx"
-      - text: "DB : SQL Server, Postgre SQL, Oracle ElasticSearch"
-      - text: "Test unitaire front et back + test end to end"
+      - text: "Conception d’une architecture de collecte, stockage et visualisation des logs pour la solution interne de test end to end."
+      - text: "Insertion de la solution dans un workflow existant."
+      - text: "Etude des contraintes du projet et des solutions existantes sur le marché et conseil auprès du client."
+      - text: "Déploiement d’une BDD Elasticsearch et développement d’une interface front en Angular."
+      - text: "refactorisation de la solution de test end to end pour rediriger vers la BDD (java/spring)."
+      - text: "Déploiement et gestion de la solution et du stockage sur les serveurs internes (1Go / jour, suppression des images de plus de 30j)."
   - 
     title1: "Formation:"
     subTitle1: "Concepteur Développeur D'applications"
     picture: "eniLogo"
     pictureUrl: "assets/logo/ecoleeni-logo.jpg"
     date: "sept. 2022 - juill. 2024 (2 ans)"
-    text: "ENI - formation en alternance certifiante (diplôme niveau 6 (bac+4))"
+    text: "ENI - formation en alternance certifiante (diplôme niveau 6 (bac+3))"
     list:
       - text: "Programmation orientée objet (POO)"
       - text: "Analyse et conception"
@@ -75,4 +102,10 @@ cv:
       - text: "PHP, Framework Symfony"
       - text: "Apache"
       - text: "Android, Xamarin, Ionic"
-  - {}
+  -     
+    title1: "Divers:"
+    list:
+      - text: "2014 : Spécialisation HVAC"
+      - text: "2013/2014 : Formation de dessinateur en construction"
+      - text: "2009/2013 : Architecture"
+      - text: "2008 : Baccalauréat Scientifique"

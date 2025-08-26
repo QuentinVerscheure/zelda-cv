@@ -70,11 +70,11 @@ export class SceneCVService extends Phaser.Scene {
 
   create() {
     this.background = this.add.image(0, 0, 'cvBackground');
-    this.background.setOrigin(0, 0); // Origin top left
+    this.background.setOrigin(0.115, 0.172); // Origin top left
     this.background.setScale(this.scaleOfTheGame);
 
-    const initialPlayerX = 473 * this.scaleOfTheGame; // Set your desired initial X position
-    const initialPlayerY = 420 * this.scaleOfTheGame; // Set your desired initial Y position
+    const initialPlayerX = 504 * this.scaleOfTheGame; // Set your desired initial X position
+    const initialPlayerY = 470 * this.scaleOfTheGame; // Set your desired initial Y position
 
     this.player = this.playerService.createPlayer(
       this.player,
@@ -100,8 +100,8 @@ export class SceneCVService extends Phaser.Scene {
       this.player,
       'sceneTransitionSprite',
       'sceneWorld',
-      464,
-      448,
+      496,
+      505,
       553,
       1253
     );
@@ -109,8 +109,8 @@ export class SceneCVService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      680,
-      380,
+      729,
+      413,
       'library_woman',
       this.player,
       true,
@@ -119,7 +119,7 @@ export class SceneCVService extends Phaser.Scene {
     );
 
     const downloadCVButton = this.add.rectangle(
-      472 * this.scaleOfTheGame,
+      503 * this.scaleOfTheGame,
       24 * this.scaleOfTheGame,
       16 * this.scaleOfTheGame,
       16 * this.scaleOfTheGame,
