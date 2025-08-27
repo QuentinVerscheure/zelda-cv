@@ -10,7 +10,7 @@ import { ScaleOfTheGameService } from '../../core/scale-of-the-game.service';
   providedIn: 'root',
 })
 export class PortfolioContentService {
-  private maxwidth: number = 100;
+  private maxwidth: number = 125;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
 
   /**
@@ -18,17 +18,17 @@ export class PortfolioContentService {
    * do not change if you have not change the picture background
    */
   private frameCoordinates = [
-    { x: 80, y: 672 },
-    { x: 304, y: 672 },
-    { x: 80, y: 400 },
-    { x: 304, y: 400 },
-    { x: 80, y: 128 },
-    { x: 304, y: 128 },
+    { x: 65, y: 658 },
+    { x: 304, y: 658 },
+    { x: 65, y: 386 },
+    { x: 304, y: 386 },
+    { x: 65, y: 114 },
+    { x: 304, y: 114 },
   ];
 
   private textStyle = {
-    fontFamily: 'Pixelify_Sans',
-    fontSize: 4 * this.scaleOfTheGame,
+    fontFamily: 'ShareTechMono-Regular',
+    fontSize: 4.5 * this.scaleOfTheGame,
     color: '#000000',
     wordWrap: {
       width: this.maxwidth * this.scaleOfTheGame,
@@ -201,7 +201,7 @@ export class PortfolioContentService {
                   },
                 }
               );
-              currentY += textObject.height + 2 * this.scaleOfTheGame;
+              currentY += textObject.height + 5 * this.scaleOfTheGame;
             } else if (this.isPicture(main) && main.picture) {
               const image = scene.add.image(
                 x + 2.5 * this.scaleOfTheGame,

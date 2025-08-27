@@ -28,15 +28,15 @@ portfolio:
   - 
     title1: "CV Zelda" # Main title in bold
     subTitle1: "Un CV en ligne sur le thème de *Link's Awakening*." 
-    date: "Août 2024" # String
+    date: "2024" # String
     main:
       - picture: 
           pictureName: "zelda_cv" # Name for the picture
           pictureUrl: "assets/pictures/zelda_cv.png" # URL of the picture
           pictureSize: 45 # Size of the picture
       - text: "Ce CV reprend les principales caractéristiques d'un CV classique, mais dans un contexte original inspiré du média vidéoludique."
-      - text: "Le projet est en cours de développement. Actuellement, la partie front-end est achevée à 80%."
-      - text: "Les prochaines étapes de développement incluent la création d'un back-end en Java (Hibernate, Spring) permettant l'authentification, la gestion des messages du livre d'or, un système de mail au propriétaire du site, ainsi qu'une fonctionnalité de visualisation en temps réel des autres \"joueurs\" coté client."
+      - text: "Le projet dispose d'un front Angular et d'un back-end en Java (Spring Boot, Hibernate) ainsi que d'un websocket pour simuler un environnement multijoueur."
+      - text: "Les prochaines étapes de développement incluent l'ajout d'une IA pour ajouter des images extraites de Google Earth et traitées comme décor jouable, ajoutant potentiellement le monde pixélisé comme map."
       - text: "Le projet a été conçu pour permettre à chaque utilisateur de personnaliser et d'adapter le site avec ses propres données."
       - picture: 
           pictureName: "github" # Name for the picture
