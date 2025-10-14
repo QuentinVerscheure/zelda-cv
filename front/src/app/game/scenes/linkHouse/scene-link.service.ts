@@ -115,8 +115,8 @@ export class SceneLinkService extends Phaser.Scene {
       'sceneWorld',
       40,
       120,
-      249,
-      1345
+      993,
+      947
     );
 
     // Synchronize user's position and other players's position for websocket

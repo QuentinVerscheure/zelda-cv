@@ -87,8 +87,8 @@ export class SceneGuestBookService1 extends Phaser.Scene {
       'sceneWorld',
       80,
       120,
-      233,
-      1507
+      817,
+      1075
     );
 
     this.collisionService.createSceneTransitionCollision(

@@ -30,7 +30,7 @@ export class SceneWorldService extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('worldBackground', 'assets/game/Koholint.png');
+    this.load.image('worldBackground', 'assets/game/world.png');
     this.load.atlas(
       'linkDefault',
       'assets/game/Links_Default.png',
@@ -38,8 +38,8 @@ export class SceneWorldService extends Phaser.Scene {
     );
     //load the collision between the background and the player
     this.load.json(
-      'KoholintCollisionBackgroundData',
-      'assets/game/Koholint_collision_background.json'
+      'worldBackgroundData',
+      'assets/game/world_collision_background.json'
     ); //background collision map file
 
     //npc
@@ -104,9 +104,9 @@ export class SceneWorldService extends Phaser.Scene {
 
     //coordonate depanding of the scene transition
     const initialPlayerX =
-      data?.x * this.scaleOfTheGame || 408 * this.scaleOfTheGame;
+      data?.x * this.scaleOfTheGame || 1045 * this.scaleOfTheGame;
     const initialPlayerY =
-      data?.y * this.scaleOfTheGame || 1378 * this.scaleOfTheGame;
+      data?.y * this.scaleOfTheGame || 970 * this.scaleOfTheGame;
 
     this.player = this.playerService.createPlayer(
       this.player,
@@ -122,7 +122,7 @@ export class SceneWorldService extends Phaser.Scene {
       this,
       this.scaleOfTheGame,
       this.player,
-      'KoholintCollisionBackgroundData'
+      'worldBackgroundData'
     );
 
     // Initialize keyboard inputs
@@ -131,15 +131,14 @@ export class SceneWorldService extends Phaser.Scene {
     // create scene transition collision
     let sceneTransitionCollisionData: SceneTransitionCollisionData[] = [
       //[nameOfTheSpriteCollision, sceneToLoad, xOfHitbox, yOfHitbox, startXPositionInNewScene?, startYPositionInNewScene?]
-      ['creditHouse', 'sceneCredit', 400, 1082],
-      ['creditHouse', 'sceneCredit', 432, 1082],
-      ['cvHouse', 'sceneCV', 543, 1226],
-      ['playerHouse', 'scenePlayerHouse', 400, 1338],
-      ['linkHouse', 'sceneLink', 240, 1322],
-      ['variousHouse', 'sceneVarious', 208, 1322],
-      ['portfolioHouse', 'scenePortfolio1', 560, 1466],
-      ['contactHouse', 'sceneContact', 400, 1466],
-      ['guestBookHouse', 'sceneGuestBook1', 224, 1482],
+      ['creditHouse', 'sceneCredit', 1112, 799],
+      ['cvHouse', 'sceneCV', 1096, 943],
+      ['playerHouse', 'scenePlayerHouse', 792, 895],
+      ['linkHouse', 'sceneLink', 984, 927],
+      ['variousHouse', 'sceneVarious', 952, 927],
+      ['portfolioHouse', 'scenePortfolio1', 1112, 1039],
+      ['contactHouse', 'sceneContact', 953, 1040],
+      ['guestBookHouse', 'sceneGuestBook1', 808, 1055],
     ];
 
     for (const data of sceneTransitionCollisionData) {
@@ -157,8 +156,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      60,
-      1400,
+      605,
+      960,
       'artist',
       this.player,
       false,
@@ -167,8 +166,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      320,
-      1500,
+      1100,
+      850,
       'chick',
       this.player,
       false,
@@ -177,8 +176,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      340,
-      1420,
+      1150,
+      870,
       'chicken',
       this.player,
       false,
@@ -187,8 +186,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      280,
-      1350,
+      950,
+      1105,
       'dog',
       this.player,
       false,
@@ -197,8 +196,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      500,
-      1400,
+      840,
+      930,
       'farmer',
       this.player,
       false,
@@ -207,8 +206,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      460,
-      1275,
+      925,
+      815,
       'musician1',
       this.player,
       false,
@@ -217,8 +216,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      450,
-      1250,
+      940,
+      795,
       'musician2',
       this.player,
       false,
@@ -227,8 +226,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      430,
-      1266,
+      960,
+      815,
       'musician3',
       this.player,
       false,
@@ -237,8 +236,8 @@ export class SceneWorldService extends Phaser.Scene {
     this.npcService.createNpc(
       this,
       this.scaleOfTheGame,
-      580,
-      1150,
+      925,
+      1075,
       'old_woman',
       this.player,
       false,

@@ -93,8 +93,8 @@ export class SceneCreditService extends Phaser.Scene {
       'sceneWorld',
       152,
       250,
-      442,
-      1110
+      1121,
+      819
     );
 
     //-------------------------------- nintendo credit --------------------------------------

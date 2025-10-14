@@ -102,8 +102,8 @@ export class SceneCVService extends Phaser.Scene {
       'sceneWorld',
       496,
       505,
-      553,
-      1253
+      1105,
+      963
     );
 
     this.npcService.createNpc(

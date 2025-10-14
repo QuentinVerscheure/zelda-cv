@@ -85,8 +85,8 @@ export class SceneContactService extends Phaser.Scene {
       'sceneWorld',
       88,
       246,
-      410,
-      1490
+      962,
+      1060
     );
 
     //create the clickable icon who display the contact form

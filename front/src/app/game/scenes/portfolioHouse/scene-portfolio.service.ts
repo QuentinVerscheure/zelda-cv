@@ -179,8 +179,8 @@ export class ScenePortfolioService extends Phaser.Scene {
       'sceneWorld',
       240,
       935,
-      568,
-      1491
+      1121,
+      1059
     );
 
     //create all transition from portfolio1 to portfolio2

@@ -103,8 +103,8 @@ export class SceneVariousService extends Phaser.Scene {
       'sceneWorld',
       192,
       266,
-      217,
-      1350
+      961,
+      947
     );
 
     // Synchronize user's position and other players's position for websocket
