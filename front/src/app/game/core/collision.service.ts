@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
 import * as Phaser from 'phaser';
-import { BackgroundCollisionMap } from '../../models/koholint_collision_map.model';
+import { BackgroundCollisionMap } from '../../models/background_map.model';
 import { ConfigService } from '../../services/config.service';
+import { ChangeSceneService } from './change-scene.service';
+import { LandingCoordinates } from '../../models/landingCoordinates.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CollisionService {
-  private wallDebugMode: number = 0;
+  private wallDebugMode: number = 0; //if debugmode = true, the wall will be 0.5 opacity in red
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private changeSceneService: ChangeSceneService
+  ) {
     this.configService.config$.subscribe((config) => {
       if (config?.debugMode) {
-        //if debugmode = true, the wall will be 0.5 opacity in red
         this.wallDebugMode = 0.5;
       }
     });
@@ -89,12 +93,16 @@ export class CollisionService {
       player,
       exitHitbox,
       () => {
-        const landingCoordinates = {
+        const landingCoordinates: LandingCoordinates = {
           x: startXPositionInNewScene,
           y: startYPositionInNewScene,
           firstAnimationFrame: firstAnimationFrame,
         };
-        scene.scene.start(sceneToLoad, landingCoordinates);
+        this.changeSceneService.changeSceneFromCollisionBox(
+          scene.scene,
+          sceneToLoad,
+          landingCoordinates
+        );
       },
       undefined,
       scene

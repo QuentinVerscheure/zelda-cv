@@ -181,4 +181,8 @@
     color: inherit;
     text-decoration: underline;
   }
+
+  a, [routerLink] {
+    cursor: pointer;
+  }
 }

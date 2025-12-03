@@ -11,10 +11,10 @@
     <div *ngIf="!isSmartphone || currentSection === 'quests'">
       <ul>
         <li class="AchievementDone" id="playerHouse">
-          <a>Visitez la map</a>
+          <a routerLink="/game/world">Découvrir l'île</a>
         </li>
         <li [class.AchievementDone]="(achievements$ | async)?.cv" id="cvHouse">
-          <a>Visiter la CV House</a>
+          <a routerLink="/game/cv">Visiter la CV House</a>
           <ul>
             <li
               [class.AchievementDone]="(achievements$ | async)?.cvDownload"
@@ -28,13 +28,13 @@
           [class.AchievementDone]="(achievements$ | async)?.portfolio"
           id="portfolioHouse"
         >
-          <a>Découvrir la portfolio house</a>
+          <a routerLink="/game/portfolio">Découvrir la portfolio house</a>
         </li>
         <li
           [class.AchievementDone]="(achievements$ | async)?.link"
           id="linkHouse"
         >
-          <a>Aller à la link house</a>
+          <a routerLink="/game/link">Aller à la link house</a>
           <ul>
             <li
               [class.AchievementDone]="(achievements$ | async)?.linkClick"
@@ -48,7 +48,7 @@
           [class.AchievementDone]="(achievements$ | async)?.phone"
           id="contactHouse"
         >
-          <a>Trouver la phone house</a>
+          <a routerLink="/game/contact">Trouver la phone house</a>
           <ul>
             <li
               [class.AchievementDone]="(achievements$ | async)?.phoneContact"
@@ -62,7 +62,7 @@
           [class.AchievementDone]="(achievements$ | async)?.guestBook"
           id="guestBookHouse"
         >
-          <a>Enqueter sur le livre d'or </a>
+          <a routerLink="/game/guestbook">Enqueter sur le livre d'or </a>
           <ul>
             <li
               [class.AchievementDone]="
@@ -78,13 +78,13 @@
           [class.AchievementDone]="(achievements$ | async)?.achievementVarious"
           id="variousHouse"
         >
-          <a>Aller à la maison divers </a>
+          <a routerLink="/game/various">Aller à la maison divers </a>
         </li>
         <li
           [class.AchievementDone]="(achievements$ | async)?.achievementCredit"
           id="creditHouse"
         >
-          <a>Voir les credits</a>
+          <a routerLink="/game/credit">Voir les credits</a>
         </li>
       </ul>
     </div>
@@ -103,18 +103,16 @@
         <div *ngIf="changeLoginPassError" class="error">
           {{ changeLoginPassError }}
         </div>
-        <label *ngIf="!tryToDeleteUser" for="pseudo">Pseudo:</label>
+        <label for="pseudo">Pseudo:</label>
         <input
-        *ngIf="!tryToDeleteUser"
           placeholder="votre pseudo, ex: Link"
           id="pseudo"
           name="pseudo"
           [(ngModel)]="pseudo"
           required
         />
-        <label *ngIf="!tryToDeleteUser" for="password">Mot de passe:</label>
+        <label for="password">Mot de passe:</label>
         <input
-        *ngIf="!tryToDeleteUser"
           placeholder="votre mot de passe, ex: Zelda"
           type="password"
           id="password"
@@ -154,11 +152,6 @@
         >
           Supprimer la partie <small>(Supprimer utilisateur)</small>
         </button>
-        <div *ngIf="tryToDeleteUser">
-          <p>
-            Cette action est irréversible et supprimera également tous vos messages. Voulez-vous vraiment continuer&nbsp;?
-          </p>
-        </div>
         <button
           id="deleteUserButtonYes"
           type="button"

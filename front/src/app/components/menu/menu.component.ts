@@ -16,11 +16,12 @@ import { AchievementService } from '../../services/achievement.service';
 import { SessionStorageService } from '../../services/session-storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { MenuMessageService } from './menu-message.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })

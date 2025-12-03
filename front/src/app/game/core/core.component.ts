@@ -1,22 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import * as Phaser from 'phaser';
 import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
-import { SceneCVService } from '../scenes/cvHouse/scene-cv.service';
-import { SceneWorldService } from '../scenes/world/scene-world.service';
+import { HousesDataService } from './houses-data.service';
+import { ConfigService } from '../../services/config.service';
+import { AchievementService } from '../../services/achievement.service';
+import { ChangeSceneService } from './change-scene.service';
 import { SceneContactService } from '../scenes/contactHouse/scene-contact.service';
+import { SceneCreditService } from '../scenes/creditHouse/scene-credit.service';
+import { SceneCVService } from '../scenes/cvHouse/scene-cv.service';
 import { SceneGuestBookService1 } from '../scenes/guestBookHouse/scene-guest-book1.service';
 import { SceneGuestBookService2 } from '../scenes/guestBookHouse/scene-guest-book2.service';
 import { SceneLinkService } from '../scenes/linkHouse/scene-link.service';
 import { ScenePlayerService } from '../scenes/playerHouse/scene-player.service';
-import { SceneVariousService } from '../scenes/variousHouse/scene-various.service';
-import { SceneCreditService } from '../scenes/creditHouse/scene-credit.service';
 import { ScenePortfolioService } from '../scenes/portfolioHouse/scene-portfolio.service';
 import { ScenePortfolio2Service } from '../scenes/portfolioHouse/scene-portfolio2.service';
-import { HousesDataService } from './houses-data.service';
-import { ConfigService } from '../../services/config.service';
-import { AppConfig } from '../../models/config.model';
-import { AchievementService } from '../../services/achievement.service';
-import { SessionStorageService } from '../../services/session-storage.service';
+import { SceneVariousService } from '../scenes/variousHouse/scene-various.service';
+import { SceneWorldService } from '../scenes/world/scene-world.service';
 
 @Component({
   selector: 'app-game',
@@ -25,10 +30,14 @@ import { SessionStorageService } from '../../services/session-storage.service';
   styleUrls: ['./core.component.scss'],
   providers: [],
 })
-export class CoreComponent implements OnInit {
+export class CoreComponent implements OnInit, OnDestroy {
   private phaserGame!: Phaser.Game;
 
   constructor(
+    private housesDataService: HousesDataService,
+    private configService: ConfigService,
+    private achievementService: AchievementService,
+    private changeSceneService: ChangeSceneService,
     private sceneWorld: SceneWorldService,
     private sceneContact: SceneContactService,
     private sceneCV: SceneCVService,
@@ -39,10 +48,7 @@ export class CoreComponent implements OnInit {
     private sceneVarious: SceneVariousService,
     private sceneCreditService: SceneCreditService,
     private scenePortfolioService: ScenePortfolioService,
-    private scenePortfolio2Service: ScenePortfolio2Service,
-    private housesDataService: HousesDataService,
-    private configService: ConfigService,
-    private achievementService: AchievementService,
+    private scenePortfolio2Service: ScenePortfolio2Service
   ) {}
 
   ngOnInit(): void {
@@ -64,8 +70,8 @@ export class CoreComponent implements OnInit {
           autoCenter: Phaser.Scale.CENTER_BOTH,
         },
         scene: [
-          this.sceneWorld,//1st scene will be load at the start of the game
-          this.scenePlayerHouse, 
+          this.sceneWorld, //1st scene will be load at the start of the game
+          this.scenePlayerHouse,
           this.sceneContact,
           this.sceneCV,
           this.sceneGuestBook1,
@@ -98,6 +104,21 @@ export class CoreComponent implements OnInit {
       this.housesDataService.loadHousesData();
 
       this.phaserGame = new Phaser.Game(Gameconfig);
+
+      this.changeSceneService.registerSceneRoutingListener(
+        this.phaserGame.scene
+      );
     });
+  }
+
+  ngOnDestroy(): void {
+    console.log('CoreComponent destroyed');
+    if (this.phaserGame) {
+      try {
+        this.phaserGame.destroy(true);
+      } catch (err) {
+        console.error('Error destroying Phaser game', err);
+      }
+    }
   }
 }
