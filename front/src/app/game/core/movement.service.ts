@@ -40,25 +40,6 @@ export class MovementService {
       this.cursors = input.keyboard.createCursorKeys();
     }
 
-    // // Check if the screen width is less than 1024px for trigger joystick
-    // if (scene.scale.width < 1024) {
-    //   const plugin = scene.plugins.get('rexVirtualJoystick') as any;
-    //   if (plugin) {
-    //     this.joystick = plugin.add(scene, {
-    //       x: 60,
-    //       y: scene.scale.height - 60,
-    //       radius: 50,
-    //       base: scene.add.circle(0, 0, 50, 0x888888, 0.5),
-    //       thumb: scene.add.circle(0, 0, 25, 0xcccccc, 0.5),
-    //       dir: '8dir',
-    //       forceMin: 16,
-    //       enable: true,
-    //     });
-
-    //     scene.add.existing(this.joystick);
-    //   }
-    // }
-
     //register pointer events for mouse clic movement
     this.registerPointerAndUpdateEvents(scene, player, scaleOfTheGame);
   }
@@ -135,33 +116,6 @@ export class MovementService {
 
     }
 
-    // // Joystick input
-    // if (this.joystick) {
-    //   const force = this.joystick.force;
-    //   const angleDeg = this.joystick.angle; // angle is already in degrees
-
-    //   if (force > 0) {
-    //     // Convert degrees to radians by trigonometric calculations
-    //     const angleRad = Phaser.Math.DegToRad(angleDeg);
-    //     const vx = Math.cos(angleRad) * this.speed * scaleOfTheGame;
-    //     const vy = Math.sin(angleRad) * this.speed * scaleOfTheGame;
-    //     player.setVelocity(vx, vy);
-
-    //     // Determine direction based on angle in degrees
-    //     if (angleDeg >= -45 && angleDeg < 45) {
-    //       direction = 'right';
-    //     } else if (angleDeg >= 45 && angleDeg < 135) {
-    //       direction = 'down';
-    //     } else if (angleDeg >= 135 || angleDeg < -135) {
-    //       direction = 'left';
-    //     } else if (angleDeg >= -135 && angleDeg < -45) {
-    //       direction = 'up';
-    //     }
-
-    //     isMoving = true;
-    //   }
-    // }
-
     // Dissociate move and animation for the diagonal case and because animation need to start
     // once and not at every frame
     if (this.isMoving && this.direction === 'left') {
@@ -173,21 +127,6 @@ export class MovementService {
     } else if (this.isMoving && this.direction === 'down') {
       player.play('walkingDown', true);
     }
-
-    // // Joystick animation
-    // if (this.joystick && this.joystick.force > 0) {
-    //   const angleDeg = this.joystick.angle; // angle is already in degrees
-
-    //   if (angleDeg >= -135 && angleDeg <= -45) {
-    //     player.play('walkingTop', true);
-    //   } else if (angleDeg > -45 && angleDeg < 45) {
-    //     player.play('walkingRight', true);
-    //   } else if (angleDeg >= 45 && angleDeg <= 135) {
-    //     player.play('walkingDown', true);
-    //   } else {
-    //     player.play('walkingLeft', true);
-    //   }
-    // }
 
     // Set a specific frame when the player stops moving
     if (!this.isMoving) {
