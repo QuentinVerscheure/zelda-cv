@@ -194,18 +194,20 @@ export class MovementService {
           if (player.body) player.setVelocity(vx, vy);
 
           // Animation logic for pointer movement
-          if (vy < 0 && Math.abs(vy) > Math.abs(vx)) {
-            this.direction = 'top';
-            player.play('walkingTop', true);
-          } else if (vx > 0 && Math.abs(vx) > Math.abs(vy)) {
-            this.direction = 'right';
-            player.play('walkingRight', true);
-          } else if (vy > 0 && Math.abs(vy) > Math.abs(vx)) {
-            this.direction = 'down';
-            player.play('walkingDown', true);
-          } else {
-            this.direction = 'left';
-            player.play('walkingLeft', true);
+          if (player.anims) {
+            if (vy < 0 && Math.abs(vy) > Math.abs(vx)) {
+              this.direction = 'top';
+              player.play('walkingTop', true);
+            } else if (vx > 0 && Math.abs(vx) > Math.abs(vy)) {
+              this.direction = 'right';
+              player.play('walkingRight', true);
+            } else if (vy > 0 && Math.abs(vy) > Math.abs(vx)) {
+              this.direction = 'down';
+              player.play('walkingDown', true);
+            } else {
+              this.direction = 'left';
+              player.play('walkingLeft', true);
+            }
           }
         }
       }
