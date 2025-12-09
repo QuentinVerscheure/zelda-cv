@@ -105,7 +105,7 @@ export class SceneLinkService extends Phaser.Scene {
       'linkCollisionBackgroundData'
     );
 
-    this.movementService.initializeInput(this);
+    this.movementService.initializeInput(this, this.player, this.scaleOfTheGame);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -137,6 +137,6 @@ export class SceneLinkService extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame, this);
   }
 }

@@ -103,7 +103,7 @@ export class ScenePortfolioService extends Phaser.Scene {
       'portFolioHouseBackgroundData'
     );
 
-    this.movementService.initializeInput(this);
+    this.movementService.initializeInput(this, this.player, this.scaleOfTheGame);
 
     // Synchronize user's position and other players's position for websocket
     this.playerSyncService.syncPlayers(
@@ -234,6 +234,6 @@ export class ScenePortfolioService extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame, this);
   }
 }

@@ -15,41 +15,52 @@ export class MovementService {
 
   private joystick: any;
 
+  //coordinates of mouse click for pointer movement
+  private targetX: number | null = null;
+  private targetY: number | null = null;
+  private mousePointerDown: boolean = false;
+
+  //speed of character movement
+  private speed = 80;
+
+  private direction: string = '';
+  private isMoving: boolean = false;
+
   /**
    * Initialize the keyboard input and joystick
    * the game isn't qwerty friendly
    */
-  initializeInput(scene: Phaser.Scene) {
+  initializeInput(
+    scene: Phaser.Scene,
+    player: Phaser.Physics.Arcade.Sprite,
+    scaleOfTheGame: number
+  ) {
     const input = scene.input;
     if (input.keyboard) {
       this.cursors = input.keyboard.createCursorKeys();
-      // Mobility input
-      // this.keys = input.keyboard.addKeys('Z,Q,S,D') as {
-      //   Z: Phaser.Input.Keyboard.Key;
-      //   Q: Phaser.Input.Keyboard.Key;
-      //   S: Phaser.Input.Keyboard.Key;
-      //   D: Phaser.Input.Keyboard.Key;
-      // };
     }
 
-    // Check if the screen width is less than 1024px for trigger joystick
-    if (scene.scale.width < 1024) {
-      const plugin = scene.plugins.get('rexVirtualJoystick') as any;
-      if (plugin) {
-        this.joystick = plugin.add(scene, {
-          x: 60,
-          y: scene.scale.height - 60,
-          radius: 50,
-          base: scene.add.circle(0, 0, 50, 0x888888, 0.5),
-          thumb: scene.add.circle(0, 0, 25, 0xcccccc, 0.5),
-          dir: '8dir',
-          forceMin: 16,
-          enable: true,
-        });
+    // // Check if the screen width is less than 1024px for trigger joystick
+    // if (scene.scale.width < 1024) {
+    //   const plugin = scene.plugins.get('rexVirtualJoystick') as any;
+    //   if (plugin) {
+    //     this.joystick = plugin.add(scene, {
+    //       x: 60,
+    //       y: scene.scale.height - 60,
+    //       radius: 50,
+    //       base: scene.add.circle(0, 0, 50, 0x888888, 0.5),
+    //       thumb: scene.add.circle(0, 0, 25, 0xcccccc, 0.5),
+    //       dir: '8dir',
+    //       forceMin: 16,
+    //       enable: true,
+    //     });
 
-        scene.add.existing(this.joystick);
-      }
-    }
+    //     scene.add.existing(this.joystick);
+    //   }
+    // }
+
+    //register pointer events for mouse clic movement
+    this.registerPointerAndUpdateEvents(scene, player, scaleOfTheGame);
   }
 
   /**
@@ -83,7 +94,11 @@ export class MovementService {
   /**
    * Do the action associate to a specific input
    */
-  movePlayer(player: Phaser.Physics.Arcade.Sprite, scaleOfTheGame: number, scene?: Phaser.Scene) {
+  movePlayer(
+    player: Phaser.Physics.Arcade.Sprite,
+    scaleOfTheGame: number,
+    scene: Phaser.Scene
+  ) {
     // disable the movement if the player is editing a comment
     if (scene && (scene as any).isEditingComment) {
       player.setVelocity(0, 0);
@@ -91,91 +106,93 @@ export class MovementService {
       return;
     }
 
-    let isMoving = false; // Use for stopping the animation after the release of the key
-    let direction = ''; // Use for choosing the frame of the static player asset
-
     // Keyboard input
-    if (this.cursors?.left.isDown || this.keys.Q?.isDown) {
-      player.setVelocityX(-80 * scaleOfTheGame);
-      isMoving = true;
-      direction = 'left';
-    } else if (this.cursors?.right.isDown || this.keys.D?.isDown) {
-      player.setVelocityX(80 * scaleOfTheGame);
-      isMoving = true;
-      direction = 'right';
-    } else {
-      player.setVelocityX(0);
-    }
-
-    if (this.cursors?.up.isDown || this.keys.Z?.isDown) {
-      player.setVelocityY(-80 * scaleOfTheGame);
-      isMoving = true;
-      direction = 'top';
-    } else if (this.cursors?.down.isDown || this.keys.S?.isDown) {
-      player.setVelocityY(80 * scaleOfTheGame);
-      isMoving = true;
-      direction = 'down';
-    } else {
-      player.setVelocityY(0);
-    }
-
-    // Joystick input
-    if (this.joystick) {
-      const force = this.joystick.force;
-      const angleDeg = this.joystick.angle; // angle is already in degrees
-
-      if (force > 0) {
-        // Convert degrees to radians by trigonometric calculations
-        const angleRad = Phaser.Math.DegToRad(angleDeg);
-        const vx = Math.cos(angleRad) * 80 * scaleOfTheGame;
-        const vy = Math.sin(angleRad) * 80 * scaleOfTheGame;
-        player.setVelocity(vx, vy);
-
-        // Determine direction based on angle in degrees
-        if (angleDeg >= -45 && angleDeg < 45) {
-          direction = 'right';
-        } else if (angleDeg >= 45 && angleDeg < 135) {
-          direction = 'down';
-        } else if (angleDeg >= 135 || angleDeg < -135) {
-          direction = 'left';
-        } else if (angleDeg >= -135 && angleDeg < -45) {
-          direction = 'up';
-        }
-
-        isMoving = true;
+    if (!this.mousePointerDown) {
+      
+      if (this.cursors?.up.isDown) {
+        player.setVelocityY(-this.speed * scaleOfTheGame);
+        this.isMoving = true;
+        this.direction = 'top';
+      } else if (this.cursors?.down.isDown) {
+        player.setVelocityY(this.speed * scaleOfTheGame);
+        this.isMoving = true;
+        this.direction = 'down';
+      } else {
+        player.setVelocityY(0);
+        this.isMoving = false;
       }
+      if (this.cursors?.left.isDown) {
+        player.setVelocityX(-this.speed * scaleOfTheGame);
+        this.isMoving = true;
+        this.direction = 'left';
+      } else if (this.cursors?.right.isDown) {
+        player.setVelocityX(this.speed * scaleOfTheGame);
+        this.isMoving = true;
+        this.direction = 'right';
+      } else {
+        player.setVelocityX(0);
+      }
+
     }
 
-    // Dissociate move and animation for the diagonal case
-    if (this.cursors?.left.isDown || this.keys.Q?.isDown) {
+    // // Joystick input
+    // if (this.joystick) {
+    //   const force = this.joystick.force;
+    //   const angleDeg = this.joystick.angle; // angle is already in degrees
+
+    //   if (force > 0) {
+    //     // Convert degrees to radians by trigonometric calculations
+    //     const angleRad = Phaser.Math.DegToRad(angleDeg);
+    //     const vx = Math.cos(angleRad) * this.speed * scaleOfTheGame;
+    //     const vy = Math.sin(angleRad) * this.speed * scaleOfTheGame;
+    //     player.setVelocity(vx, vy);
+
+    //     // Determine direction based on angle in degrees
+    //     if (angleDeg >= -45 && angleDeg < 45) {
+    //       direction = 'right';
+    //     } else if (angleDeg >= 45 && angleDeg < 135) {
+    //       direction = 'down';
+    //     } else if (angleDeg >= 135 || angleDeg < -135) {
+    //       direction = 'left';
+    //     } else if (angleDeg >= -135 && angleDeg < -45) {
+    //       direction = 'up';
+    //     }
+
+    //     isMoving = true;
+    //   }
+    // }
+
+    // Dissociate move and animation for the diagonal case and because animation need to start
+    // once and not at every frame
+    if (this.isMoving && this.direction === 'left') {
       player.play('walkingLeft', true);
-    } else if (this.cursors?.right.isDown || this.keys.D?.isDown) {
+    } else if (this.isMoving && this.direction === 'right') {
       player.play('walkingRight', true);
-    } else if (this.cursors?.up.isDown || this.keys.Z?.isDown) {
+    } else if (this.isMoving && this.direction === 'top') {
       player.play('walkingTop', true);
-    } else if (this.cursors?.down.isDown || this.keys.S?.isDown) {
+    } else if (this.isMoving && this.direction === 'down') {
       player.play('walkingDown', true);
     }
 
-    // Joystick animation
-    if (this.joystick && this.joystick.force > 0) {
-      const angleDeg = this.joystick.angle; // angle is already in degrees
+    // // Joystick animation
+    // if (this.joystick && this.joystick.force > 0) {
+    //   const angleDeg = this.joystick.angle; // angle is already in degrees
 
-      if (angleDeg >= -135 && angleDeg <= -45) {
-        player.play('walkingTop', true);
-      } else if (angleDeg > -45 && angleDeg < 45) {
-        player.play('walkingRight', true);
-      } else if (angleDeg >= 45 && angleDeg <= 135) {
-        player.play('walkingDown', true);
-      } else {
-        player.play('walkingLeft', true);
-      }
-    }
+    //   if (angleDeg >= -135 && angleDeg <= -45) {
+    //     player.play('walkingTop', true);
+    //   } else if (angleDeg > -45 && angleDeg < 45) {
+    //     player.play('walkingRight', true);
+    //   } else if (angleDeg >= 45 && angleDeg <= 135) {
+    //     player.play('walkingDown', true);
+    //   } else {
+    //     player.play('walkingLeft', true);
+    //   }
+    // }
 
     // Set a specific frame when the player stops moving
-    if (!isMoving) {
+    if (!this.isMoving) {
       player.stop(); // Stop the animation
-      switch (direction) {
+      switch (this.direction) {
         case 'right':
           player.setFrame('walkingRight/frame0001');
           break;
@@ -192,6 +209,68 @@ export class MovementService {
           break;
       }
     }
+  }
+
+  registerPointerAndUpdateEvents(
+    scene: Phaser.Scene,
+    player: Phaser.Physics.Arcade.Sprite,
+    scaleOfTheGame: number
+  ) {
+    scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      this.mousePointerDown = true;
+      this.isMoving = true;
+      this.targetX = pointer.worldX;
+      this.targetY = pointer.worldY;
+    });
+
+    scene.input.on('pointerup', () => {
+      this.mousePointerDown = false;
+      this.isMoving = false;
+      this.targetX = null;
+      this.targetY = null;
+      if (player.body) player.setVelocity(0, 0);
+    });
+
+    scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+      if (this.mousePointerDown) {
+        this.targetX = pointer.worldX;
+        this.targetY = pointer.worldY;
+      }
+    });
+
+    scene.events.on('update', () => {
+      if (
+        this.targetX !== null &&
+        this.targetY !== null &&
+        scene.input.activePointer.isDown
+      ) {
+        const dx = this.targetX - player.x;
+        const dy = this.targetY - player.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance > 2) {
+          const angle = Math.atan2(dy, dx);
+          const vx = Math.cos(angle) * this.speed * scaleOfTheGame;
+          const vy = Math.sin(angle) * this.speed * scaleOfTheGame;
+          if (player.body) player.setVelocity(vx, vy);
+
+          // Animation logic for pointer movement
+          if (vy < 0 && Math.abs(vy) > Math.abs(vx)) {
+            this.direction = 'top';
+            player.play('walkingTop', true);
+          } else if (vx > 0 && Math.abs(vx) > Math.abs(vy)) {
+            this.direction = 'right';
+            player.play('walkingRight', true);
+          } else if (vy > 0 && Math.abs(vy) > Math.abs(vx)) {
+            this.direction = 'down';
+            player.play('walkingDown', true);
+          } else {
+            this.direction = 'left';
+            player.play('walkingLeft', true);
+          }
+        }
+      }
+    });
   }
 
   /**
@@ -233,20 +312,22 @@ export class MovementService {
 
   disableMovementKeys() {
     if (this.keys) {
-      Object.values(this.keys).forEach(key => key?.reset());
-      Object.values(this.keys).forEach(key => key && (key.enabled = false));
+      Object.values(this.keys).forEach((key) => key?.reset());
+      Object.values(this.keys).forEach((key) => key && (key.enabled = false));
     }
     if (this.cursors) {
-      Object.values(this.cursors).forEach(key => key && (key.enabled = false));
+      Object.values(this.cursors).forEach(
+        (key) => key && (key.enabled = false)
+      );
     }
   }
 
   enableMovementKeys() {
     if (this.keys) {
-      Object.values(this.keys).forEach(key => key && (key.enabled = true));
+      Object.values(this.keys).forEach((key) => key && (key.enabled = true));
     }
     if (this.cursors) {
-      Object.values(this.cursors).forEach(key => key && (key.enabled = true));
+      Object.values(this.cursors).forEach((key) => key && (key.enabled = true));
     }
   }
 }

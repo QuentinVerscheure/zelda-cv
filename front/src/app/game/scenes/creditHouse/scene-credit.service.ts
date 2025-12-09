@@ -83,7 +83,7 @@ export class SceneCreditService extends Phaser.Scene {
       'creditCollisionBackgroundData'
     );
 
-    this.movementService.initializeInput(this);
+    this.movementService.initializeInput(this, this.player, this.scaleOfTheGame);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -281,7 +281,7 @@ export class SceneCreditService extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame, this);
   }
 
   private textStyle = {

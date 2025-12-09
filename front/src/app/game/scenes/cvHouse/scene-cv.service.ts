@@ -92,7 +92,7 @@ export class SceneCVService extends Phaser.Scene {
       'CVCollisionBackgroundData'
     );
 
-    this.movementService.initializeInput(this);
+    this.movementService.initializeInput(this, this.player, this.scaleOfTheGame);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -159,6 +159,6 @@ export class SceneCVService extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame, this);
   }
 }

@@ -77,7 +77,7 @@ export class SceneGuestBookService1 extends Phaser.Scene {
       'guestBookCollisionBackgroundData'
     );
 
-    this.movementService.initializeInput(this);
+    this.movementService.initializeInput(this, this.player, this.scaleOfTheGame);
 
     this.collisionService.createSceneTransitionCollision(
       this,
@@ -113,6 +113,6 @@ export class SceneGuestBookService1 extends Phaser.Scene {
   }
 
   override update() {
-    this.movementService.movePlayer(this.player, this.scaleOfTheGame);
+    this.movementService.movePlayer(this.player, this.scaleOfTheGame, this);
   }
 }
