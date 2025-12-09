@@ -17,7 +17,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping({"/api/comments", "/comments"})
+@RequestMapping({"/api/comments"})
 @Tag(name = "Comment", description = "Operations related to the comments a user can leave in the guestHouse")
 public class CommentController {
 

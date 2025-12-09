@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import zeldaCV.dto.MailDTO;
 
 @RestController
-@RequestMapping({"/api/sendMailToOwner","/sendMailToOwner"})
+@RequestMapping({"/api/sendMailToOwner"})
 @Tag(name = "Mail to Owner", description = "sending mail to the owner")
 public class mailControler {
 

@@ -16,7 +16,7 @@ import zeldaCV.converter.AchievementMapper;
 import zeldaCV.service.AchievementService;
 
 @RestController
-@RequestMapping({"/api/achievements", "/achievements"})
+@RequestMapping({"/api/achievements"})
 @Tag(name = "Achievements", description = "Operations related to Achievements of a player")
 public class AchievementController {
 
