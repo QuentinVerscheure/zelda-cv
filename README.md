@@ -67,7 +67,6 @@ you can create a comment in the guestbook house by clicking on the book, create 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.0.  
 It uses the [Phaser](https://phaser.io/) library to create the game.  
-It uses the [VirtualJoystickPlugin](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/virtualjoystick/) for the mobile version's joystick.
 
 Run `ng serve` for a development server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.  
 Run `ng build` to generate the deployment files only if you modify code that isn't in the `assets` folder. The build artifacts will be stored in the `dist/` directory.
@@ -101,3 +100,6 @@ Be carefull to change the token if you modify your name or pass and don't use th
 
 ![Database Schema](src/main/resources/static/shemaDB.png)
 
+## tag on commit
+
+delete-functionality
