@@ -5,190 +5,207 @@
   <div class="menu-content" [class.active]="menuOpen">
     <span class="closeButton" [class.active]="menuOpen" (click)="toggleMenu()"
       >&times;</span
-    >
-    <h1>{{ config?.me?.menuName }}</h1>
-    <h3 (click)="changeSection('quests')">Quêtes:</h3>
-    <div *ngIf="!isSmartphone || currentSection === 'quests'">
-      <ul>
-        <li class="AchievementDone" id="playerHouse">
-          <a routerLink="/game/world">Découvrir l'île</a>
-        </li>
-        <li [class.AchievementDone]="(achievements$ | async)?.cv" id="cvHouse">
-          <a routerLink="/game/cv">Visiter la CV House</a>
+      >
+      <h1>{{ config?.me?.menuName }}</h1>
+      <h3 (click)="changeSection('quests')">Quêtes:</h3>
+      @if (!isSmartphone || currentSection === 'quests') {
+        <div>
           <ul>
-            <li
-              [class.AchievementDone]="(achievements$ | async)?.cvDownload"
-              id="cvHouseDownload"
-            >
-              Télécharger le CV
+            <li class="AchievementDone" id="playerHouse">
+              <a routerLink="/game/world">Découvrir l'île</a>
             </li>
-          </ul>
-        </li>
-        <li
-          [class.AchievementDone]="(achievements$ | async)?.portfolio"
-          id="portfolioHouse"
-        >
-          <a routerLink="/game/portfolio">Découvrir la portfolio house</a>
-        </li>
-        <li
-          [class.AchievementDone]="(achievements$ | async)?.link"
-          id="linkHouse"
-        >
-          <a routerLink="/game/link">Aller à la link house</a>
-          <ul>
-            <li
-              [class.AchievementDone]="(achievements$ | async)?.linkClick"
-              id="linkClicked"
-            >
-              Cliquer sur un lien
+            <li [class.AchievementDone]="(achievements$ | async)?.cv" id="cvHouse">
+              <a routerLink="/game/cv">Visiter la CV House</a>
+              <ul>
+                <li
+                  [class.AchievementDone]="(achievements$ | async)?.cvDownload"
+                  id="cvHouseDownload"
+                  >
+                  Télécharger le CV
+                </li>
+              </ul>
             </li>
-          </ul>
-        </li>
-        <li
-          [class.AchievementDone]="(achievements$ | async)?.phone"
-          id="contactHouse"
-        >
-          <a routerLink="/game/contact">Trouver la phone house</a>
-          <ul>
             <li
-              [class.AchievementDone]="(achievements$ | async)?.phoneContact"
-              id="contactMe"
-            >
-              Contacter le dev
+              [class.AchievementDone]="(achievements$ | async)?.portfolio"
+              id="portfolioHouse"
+              >
+              <a routerLink="/game/portfolio">Découvrir la portfolio house</a>
             </li>
-          </ul>
-        </li>
-        <li
-          [class.AchievementDone]="(achievements$ | async)?.guestBook"
-          id="guestBookHouse"
-        >
-          <a routerLink="/game/guestbook">Enqueter sur le livre d'or </a>
-          <ul>
             <li
+              [class.AchievementDone]="(achievements$ | async)?.link"
+              id="linkHouse"
+              >
+              <a routerLink="/game/link">Aller à la link house</a>
+              <ul>
+                <li
+                  [class.AchievementDone]="(achievements$ | async)?.linkClick"
+                  id="linkClicked"
+                  >
+                  Cliquer sur un lien
+                </li>
+              </ul>
+            </li>
+            <li
+              [class.AchievementDone]="(achievements$ | async)?.phone"
+              id="contactHouse"
+              >
+              <a routerLink="/game/contact">Trouver la phone house</a>
+              <ul>
+                <li
+                  [class.AchievementDone]="(achievements$ | async)?.phoneContact"
+                  id="contactMe"
+                  >
+                  Contacter le dev
+                </li>
+              </ul>
+            </li>
+            <li
+              [class.AchievementDone]="(achievements$ | async)?.guestBook"
+              id="guestBookHouse"
+              >
+              <a routerLink="/game/guestbook">Enqueter sur le livre d'or </a>
+              <ul>
+                <li
               [class.AchievementDone]="
                 (achievements$ | async)?.guestBookComment
               "
-              id="postComment"
-            >
-              Déposer un commentaire
+                  id="postComment"
+                  >
+                  Déposer un commentaire
+                </li>
+              </ul>
+            </li>
+            <li
+              [class.AchievementDone]="(achievements$ | async)?.achievementVarious"
+              id="variousHouse"
+              >
+              <a routerLink="/game/various">Aller à la maison divers </a>
+            </li>
+            <li
+              [class.AchievementDone]="(achievements$ | async)?.achievementCredit"
+              id="creditHouse"
+              >
+              <a routerLink="/game/credit">Voir les credits</a>
             </li>
           </ul>
-        </li>
-        <li
-          [class.AchievementDone]="(achievements$ | async)?.achievementVarious"
-          id="variousHouse"
-        >
-          <a routerLink="/game/various">Aller à la maison divers </a>
-        </li>
-        <li
-          [class.AchievementDone]="(achievements$ | async)?.achievementCredit"
-          id="creditHouse"
-        >
-          <a routerLink="/game/credit">Voir les credits</a>
-        </li>
-      </ul>
-    </div>
-    <h3 (click)="changeSection('save')">(s')enregistrer</h3>
-    <div *ngIf="!isSmartphone || currentSection === 'save'">
-      <form (ngSubmit)="onSubmit()">
-        <button
-          id="changeLoginPassButton"
-          type="button"
-          (click)="onChangeUser()"
-          class=""
-          *ngIf="isAuthenticated && !tryToDeleteUser"
-        >
-          Changer de héros <small>(changer pseudo/pass)</small>
-        </button>
-        <div *ngIf="changeLoginPassError" class="error">
-          {{ changeLoginPassError }}
         </div>
-        <label for="pseudo">Pseudo:</label>
-        <input
-          placeholder="votre pseudo, ex: Link"
-          id="pseudo"
-          name="pseudo"
-          [(ngModel)]="pseudo"
-          required
-        />
-        <label for="password">Mot de passe:</label>
-        <input
-          placeholder="votre mot de passe, ex: Zelda"
-          type="password"
-          id="password"
-          name="password"
-          [(ngModel)]="password"
-          required
-        />
-
-        <button
-          id="signUpButton"
-          type="button"
-          (click)="onSignUp()"
-          class=""
-          *ngIf="!isAuthenticated && !tryToDeleteUser"
-        >
-          Sauvegarder <small>(sign up)</small>
-        </button>
-
-        <div *ngIf="signUpError" class="error">
-          {{ signUpError }}
+      }
+      <h3 (click)="changeSection('save')">(s')enregistrer</h3>
+      @if (!isSmartphone || currentSection === 'save') {
+        <div>
+          <form (ngSubmit)="onSubmit()">
+            @if (isAuthenticated && !tryToDeleteUser) {
+              <button
+                id="changeLoginPassButton"
+                type="button"
+                (click)="onChangeUser()"
+                class=""
+                >
+                Changer de héros <small>(changer pseudo/pass)</small>
+              </button>
+            }
+            @if (changeLoginPassError) {
+              <div class="error">
+                {{ changeLoginPassError }}
+              </div>
+            }
+            <label for="pseudo">Pseudo:</label>
+            <input
+              placeholder="votre pseudo, ex: Link"
+              id="pseudo"
+              name="pseudo"
+              [(ngModel)]="pseudo"
+              required
+              />
+              <label for="password">Mot de passe:</label>
+              <input
+                placeholder="votre mot de passe, ex: Zelda"
+                type="password"
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                required
+                />
+                @if (!isAuthenticated && !tryToDeleteUser) {
+                  <button
+                    id="signUpButton"
+                    type="button"
+                    (click)="onSignUp()"
+                    class=""
+                    >
+                    Sauvegarder <small>(sign up)</small>
+                  </button>
+                }
+                @if (signUpError) {
+                  <div class="error">
+                    {{ signUpError }}
+                  </div>
+                }
+                @if (isAuthenticated && !tryToDeleteUser) {
+                  <button
+                    id="logOutButton"
+                    type="button"
+                    (click)="onLogout()"
+                    class=""
+                    >
+                    Quitter <small>(logout)</small>
+                  </button>
+                }
+                @if (isAuthenticated && !tryToDeleteUser) {
+                  <button
+                    id="triggerdeleteUserButton"
+                    type="triggerbutton"
+                    (click)="onTriggerDeleteUser()"
+                    class=""
+                    >
+                    Supprimer la partie <small>(Supprimer utilisateur)</small>
+                  </button>
+                }
+                @if (isAuthenticated && tryToDeleteUser) {
+                  <button
+                    id="deleteUserButtonYes"
+                    type="button"
+                    (click)="onDeleteUserYes()"
+                    class=""
+                    >
+                    finish him <small>(oui)</small>
+                  </button>
+                }
+                @if (isAuthenticated && tryToDeleteUser) {
+                  <button
+                    id="deleteUserButtonNo"
+                    type="button"
+                    (click)="onDeleteUserNo()"
+                    class=""
+                    >
+                    It's dangerous to go alone! <small>(non)</small>
+                  </button>
+                }
+                @if (!isAuthenticated) {
+                  <button
+                    id="loginButton"
+                    type="button"
+                    (click)="onLogin()"
+                    class=""
+                    >
+                    Charger <small>(login)</small>
+                  </button>
+                }
+                @if (loginError && !tryToDeleteUser) {
+                  <div class="error">
+                    {{ loginError }}
+                  </div>
+                }
+              </form>
+            </div>
+          }
+          <h3 (click)="changeSection('noTime')">CV</h3>
+          @if (!isSmartphone || currentSection === 'noTime') {
+            <div>
+              <a href="assets/docs/CV.pdf" download="Verscheure-Quentin-CV">
+                <p class="clickable">- Télécharger le CV</p>
+              </a>
+            </div>
+          }
         </div>
-        <button
-          id="logOutButton"
-          type="button"
-          (click)="onLogout()"
-          class=""
-          *ngIf="isAuthenticated && !tryToDeleteUser"
-        >
-          Quitter <small>(logout)</small>
-        </button>
-        <button
-          id="triggerdeleteUserButton"
-          type="triggerbutton"
-          (click)="onTriggerDeleteUser()"
-          class=""
-          *ngIf="isAuthenticated && !tryToDeleteUser"
-        >
-          Supprimer la partie <small>(Supprimer utilisateur)</small>
-        </button>
-        <button
-          id="deleteUserButtonYes"
-          type="button"
-          (click)="onDeleteUserYes()"
-          class=""
-          *ngIf="isAuthenticated && tryToDeleteUser"
-        >
-          finish him <small>(oui)</small>
-        </button>
-        <button
-          id="deleteUserButtonNo"
-          type="button"
-          (click)="onDeleteUserNo()"
-          class=""
-          *ngIf="isAuthenticated && tryToDeleteUser"
-        >
-          It's dangerous to go alone! <small>(non)</small>
-        </button>
-        <button
-          id="loginButton"
-          type="button"
-          (click)="onLogin()"
-          class=""
-          *ngIf="!isAuthenticated"
-        >
-          Charger <small>(login)</small>
-        </button>
-        <div *ngIf="loginError && !tryToDeleteUser" class="error">
-          {{ loginError }}
-        </div>
-      </form>
-    </div>
-    <h3 (click)="changeSection('noTime')">CV</h3>
-    <div *ngIf="!isSmartphone || currentSection === 'noTime'">
-      <a href="assets/docs/CV.pdf" download="Verscheure-Quentin-CV">
-        <p class="clickable">- Télécharger le CV</p>
-      </a>
-    </div>
-  </div>
-</div>
+      </div>
