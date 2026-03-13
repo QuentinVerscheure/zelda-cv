@@ -7,17 +7,16 @@ import { CommentFormComponent } from './components/comment-form/comment-form.com
 import { SessionStorageService } from './services/session-storage.service';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    CoreComponent,
-    MenuComponent,
-    ContactFormComponent,
-    CommentFormComponent,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        CoreComponent,
+        MenuComponent,
+        ContactFormComponent,
+        CommentFormComponent,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   title = 'zelda-cv';

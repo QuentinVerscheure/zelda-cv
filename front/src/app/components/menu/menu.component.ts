@@ -19,11 +19,10 @@ import { MenuMessageService } from './menu-message.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-menu',
-  standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
+    selector: 'app-menu',
+    imports: [RouterModule, CommonModule, FormsModule],
+    templateUrl: './menu.component.html',
+    styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
   menuOpen = true;

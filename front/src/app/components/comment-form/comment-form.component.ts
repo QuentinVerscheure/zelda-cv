@@ -6,11 +6,10 @@ import { GuestBookComment } from '../../models/guestBookComment.model';
 import { MovementService } from '../../game/core/movement.service';
 
 @Component({
-  selector: 'app-comment-form',
-  standalone: true,
-  imports: [FormsModule],
-  templateUrl: './comment-form.component.html',
-  styleUrl: './comment-form.component.scss',
+    selector: 'app-comment-form',
+    imports: [FormsModule],
+    templateUrl: './comment-form.component.html',
+    styleUrl: './comment-form.component.scss'
 })
 export class CommentFormComponent {
   constructor(
