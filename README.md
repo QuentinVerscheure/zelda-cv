@@ -103,3 +103,7 @@ Be carefull to change the token if you modify your name or pass and don't use th
 ## tag on commit
 
 delete-functionality
+
+## Security
+
+Deux vulnérabilités modérées subsistent sur une dépendance transitive (i18next-http-backend via phaser3-rex-plugins). Elles ne sont pas corrigées afin d'éviter une mise à jour cassante (npm audit fix --force). Elles seront réévaluées lorsqu'une version compatible de phaser3-rex-plugins sera disponible.
