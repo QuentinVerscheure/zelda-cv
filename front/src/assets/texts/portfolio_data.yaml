@@ -26,22 +26,211 @@
 
 portfolio:
   - 
-    title1: "CV Zelda" # Main title in bold
-    subTitle1: "Un CV en ligne sur le thème de *Link's Awakening*." 
-    date: "2024" # String
+    title1: "AutoSearch" 
+    subTitle1: "Automatisation de ma recherche d'emploi via IA et N8N" 
+    date: "2026"
     main:
       - picture: 
-          pictureName: "zelda_cv" # Name for the picture
-          pictureUrl: "assets/pictures/zelda_cv.png" # URL of the picture
-          pictureSize: 45 # Size of the picture
+          pictureName: "cover"
+          pictureUrl: "assets/pictures/00_cover.png"
+          pictureSize: 30 
+      - text: "Ce projet automatise une partie de ma recherche d'emploi en centralisant les offres, leur analyse et le suivi des candidatures au sein d'un workflow n8n."
+      - text: "Un agent IA analyse les offres collectées, extrait les informations importantes et évalue leur pertinence selon mon profil et mes critères de recherche."
+      - text: "Une DB est utilisée pour centraliser les offres, leur statut et les différentes étapes de suivi, notamment les relances."
+      - text: "Discord sert d'interface avec le système pour transmettre des offres, recevoir les résultats des analyses et suivre l'exécution des automatisations."
+      - text: "Le projet est auto-hébergé sur un VPS à l'aide de Docker, tandis que n8n assure l'orchestration des différents services et workflows."
+      - text: "--> Pour en savoir plus, prenez les escalier sur le coté"
+    more:
+      - type: "text"
+        xOffset: -150
+        yOffset: 135
+        text: 
+          - "01 AJOUT OFFRE + SCORING"
+          - "Le rooting reçoit son instruction via discord, et analyse quel sous agent utiliser, puis notifie l'utilisateur du traitement de sa demande"
+
+      - type: "image"
+        picture: 
+          pictureName: "rooting"
+          pictureUrl: "assets/pictures/01_rooting.png"
+          pictureSize: 130
+        xOffset: -150
+        yOffset: 150
+      - type: "text"
+        xOffset: -150
+        yOffset: 293
+        text: 
+          - "02 AJOUT OFFRE + SCORING"
+          - "Rôle : analyser, découper et archiver une offre dans une BD (initialement googlesheet suite à une présentation devant public, mais elle sera remplacée par une BD SQL)"
+          - "1. Trigger interne reçoit le payload du router"
+          - "2. Détecte si c'est une URL ou du texte brut"
+          - "3. URL → Jina.ai convertit la page en Markdown propre"
+          - "4. Texte → utilisé directement"
+          - "5. Les deux branches fusionnent (Merge)"
+          - "6. Claude extrait 10 champs + score 0-100 en un seul appel"
+          - "7. Code formate, calcule les futurs relances, initialise colonnes relance"
+          - "8. Google Sheets ajoute la ligne"
+          - "9. Discord confirme avec le score"
+      - type: "image"
+        picture: 
+          pictureName: "ajout"
+          pictureUrl: "assets/pictures/02_ajout.png"
+          pictureSize: 70
+        xOffset: -150
+        yOffset: 355
+      - type: "text"
+        xOffset: -150
+        yOffset: 438
+        text: 
+          - "03 QUESTION SUR CANDIDATURES"
+          - "Rôle : répondre en langage naturel à n'importe quelle question sur les candidatures archivées."
+          - "1. Trigger interne reçoit ta question depuis le router"
+          - "2. Lit toutes les lignes du Google Sheet (à évoluer en IA génère une commande SQL de lecture seule)"
+          - "3. Sérialise en JSON + envoie à Claude avec ta question"
+          - "4. Claude formule une réponse naturelle en français"
+          - "5. Discord envoie la réponse"
+      - type: "image"
+        picture: 
+          pictureName: "question"
+          pictureUrl: "assets/pictures/03_question.png"
+          pictureSize: 40
+        xOffset: -150
+        yOffset: 480
+      - type: "text"
+        xOffset: -150
+        yOffset: 533
+        text: 
+          - "04 REFUS MANUEL (via Discord)"
+          - "Rôle : mettre à jour le statut d'une candidature quand TU signales un refus depuis Discord."
+          - "1. Trigger interne reçoit le message du router"
+          - "2. Claude extrait le nom de l'entreprise"
+          - "3. Google Sheets trouve la ligne correspondante"
+          - "4. Met à jour le statut → Refus"
+          - "5. Discord confirme"
+      - type: "image"
+        picture: 
+          pictureName: "refus"
+          pictureUrl: "assets/pictures/04_refus.png"
+          pictureSize: 40
+        xOffset: -150
+        yOffset: 575
+      - type: "text"
+        xOffset: -150
+        yOffset: 628
+        text: 
+          - "04b DÉTECTION AUTO REFUS (Gmail)"
+          - "Rôle : détecter automatiquement les refus dans ta boîte email dédiée."
+          - "1. Gmail (boîte mail dédiée, pas perso) Trigger poll toutes les minutes les emails non lus"
+          - "2. Extrait objet, expéditeur, 500 premiers caractères du corps"
+          - "3. Claude détecte si c'est un refus → JSON {type, entreprise}"
+          - "4. Si AUTRE → Stop silencieux (newsletters, factures...)"
+          - "5. Si REFUS → Google Sheets met Statut → Refus"
+          - "6. Si ACCEPTATION → Google Sheets met Statut → accepté et lance le sous agent 06 PREPARATION ENTRETIEN"
+          - "7. modification du statut du mail en lu"
+          - "8. Discord notifie avec l'expéditeur et l'objet"
+      - type: "image"
+        picture: 
+          pictureName: "refus_auto"
+          pictureUrl: "assets/pictures/04B_refus_auto.png"
+          pictureSize: 150
+        xOffset: -150
+        yOffset: 685
+      - type: "text"
+        xOffset: -150
+        yOffset: 848
+        text: 
+          - "05 RELANCES AUTOMATIQUES (Cron)"
+          - "Rôle : chaque matin lun-ven à 9h, te rappeler les candidatures à relancer."
+          - "1. Cron déclenche à 9h lun-ven"
+          - "2. Lit toutes les offres du Sheet (à changer par commande SQL à la DB)"
+          - "3. Filtre celles dont Prochaine Relance <= aujourd'hui (et statut ≠ Refus/Abandonné)"
+          - "4. Switch détecte à quelle étape en est la relance (J3, J7, J12, J16)"
+          - "5. Discord envoie le rappel avec contact + lien"
+          - "6. Sheets met à jour la colonne relance avec la date du jour"
+      - type: "image"
+        picture: 
+          pictureName: "relance"
+          pictureUrl: "assets/pictures/05_relance.png"
+          pictureSize: 150
+        xOffset: -150
+        yOffset: 895
+      - type: "text"
+        xOffset: -150
+        yOffset: 1058
+        text: 
+          - "06 PRÉPARATION ENTRETIEN"
+          - "Rôle : générer un brief d'entretien complet depuis Discord."
+          - "1. Trigger interne reçoit \"prépare l'entretien Doctolib\""
+          - "2. IA extrait le nom de l'entreprise"
+          - "3. DB récupère la ligne (titre, stack, niveau)"
+          - "4. IA recherche des infos sur l'entreprise + génère un brief en 5 parties"
+          - "5. Sauvegardé dans colonne Prep Entretien du Sheet"
+          - "6. Discord envoie un fichier .md avec prep entretien"
+      - type: "image"
+        picture: 
+          pictureName: "prep"
+          pictureUrl: "assets/pictures/06_prep.png"
+          pictureSize: 70
+        xOffset: -150
+        yOffset: 1105
+      - type: "text"
+        xOffset: -150
+        yOffset: 1188
+        text: 
+          - "07 CANDIDATURE SPONTANÉE"
+          - "Rôle : automatiser une candidature spontanée sur demande utilisateur"
+          - "1. Trigger interne reçoit \"candidature stripe.com [email]\""
+          - "2. Claude extrait entreprise / URL / email"
+          - "3. Vérification de candidature déjà en cours pour la même entreprise dans la BD"
+          - "4. Email fourni → direct ; sinon Claude (web_search) cherche email RH + résumé"
+          - "5. Introuvable → archive partielle \"Email manquant\" + Discord demande l'email (relancer la commande AVEC l'email reprend la ligne)"
+          - "6. CV Master lu → IA génère CV + email"
+          - "7. Google Doc privé (PAS de partage public) → export PDF"
+          - "8. Brouillon Gmail pré-adressé avec PDF JOINT — envoi manuel"
+          - "11. Discord confirme"
+      - type: "image"
+        picture: 
+          pictureName: "candidature"
+          pictureUrl: "assets/pictures/07_candidature.png"
+          pictureSize: 170
+        xOffset: -150
+        yOffset: 1250
+      - type: "text"
+        xOffset: -150
+        yOffset: 1433
+        text: 
+          - "08 SCRAPING LINKEDIN (Apify)"
+          - "Rôle : scraper automatiquement des offres LinkedIn sur demande depuis Discord."
+          - "1. Trigger interne reçoit \"scrappe les offres react Paris\""
+          - "2. IA extrait les paramètres : keywords, location, count"
+          - "3. Apify scrape LinkedIn avec ces paramètres (max 20 offres)"
+          - "4. IA filtre : compatible avec mon profil ? score 0-100"
+          - "5. Archive les offres filtrées dans BD"
+          - "6. Construit un récap lisible"
+          - "7. Discord envoie le récap"
+      - type: "image"
+        picture: 
+          pictureName: "scrapping"
+          pictureUrl: "assets/pictures/08_scrapping.png"
+          pictureSize: 50
+        xOffset: -150
+        yOffset: 1485
+  - 
+    title1: "CV Zelda"
+    subTitle1: "Un CV en ligne sur le thème de *Link's Awakening*." 
+    date: "2024"
+    main:
+      - picture: 
+          pictureName: "zelda_cv"
+          pictureUrl: "assets/pictures/zelda_cv.png"
+          pictureSize: 45
       - text: "Ce CV reprend les principales caractéristiques d'un CV classique, mais dans un contexte original inspiré du média vidéoludique."
       - text: "Le projet dispose d'un front Angular et d'un back-end en Java (Spring Boot, Hibernate) ainsi que d'un websocket pour simuler un environnement multijoueur."
       - text: "Les prochaines étapes de développement incluent l'ajout d'une IA pour ajouter des images extraites de Google Earth et traitées comme décor jouable, ajoutant potentiellement le monde pixélisé comme map."
       - text: "Le projet a été conçu pour permettre à chaque utilisateur de personnaliser et d'adapter le site avec ses propres données."
       - picture: 
-          pictureName: "github" # Name for the picture
-          pictureUrl: "assets/logo/GitHub-Logo.png" # URL of the picture
-          pictureSize: 13 # Size of the picture
+          pictureName: "github"
+          pictureUrl: "assets/logo/GitHub-Logo.png"
+          pictureSize: 13
           pictureLink: "https://github.com/QuentinVerscheure/zelda-cv"
   - 
     title1: "Suivi-Ares" 
@@ -56,6 +245,7 @@ portfolio:
       - text: "ElasticSearch a été choisi comme base de données en raison de ses capacités à gérer de grandes quantités de données non structurées."
       - text: "Angular a été sélectionné comme framework front-end."
       - text: "Ce projet a été présenté lors d'une soutenance. Pour plus de détails, les documents de présentation sont disponibles en téléchargement."
+      - text: "--> Pour en savoir plus, prenez les escalier sur le coté"
       - picture: 
           pictureName: "power-point"
           pictureUrl: "assets/logo/power-point.png"
@@ -126,7 +316,6 @@ portfolio:
           - "Détail d'un test."
           - "Affichage d'une capture d'écran en cas d'erreur."
           - "commentaire par détail."
-  - {}
   - {}
   - {}
   - {}

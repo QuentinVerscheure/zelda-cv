@@ -70,6 +70,7 @@ export class CoreComponent implements OnInit, OnDestroy {
           autoCenter: Phaser.Scale.CENTER_BOTH,
         },
         scene: [
+                   this.scenePortfolioService,
           this.sceneWorld, //1st scene will be load at the start of the game
           this.scenePlayerHouse,
           this.sceneContact,
@@ -79,7 +80,7 @@ export class CoreComponent implements OnInit, OnDestroy {
           this.sceneLink,
           this.sceneVarious,
           this.sceneCreditService,
-          this.scenePortfolioService,
+          // this.scenePortfolioService,
           this.scenePortfolio2Service,
         ],
         plugins: {
