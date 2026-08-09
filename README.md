@@ -17,7 +17,7 @@ you can create a comment in the guestbook house by clicking on the book, create 
 
 ### To customize this project for your personal use, you must modify:
 
-#### front: In  `assets/texts`:
+#### front: In  `front/src/assets/texts`:
 - `cv_data.yaml`: your resume  
   This is the main content of your CV.
 - `link_data.yaml`: some links  
@@ -27,15 +27,23 @@ you can create a comment in the guestbook house by clicking on the book, create 
 - `various_data.yaml`: some various information about you  
   Includes small information like mobility, secondary languages, or hobbies.
 
-#### front: In `assets/docs`:
+#### front: In `front/src/assets/docs`:
 - Replace the file `CV.pdf` with your own resume.
 
-#### front: In `assets`:
-- `config.json`: the config file
-  - `"debugMode"`: used to activate debug mode (visibility of hitboxes and mobility of the player).
+#### front: In `front/src/assets/config.json`:
+- `"debugMode"`: used to activate debug mode (visibility of hitboxes and mobility of the player).
+- `"me"`:
   - `"menuName"`: The name displayed as the title in the menu.
   - `"cvName"`: The name given to your `CV.pdf` when downloaded.
   - `"mail"`: Your email displayed in the ContactHouse.
+
+#### front: In `front/src/environments`:
+- `environment.ts` / `environment.prod.ts`: set `apiUrl` to the URL where your own backend is reachable (defaults to `http://localhost:8080/api` in dev and `https://quentinverscheure.fr/api` in the production build).
+
+#### back: In `back/src/main/resources/application.properties`:
+- `spring.datasource.url` / `username` / `password`: point to your own MySQL database (create an empty schema first, Hibernate will create the tables on first run via `spring.jpa.hibernate.ddl-auto=update`).
+- `jwt.secret`: replace with your own secret used to sign JWT tokens.
+- Mail settings (`spring.mail.*`) can be provided via the `MAIL_HOST` / `MAIL_PORT` / `MAIL_USER` / `MAIL_PASS` environment variables, but note that `JavaMailSenderConfig` currently overrides them with a hardcoded local test config (see below) — mail sending isn't fully wired up yet, on either the front or the back.
 
 #### back: In `JavaMailSenderConfig`:
 - your mailsender properties
@@ -44,9 +52,9 @@ you can create a comment in the guestbook house by clicking on the book, create 
 
 
 ### To modify the words of an NPC:
-#### In `assets/game`:
-- Modify the `"NPC_name-text.json"` of your NPC.  
-  The text will loop every 6 seconds with 10 seconds of blank at the end of a loop.
+#### In `front/src/assets/game`:
+- Modify the `<npc_name>_text.json` file of your NPC (e.g. `fairy_text.json`).  
+  Each line is shown for 4 seconds; once every line has been shown, there is a 6 second blank pause before the loop restarts from the first line.
 
 ## Development
 
@@ -65,7 +73,7 @@ you can create a comment in the guestbook house by clicking on the book, create 
 
 #### stack & usage
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.0.  
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) and currently runs on Angular 21.  
 It uses the [Phaser](https://phaser.io/) library to create the game.  
 
 Run `ng serve` for a development server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.  
@@ -82,27 +90,30 @@ Run `ng build` to generate the deployment files only if you modify code that isn
   - Spring Data JPA
   - MySQL Driver
   - Spring DevTools
-  - Spring Security (JWT euth)
+  - Spring Security (JWT auth)
+  - Spring Mail
   - Springdoc OpenAPI (Swagger)
   - WebSocket (multiplayer real time)
-  
-Run `mvn spring-boot:run` for a development server. 
-Run `java -jar your-app.jar --spring.profiles.active=prod` for a production .jar
+
+A Maven wrapper is included, so a local Maven install isn't required: use `./mvnw` (or `mvnw.cmd` on Windows) instead of `mvn` below.
+
+Run `mvn spring-boot:run` for a development server.  
+Run `mvn clean package -DskipTests` to build the jar, then `java -jar target/Zelda-cv-1.0.0.jar --spring.profiles.active=prod` to run it with the production profile (`application-prod.properties`, not committed to the repo — create it yourself next to `application.properties`).
 
 #### swagger
 
-Swagger available to: http://localhost:8080/swagger-ui/index.html
-To use it, create a acount with `POST /api/users Create a new user` then authenticate with `POST /api/auth/login`
-Copy paste the token you receive in responses in the `Authorize` button on top right
-Be carefull to change the token if you modify your name or pass and don't use the token if you use a unauthenticate controler
+Swagger available at: http://localhost:8080/swagger-ui/index.html  
+To use it, create an account with `POST /api/users` (Create a new user), then authenticate with `POST /api/auth/login`.  
+Copy/paste the token you receive in the response into the `Authorize` button in the top right.  
+Remember to get a new token if you change your username or password, and note that some endpoints don't require a token at all (see `SecurityConfig`).
 
 ### DB shéma:
 
-![Database Schema](src/main/resources/static/shemaDB.png)
+![Database Schema](back/src/main/resources/static/shemaDB.png)
 
-## tag on commit
+## Git convention
 
-delete-functionality
+When a piece of code/functionality is removed because it's no longer useful for the project (but might be worth reviving later), the removal commit is tagged `delete-functionality` instead of just deleting the code outright, so it stays easy to find and restore if needed. So far this has only been used for removing the on-screen virtual joystick and its plugin (see the `delete-functionality` tag / `delete joystick` commit).
 
 ## Security
 
