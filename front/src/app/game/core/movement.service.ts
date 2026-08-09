@@ -155,11 +155,9 @@ export class MovementService {
     player: Phaser.Physics.Arcade.Sprite,
     scaleOfTheGame: number
   ) {
-    scene.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+    scene.input.on('pointerdown', () => {
       this.mousePointerDown = true;
       this.isMoving = true;
-      this.targetX = pointer.worldX;
-      this.targetY = pointer.worldY;
     });
 
     scene.input.on('pointerup', () => {
@@ -170,14 +168,14 @@ export class MovementService {
       if (player.body) player.setVelocity(0, 0);
     });
 
-    scene.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-      if (this.mousePointerDown) {
-        this.targetX = pointer.worldX;
-        this.targetY = pointer.worldY;
-      }
-    });
-
     scene.events.on('update', () => {
+      if (this.mousePointerDown && scene.input.activePointer.isDown) {
+        const pointer = scene.input.activePointer;
+        const worldPoint = scene.cameras.main.getWorldPoint(pointer.x, pointer.y);
+        this.targetX = worldPoint.x;
+        this.targetY = worldPoint.y;
+      }
+
       if (
         this.targetX !== null &&
         this.targetY !== null &&
@@ -192,6 +190,7 @@ export class MovementService {
           const vx = Math.cos(angle) * this.speed * scaleOfTheGame;
           const vy = Math.sin(angle) * this.speed * scaleOfTheGame;
           if (player.body) player.setVelocity(vx, vy);
+          this.isMoving = true;
 
           // Animation logic for pointer movement
           if (player.anims) {
@@ -209,6 +208,11 @@ export class MovementService {
               player.play('walkingLeft', true);
             }
           }
+        } else {
+          // Arrived at the target: stop cleanly instead of jittering
+          // around it with stale velocity from the previous frame.
+          if (player.body) player.setVelocity(0, 0);
+          this.isMoving = false;
         }
       }
     });
