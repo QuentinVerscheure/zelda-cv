@@ -2,28 +2,83 @@
   <!-- Close icon -->
   <h1>Contact</h1>
   <p>mail: {{ config?.me?.mail }}</p>
-  <form id="messageForm" (ngSubmit)="onSubmit()">
+  <form
+    id="messageForm"
+    [formGroup]="messageForm"
+    (ngSubmit)="onSubmit()"
+    (focusin)="disablePhaserKeyDownEvent()"
+    (focusout)="enablePhaserKeyDownEvent()"
+  >
     <span class="closeButton" (click)="hideForm()">&times;</span>
     <div>
       <label for="nom">Nom:</label>
-      <input type="text" id="nom" name="nom" placeholder="Entrez votre nom:" />
+      <input
+        type="text"
+        id="nom"
+        formControlName="nom"
+        placeholder="Entrez votre nom:"
+      />
+      @if (isInvalid('nom')) {
+        <p class="fieldError">Le nom est obligatoire.</p>
+      }
 
       <label for="email">Email:</label>
       <input
         type="email"
         id="email"
-        name="email"
+        formControlName="email"
         placeholder="Entrez votre email:"
       />
+      @if (isInvalid('email')) {
+        <p class="fieldError">
+          @if (messageForm.get('email')?.errors?.['required']) {
+            L'email est obligatoire.
+          } @else if (messageForm.get('email')?.errors?.['email']) {
+            Cet email n'est pas valide.
+          }
+        </p>
+      }
 
-      <label class="notImplemented" for="message"
-        >Envoie de message impossible pour le moment, WIP</label
-      >
-      <textarea id="message" placeholder="Ecrivez votre message ici"></textarea>
+      <label for="subject">Sujet:</label>
+      <input
+        type="text"
+        id="subject"
+        formControlName="subject"
+        placeholder="Objet de votre message:"
+      />
+      @if (isInvalid('subject')) {
+        <p class="fieldError">Le sujet est obligatoire.</p>
+      }
+
+      <label for="message">Message:</label>
+      <textarea
+        id="message"
+        formControlName="message"
+        placeholder="Ecrivez votre message ici"
+      ></textarea>
+      @if (isInvalid('message')) {
+        <p class="fieldError">
+          @if (messageForm.get('message')?.errors?.['required']) {
+            Le message est obligatoire.
+          } @else if (messageForm.get('message')?.errors?.['minlength']) {
+            Le message doit contenir au moins {{ messageForm.get('message')?.errors?.['minlength'].requiredLength }} caractères
+            ({{ messageForm.get('message')?.errors?.['minlength'].actualLength }}/{{ messageForm.get('message')?.errors?.['minlength'].requiredLength }}).
+          } @else if (messageForm.get('message')?.errors?.['maxlength']) {
+            Le message ne peut pas dépasser {{ messageForm.get('message')?.errors?.['maxlength'].requiredLength }} caractères.
+          }
+        </p>
+      }
     </div>
 
-    <button type="submit" [disabled]="messageForm.invalid">
-      Envoyer le message
+    <button type="submit" [disabled]="messageForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Envoi en cours...' : 'Envoyer le message' }}
     </button>
+
+    @if (submitStatus === 'success') {
+      <p class="feedback success">Message envoyé avec succès !</p>
+    }
+    @if (submitStatus === 'error') {
+      <p class="feedback error">Une erreur est survenue, veuillez réessayer.</p>
+    }
   </form>
 </div>

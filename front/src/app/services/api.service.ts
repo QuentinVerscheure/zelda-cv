@@ -75,9 +75,9 @@ export class ApiService {
     );
   }
 
-  // sendMailToOwner(mail: MailDTO): Observable<string> {
-  //   return this.http.post<string>(`${this.baseUrl}/sendMailToOwner/`, mail);
-  // }
+  sendMailToOwner(mail: MailDTO): Observable<string[]> {
+    return this.http.post<string[]>(`${this.baseUrl}/sendMailToOwner/`, mail);
+  }
 
   updateAchievement(achievement: Achievement): Observable<Achievement> {
     return this.http.put<Achievement>(

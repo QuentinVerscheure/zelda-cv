@@ -1,12 +1,14 @@
 package zeldaCV.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import zeldaCV.dto.MailDTO;
 
@@ -21,10 +23,16 @@ public class mailControler {
     @PostMapping("/")
     @Operation(summary = "send mail", description = "send mail to the owner")
     public String[] sendMail(@RequestBody MailDTO mailDto) {
+        if (mailDto.getFrom() == null || mailDto.getFrom().isBlank()
+                || mailDto.getSubject() == null || mailDto.getSubject().isBlank()
+                || mailDto.getText() == null || mailDto.getText().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "from, subject and text are all required");
+        }
         mailService.sendMail(mailDto);
         return ResponseEntity.ok()
                 .body(new String[] { "MAIL_SENT", "Mail sent successfully" })
                 .getBody();
-    }   
+    }
 
 }

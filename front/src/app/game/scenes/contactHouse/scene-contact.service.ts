@@ -14,6 +14,8 @@ export class SceneContactService extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
   private scaleOfTheGame: number = ScaleOfTheGameService.getScaleOfTheGame();
+  // disables player movement while the contact form is focused, checked in MovementService.movePlayer()
+  public isEditingComment: boolean = false;
 
   constructor(
     private movementService: MovementService,

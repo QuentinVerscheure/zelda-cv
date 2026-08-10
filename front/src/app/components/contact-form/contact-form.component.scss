@@ -44,6 +44,7 @@
       font-family: Pixelify_Sans;
       width: 100%;
       margin-top: 10px;
+      margin-bottom: 4px;
       box-sizing: border-box;
       resize: vertical;
     }
@@ -55,9 +56,16 @@
     }
     input {
       width: 100%;
-      margin-bottom: 20px;
+      margin-bottom: 4px;
       padding: 8px;
       font-size: 16px;
+    }
+
+    .fieldError {
+      font-family: Pixelify_Sans;
+      color: #c62828;
+      font-size: 12px;
+      margin: 0 0 8px;
     }
   }
 }
@@ -96,4 +104,17 @@
 
 .hidden {
   display: none;
+}
+
+.feedback {
+  font-family: Pixelify_Sans;
+  font-size: 14px;
+
+  &.success {
+    color: #2e7d32;
+  }
+
+  &.error {
+    color: #c62828;
+  }
 }
