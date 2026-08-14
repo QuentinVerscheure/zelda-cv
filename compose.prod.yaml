@@ -1,0 +1,15 @@
+services:
+
+# reset pour ne pas exposer d'api back ou DB, une seul entrée public front exposé sur le web
+# la communication front/back/DB se fait via un network docker
+# seul le Nginx installé sur VPS recois la requete user et communique avec le Nginx front docker via localhost
+  database:
+    ports: !reset []
+
+  backend:
+    ports: !reset []
+
+# Le frontend n'est disponible qu'en local
+  frontend:
+    ports: !override
+      - "127.0.0.1:8082:80"

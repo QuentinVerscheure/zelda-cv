@@ -13,8 +13,8 @@ export class WebsocketPlayerService implements OnDestroy {
   private sendIntervalSub: Subscription | null = null;
   private readonly WS_URL =
     window.location.protocol === 'https:'
-      ? `wss://${window.location.hostname}/ws/positions`
-      : `ws://${window.location.hostname}/ws/positions`;
+      ? `wss://${window.location.host}/ws/positions`
+      : `ws://${window.location.host}/ws/positions`;
 
   private myPosition: PlayerPositionDTO | null = null;
   public topPlayers$ = new BehaviorSubject<PlayerPositionDTO[]>([]);
