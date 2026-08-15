@@ -1,6 +1,7 @@
 services:
   database:
     image: mysql:8.0
+    restart: unless-stopped
 
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -23,6 +24,7 @@ services:
   backend:
     build:
       context: ./back
+    restart: unless-stopped
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/${MYSQL_DATABASE}
@@ -52,6 +54,7 @@ services:
   frontend:
     build:
       context: ./front
+    restart: unless-stopped
 
     ports:
       - "8082:80"
