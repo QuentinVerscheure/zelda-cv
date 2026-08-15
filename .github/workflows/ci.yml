@@ -53,3 +53,16 @@ jobs:
       - name: Build frontend
         working-directory: front
         run: npm run build
+
+  test-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Build backend Docker image
+        run: docker build -t zelda-cv-backend:test ./back
+
+      - name: Build frontend Docker image
+        run: docker build -t zelda-cv-frontend:test ./front
