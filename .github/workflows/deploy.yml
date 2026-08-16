@@ -34,27 +34,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Set lowercase image owner
+        run: echo "IMAGE_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_ENV"
+
       - name: Login to GHCR
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push backend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./back
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/zelda-cv-backend:latest
-            ghcr.io/${{ github.repository_owner }}/zelda-cv-backend:${{ github.sha }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/zelda-cv-backend:latest
+            ghcr.io/${{ env.IMAGE_OWNER }}/zelda-cv-backend:${{ github.sha }}
 
       - name: Build and push frontend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./front
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/zelda-cv-frontend:latest
-            ghcr.io/${{ github.repository_owner }}/zelda-cv-frontend:${{ github.sha }}
+            ghcr.io/${{ env.IMAGE_OWNER }}/zelda-cv-frontend:latest
+            ghcr.io/${{ env.IMAGE_OWNER }}/zelda-cv-frontend:${{ github.sha }}
