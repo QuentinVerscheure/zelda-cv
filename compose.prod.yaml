@@ -1,15 +1,22 @@
 services:
 
-# reset pour ne pas exposer d'api back ou DB, une seul entrée public front exposé sur le web
-# la communication front/back/DB se fait via un network docker
-# seul le Nginx installé sur VPS recois la requete user et communique avec le Nginx front docker via localhost
+  # Production : MySQL n'est pas exposé sur l'hôte.
   database:
     ports: !reset []
 
+  # Production : on utilise l'image déjà construite par GitHub Actions / GHCR.
+  # Aucun build n'est effectué sur le VPS et aucun port backend n'est publié.
   backend:
+    build: !reset null
+    image: ghcr.io/quentinverscheure/zelda-cv-backend:latest
+    pull_policy: always
     ports: !reset []
 
-# Le frontend n'est disponible qu'en local
+  # Production : idem pour Angular/Nginx.
+  # Seul Nginx sur le VPS peut joindre ce conteneur via localhost:8082.
   frontend:
+    build: !reset null
+    image: ghcr.io/quentinverscheure/zelda-cv-frontend:latest
+    pull_policy: always
     ports: !override
       - "127.0.0.1:8082:80"
