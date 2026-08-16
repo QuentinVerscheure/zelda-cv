@@ -1,19 +1,14 @@
 services:
 
-  # Production : MySQL n'est pas exposé sur l'hôte.
   database:
     ports: !reset []
 
-  # Production : on utilise l'image déjà construite par GitHub Actions / GHCR.
-  # Aucun build n'est effectué sur le VPS et aucun port backend n'est publié.
   backend:
     build: !reset null
     image: ghcr.io/quentinverscheure/zelda-cv-backend:latest
     pull_policy: always
     ports: !reset []
 
-  # Production : idem pour Angular/Nginx.
-  # Seul Nginx sur le VPS peut joindre ce conteneur via localhost:8082.
   frontend:
     build: !reset null
     image: ghcr.io/quentinverscheure/zelda-cv-frontend:latest
