@@ -2,37 +2,15 @@ name: Deploy Zelda CV
 
 on:
   workflow_dispatch:
-    permissions:
-      contents: read
-      packages: write
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  test-ssh:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-
-      - name: Add VPS to known hosts
-        run: |
-          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
-
-      - name: Test SSH connection
-        run: |
-          ssh -i ~/.ssh/deploy_key \
-            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            "echo 'SSH connection successful'; hostname; whoami"
 
   publish-images:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout repository
@@ -65,3 +43,28 @@ jobs:
           tags: |
             ghcr.io/${{ env.IMAGE_OWNER }}/zelda-cv-frontend:latest
             ghcr.io/${{ env.IMAGE_OWNER }}/zelda-cv-frontend:${{ github.sha }}
+
+  deploy-production:
+    needs: publish-images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Add VPS to known hosts
+        run: |
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'cd /opt/zelda-cv &&
+             git pull --ff-only &&
+             docker compose -f compose.yaml -f compose.prod.yaml pull &&
+             docker compose -f compose.yaml -f compose.prod.yaml up -d &&
+             docker compose -f compose.yaml -f compose.prod.yaml ps'
