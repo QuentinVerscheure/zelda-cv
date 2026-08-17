@@ -1,120 +1,246 @@
-# ZeldaCv
-You can visit the website at: [quentinverscheure.fr](https://quentinverscheure.fr)
+# Zelda CV — Interactive Full-Stack Portfolio
 
-## Credit
+> An interactive portfolio built as a 2D game: explore a map, discover my experience and projects, interact with the environment, and see other visitors in real time.
 
-This application is a resume using the theme of the game "Link's Awakening" from the Zelda franchise.  
-It has been designed to be customizable by any user.  
-Unfortunately, I don't have permission from Nintendo to use their assets for my work.  
-Please, Nintendo, don't take legal action against me. This project doesn't generate any revenue, and I'm just a poor, lonesome developer.  
-If you want to contact me: quentin.verscheure@gmail.com
+**Live:** https://quentinverscheure.fr
 
-a websocket multiplayer system allow you to see other users in real time in the map
+## Why this project?
 
-you can create a comment in the guestbook house by clicking on the book, create your comment and drag and drop it on some free space 
+Zelda CV started as a way to build a portfolio that demonstrates technical skills through the product itself rather than only listing them on a conventional résumé.
 
-## Customization
+The project combines a game-oriented Angular frontend with a Spring Boot backend and a production deployment pipeline. It covers frontend architecture, REST APIs, real-time communication, authentication, persistence, containerization, reverse proxying, HTTPS, and CI/CD.
 
-### To customize this project for your personal use, you must modify:
+## Main features
 
-#### front: In  `front/src/assets/texts`:
-- `cv_data.yaml`: your resume  
-  This is the main content of your CV.
-- `link_data.yaml`: some links  
-  Includes links like your Facebook, LinkedIn, or CodePen.
-- `portfolio_data.yaml`: your portfolio  
-  The projects you've created and the pictures to showcase.
-- `various_data.yaml`: some various information about you  
-  Includes small information like mobility, secondary languages, or hobbies.
+- **Interactive 2D portfolio** built with Angular and Phaser.
+- **CV and project exploration** directly inside the game world.
+- **Real-time multiplayer presence** through WebSockets: connected visitors can see each other moving on the map.
+- **Interactive guestbook** with persistent comments stored in MySQL.
+- **Contact form** sending email through the Spring Boot backend.
+- **JWT authentication** for protected backend endpoints.
+- **REST API documented with OpenAPI / Swagger.**
+- **Data-driven content**: CV, portfolio, links, NPC texts and other information are separated from the application logic.
+- **Responsive production deployment** behind Nginx and HTTPS.
 
-#### front: In `front/src/assets/docs`:
-- Replace the file `CV.pdf` with your own resume.
+## Tech stack
 
-#### front: In `front/src/assets/config.json`:
-- `"debugMode"`: used to activate debug mode (visibility of hitboxes and mobility of the player).
-- `"me"`:
-  - `"menuName"`: The name displayed as the title in the menu.
-  - `"cvName"`: The name given to your `CV.pdf` when downloaded.
-  - `"mail"`: Your email displayed in the ContactHouse.
+| Layer | Technologies |
+| --- | --- |
+| Frontend | Angular 21, TypeScript, Phaser, RxJS |
+| Backend | Java 17, Spring Boot 3.3, Spring Web, Spring Data JPA |
+| Realtime | WebSocket |
+| Security | Spring Security, JWT |
+| Database | MySQL 8 |
+| API documentation | Springdoc OpenAPI / Swagger UI |
+| Email | Spring Mail / Gmail SMTP |
+| Containerization | Docker, Docker Compose |
+| CI/CD | GitHub Actions, GitHub Container Registry (GHCR) |
+| Production | Ubuntu VPS, Nginx reverse proxy, HTTPS |
 
-#### front: In `front/src/environments`:
-- `environment.ts` / `environment.prod.ts`: set `apiUrl` to the URL where your own backend is reachable (defaults to `http://localhost:8080/api` in dev and `https://quentinverscheure.fr/api` in the production build).
+## Architecture
 
-#### back: In `back/src/main/resources/application.properties`:
-- `spring.datasource.url` / `username` / `password`: point to your own MySQL database (create an empty schema first, Hibernate will create the tables on first run via `spring.jpa.hibernate.ddl-auto=update`).
-- `jwt.secret`: replace with your own secret used to sign JWT tokens.
-- Mail settings (`spring.mail.*`) can be provided via the `MAIL_HOST` / `MAIL_PORT` / `MAIL_USER` / `MAIL_PASS` environment variables, but note that `JavaMailSenderConfig` currently overrides them with a hardcoded local test config (see below) — mail sending isn't fully wired up yet, on either the front or the back.
+```mermaid
+flowchart LR
+    U[Visitor] -->|HTTPS| N[Nginx - VPS]
+    N -->|localhost:8082| F[Frontend container<br/>Angular + Nginx]
+    F -->|/api| B[Backend container<br/>Spring Boot]
+    F <-->|WebSocket| B
+    B --> DB[(MySQL container)]
+    B --> SMTP[Gmail SMTP]
 
-#### back: In `JavaMailSenderConfig`:
-- your mailsender properties
-#### back: In `MailService`:
-- your email adresse
+    GH[GitHub] --> GA[GitHub Actions]
+    GA -->|Build & push| CR[GHCR]
+    CR -->|Pull image by Git SHA| VPS[Docker Compose - VPS]
+```
 
+Only the host Nginx is exposed publicly. The application containers communicate through the Docker network; MySQL and the Spring Boot port are not exposed directly to the Internet.
 
-### To modify the words of an NPC:
-#### In `front/src/assets/game`:
-- Modify the `<npc_name>_text.json` file of your NPC (e.g. `fairy_text.json`).  
-  Each line is shown for 4 seconds; once every line has been shown, there is a 6 second blank pause before the loop restarts from the first line.
+## CI/CD and production deployment
 
-## Development
+A push to `master` triggers the deployment workflow:
 
-### front:
+1. GitHub Actions builds the backend and frontend Docker images.
+2. Images are published to GHCR with both `latest` and the Git commit SHA.
+3. The deployment job connects to the VPS over SSH.
+4. Docker Compose pulls the images identified by the commit SHA.
+5. The frontend and backend containers are recreated from those immutable images.
+6. MySQL data remains persisted in a Docker volume.
 
-#### To create or edit a scene with Tiled:
+Using the Git SHA makes the deployed application version traceable and allows a previous image version to be redeployed manually if a rollback is required.
 
-- Create your PNG image.
-- Install and open Tiled.
-- Create a **New Map**. Set the **Tile Size** to 16x16 (optional), and set your image dimensions.
-- On the right, in the **Layers** panel, right-click and select **Add Tile Layer** (for tilemaps) or **Add Image Layer** (for background images).
-  - In the **Properties** panel on the left, set the image for the layer if using an Image Layer.
-- On the right, in the **Layers** panel, right-click and select **Add Object Layer** (for hitboxes or interactive objects).
-  - Ctrl + right-click to snap objects to the 16x16 grid (optional), and create your hitboxes using the **Insert Rectangle** tool.
-- Go to **File > Export As...** and choose **JSON** format.
+Production secrets are **not baked into Docker images or committed to Git**. They are injected at runtime through environment variables on the VPS.
 
-#### stack & usage
+## Repository structure
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) and currently runs on Angular 21.  
-It uses the [Phaser](https://phaser.io/) library to create the game.  
+```text
+zelda-cv/
+├── front/                  # Angular + Phaser application
+├── back/                   # Spring Boot REST/WebSocket backend
+├── .github/workflows/      # CI/CD and rollback workflows
+├── compose.yaml            # Common Docker Compose configuration
+└── compose.prod.yaml       # Production-specific Compose overrides
+```
 
-Run `ng serve` for a development server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.  
-Run `ng build` to generate the deployment files only if you modify code that isn't in the `assets` folder. The build artifacts will be stored in the `dist/` directory.
+## Local development
 
-### back:
+### Requirements
 
-#### stack & usage
+- Docker / Docker Compose, or:
+  - Node.js for the frontend
+  - Java 17 for the backend
+- MySQL 8 when running without Docker
 
-- Apache Maven 3.9.9
-- Java version: 17.0.12, vendor: Oracle Corporation
-- Spring Boot 3.3.3 with dependencies:
-  - Spring Web
-  - Spring Data JPA
-  - MySQL Driver
-  - Spring DevTools
-  - Spring Security (JWT auth)
-  - Spring Mail
-  - Springdoc OpenAPI (Swagger)
-  - WebSocket (multiplayer real time)
+### Frontend
 
-A Maven wrapper is included, so a local Maven install isn't required: use `./mvnw` (or `mvnw.cmd` on Windows) instead of `mvn` below.
+```bash
+cd front
+npm ci
+npm start
+```
 
-Run `mvn spring-boot:run` for a development server.  
-Run `mvn clean package -DskipTests` to build the jar, then `java -jar target/Zelda-cv-1.0.0.jar --spring.profiles.active=prod` to run it with the production profile (`application-prod.properties`, not committed to the repo — create it yourself next to `application.properties`).
+The Angular development server is available on `http://localhost:4200`.
 
-#### swagger
+Production build:
 
-Swagger available at: http://localhost:8080/swagger-ui/index.html  
-To use it, create an account with `POST /api/users` (Create a new user), then authenticate with `POST /api/auth/login`.  
-Copy/paste the token you receive in the response into the `Authorize` button in the top right.  
-Remember to get a new token if you change your username or password, and note that some endpoints don't require a token at all (see `SecurityConfig`).
+```bash
+npm run build
+```
 
-### DB shéma:
+### Backend
+
+A Maven Wrapper is included, so Maven does not need to be installed globally.
+
+Linux/macOS:
+
+```bash
+cd back
+./mvnw spring-boot:run
+```
+
+Windows:
+
+```powershell
+cd back
+.\mvnw.cmd spring-boot:run
+```
+
+Swagger UI is available locally at:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+### Docker
+
+The application can also be built and started through Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+The exact environment variables required by the project are documented in the repository's environment example file. Never commit real credentials.
+
+## Content customization
+
+Most portfolio content is intentionally separated from the application code.
+
+### CV and portfolio data
+
+In `front/src/assets/texts`:
+
+- `cv_data.yaml` — CV content
+- `portfolio_data.yaml` — projects
+- `link_data.yaml` — external links
+- `various_data.yaml` — additional personal information
+
+The downloadable CV is stored in:
+
+```text
+front/src/assets/docs/CV.pdf
+```
+
+General frontend configuration is located in:
+
+```text
+front/src/assets/config.json
+```
+
+### NPC dialogue
+
+NPC text files are stored under:
+
+```text
+front/src/assets/game
+```
+
+This allows dialogue/content changes without modifying the game logic.
+
+## Creating and editing maps
+
+Scenes can be edited with the software **Tiled**:
+
+1. Create or import the map image.
+2. Create tile/image layers for the visual environment.
+3. Add object layers for hitboxes and interactive zones.
+4. Export the map as JSON.
+5. Load the generated data from the Angular/Phaser frontend.
+
+The project primarily uses a 16×16 pixel grid.
+
+## API and authentication
+
+The backend exposes REST endpoints and WebSocket communication.
+
+Swagger UI can be used to inspect and test the REST API. Protected endpoints use JWT authentication through Spring Security.
+
+Typical authentication flow:
+
+```text
+Create/login user
+      ↓
+Spring Security
+      ↓
+JWT returned
+      ↓
+Authorization: Bearer <token>
+      ↓
+Protected endpoint
+```
+
+## Database
+
+Persistence is handled with Spring Data JPA and MySQL.
 
 ![Database Schema](back/src/main/resources/static/shemaDB.png)
 
-## Git convention
+In production, MySQL data is stored in a persistent Docker volume so application container deployments do not recreate the database.
 
-When a piece of code/functionality is removed because it's no longer useful for the project (but might be worth reviving later), the removal commit is tagged `delete-functionality` instead of just deleting the code outright, so it stays easy to find and restore if needed. So far this has only been used for removing the on-screen virtual joystick and its plugin (see the `delete-functionality` tag / `delete joystick` commit).
+## Security choices
 
-## Security
+- HTTPS termination through Nginx.
+- Backend and database ports are not publicly exposed.
+- SSH password authentication is disabled on the VPS; key-based authentication is used.
+- Root cannot authenticate directly over SSH with a password.
+- Production credentials are injected at runtime and excluded from Git.
+- GitHub Actions uses a dedicated SSH key for deployment.
+- GHCR images are deployed by immutable Git SHA.
+- Ubuntu unattended security upgrades are enabled.
+- UFW only exposes the required public services (SSH, HTTP and HTTPS).
 
-Deux vulnérabilités modérées subsistent sur une dépendance transitive (i18next-http-backend via phaser3-rex-plugins). Elles ne sont pas corrigées afin d'éviter une mise à jour cassante (npm audit fix --force). Elles seront réévaluées lorsqu'une version compatible de phaser3-rex-plugins sera disponible.
+Two moderate vulnerabilities currently remain in a transitive frontend dependency (`i18next-http-backend` through `phaser3-rex-plugins`). They are intentionally not force-upgraded because `npm audit fix --force` would require a potentially breaking dependency change. They are tracked for reassessment when a compatible upstream version is available.
+
+## Engineering notes
+
+Removed functionality that may be useful again is occasionally marked with the Git tag `delete-functionality` to make historical implementations easier to locate.
+
+previous focntionality: joystick on smartphone
+
+## Legal notice
+
+This is a non-commercial fan portfolio inspired by *The Legend of Zelda: Link's Awakening*. It is not affiliated with or endorsed by Nintendo. Zelda, Link's Awakening, and related visual assets and trademarks belong to their respective rights holders.
+
+## Contact
+
+**Quentin Verscheure**  
+Email: quentin.verscheure@gmail.com  
+Portfolio: https://quentinverscheure.fr
