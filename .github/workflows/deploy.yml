@@ -6,7 +6,7 @@ on:
       - master
   workflow_dispatch:
 
-  concurrency:
+concurrency:
   group: production
   cancel-in-progress: false
 
@@ -71,7 +71,7 @@ jobs:
           ssh -i ~/.ssh/deploy_key \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
             "cd /opt/zelda-cv &&
-            git pull --ff-only &&
-            IMAGE_TAG=${{ github.sha }} docker compose -f compose.yaml -f compose.prod.yaml pull &&
-            IMAGE_TAG=${{ github.sha }} docker compose -f compose.yaml -f compose.prod.yaml up -d &&
-            docker compose -f compose.yaml -f compose.prod.yaml ps"
+             git pull --ff-only &&
+             IMAGE_TAG=${{ github.sha }} docker compose -f compose.yaml -f compose.prod.yaml pull &&
+             IMAGE_TAG=${{ github.sha }} docker compose -f compose.yaml -f compose.prod.yaml up -d &&
+             IMAGE_TAG=${{ github.sha }} docker compose -f compose.yaml -f compose.prod.yaml ps"
