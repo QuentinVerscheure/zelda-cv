@@ -1,7 +1,14 @@
 name: Deploy Zelda CV
 
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch:
+
+  concurrency:
+  group: production
+  cancel-in-progress: false
 
 permissions:
   contents: read
