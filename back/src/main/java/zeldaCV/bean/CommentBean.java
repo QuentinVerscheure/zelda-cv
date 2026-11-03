@@ -1,5 +1,6 @@
 package zeldaCV.bean;
-import java.sql.Date;
+
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,10 +15,10 @@ import lombok.ToString;
 @ToString
 public class CommentBean {
     private Long id;
+    private String pseudo;
     private String comment;
     private int coordinateX;
     private int coordinateY;
-    private Long userId;
-    private String userPseudo;
-    private Date date;
+    /** Creation date, in UTC. */
+    private LocalDateTime createdAt;
 }

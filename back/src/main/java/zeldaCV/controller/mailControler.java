@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import zeldaCV.dto.MailDTO;
 
 @RestController
@@ -21,8 +22,8 @@ public class mailControler {
     private zeldaCV.service.MailService mailService;
 
     @PostMapping("/")
-    @Operation(summary = "send mail", description = "send mail to the owner")
-    public String[] sendMail(@RequestBody MailDTO mailDto) {
+    @Operation(summary = "send mail", description = "send mail to the owner. Rate limited per IP.")
+    public String[] sendMail(@Valid @RequestBody MailDTO mailDto) {
         if (mailDto.getFrom() == null || mailDto.getFrom().isBlank()
                 || mailDto.getSubject() == null || mailDto.getSubject().isBlank()
                 || mailDto.getText() == null || mailDto.getText().isBlank()) {

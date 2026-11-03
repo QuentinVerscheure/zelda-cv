@@ -11,10 +11,6 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
-    List<CommentEntity> findByCoordinateXAndCoordinateY(Long coordinateX, Long coordinateY);
-
-    List<CommentEntity> findByUserPseudo(String pseudo);
-
     /**
      * Returns all comments from the DB that are within the rectangle defined by
      * (X - width, X + width) and (Y - height, Y + height) around the given commentBean.
@@ -29,6 +25,4 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
         @Param("minY") int minY,
         @Param("maxY") int maxY
     );
-
-    boolean existsByIdAndUserPseudo(Long id, String userPseudo);
 }

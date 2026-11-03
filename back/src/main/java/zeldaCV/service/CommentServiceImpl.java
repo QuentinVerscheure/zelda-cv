@@ -2,127 +2,154 @@ package zeldaCV.service;
 
 import zeldaCV.bean.CommentBean;
 import zeldaCV.converter.CommentMapper;
+import zeldaCV.dto.CommentCreateDTO;
 import zeldaCV.dto.CommentDTO;
+import zeldaCV.dto.CommentUpdateDTO;
 import zeldaCV.model.CommentEntity;
-import zeldaCV.model.UserEntity;
 import zeldaCV.repository.CommentRepository;
-import zeldaCV.repository.UserRepository;
+import zeldaCV.util.CommentPassword;
+import zeldaCV.util.CommentRules;
+import zeldaCV.util.Pseudo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final Clock clock;
 
-    // fixe dimentions of the message. DO NOT CHANGE. 
-    // if you change it, the back can't remember the dimentions of the olds messages and will not be able 
+    // fixe dimentions of the message. DO NOT CHANGE.
+    // if you change it, the back can't remember the dimentions of the olds messages and will not be able
     // to check collision with old and new dimentions
     private static final int COMMENT_WIDTH = 131;
     private static final int COMMENT_HEIGHT = 44;
 
+    @Autowired
     public CommentServiceImpl(CommentRepository commentRepository) {
+        this(commentRepository, Clock.systemUTC());
+    }
+
+    CommentServiceImpl(CommentRepository commentRepository, Clock clock) {
         this.commentRepository = commentRepository;
-    }
-
-    @Override
-    public CommentDTO getCommentById(Long id) {
-        CommentEntity commentEntity = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
-        return CommentMapper.beanToDto(CommentMapper.entityToBean(commentEntity));
-    }
-
-    @Override
-    public List<CommentDTO> getCommentByPseudo(String pseudo) {
-        List<CommentEntity> comments = commentRepository.findByUserPseudo(pseudo);
-        return comments.stream()
-                .map(CommentMapper::entityToBean)
-                .map(CommentMapper::beanToDto)
-                .collect(Collectors.toList());
+        this.clock = clock;
     }
 
     @Override
     public List<CommentDTO> getAllComments() {
-        List<CommentEntity> comments = commentRepository.findAll();
-        return comments.stream()
-                .map(CommentMapper::entityToBean)
-                .map(CommentMapper::beanToDto)
+        return commentRepository.findAll().stream()
+                .map(CommentMapper::entityToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CommentDTO createComment(CommentDTO commentDTO) {
-        CommentBean commentBean = CommentMapper.dtoToBean(commentDTO);
+    public CommentDTO createComment(CommentCreateDTO commentCreateDto) {
+        CommentBean commentBean = CommentMapper.createDtoToBean(commentCreateDto);
+        commentBean.setPseudo(commentBean.getPseudo().trim());
+        commentBean.setComment(normalizeText(commentBean.getComment()));
 
-        if (!this.commentVerification(commentBean)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment is not valid: it overlaps a forbidden area or another comment.");
-        }
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String pseudo = authentication != null ? authentication.getName() : null;
-        UserEntity user = userRepository.findByPseudo(pseudo)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-        CommentEntity commentEntity = CommentMapper.beanToEntity(commentBean);
-        commentEntity.setUser(user);
-
-        CommentEntity savedComment = commentRepository.save(commentEntity);
-        return CommentMapper.beanToDto(CommentMapper.entityToBean(savedComment));
-    }
-
-    @Override
-    public CommentDTO updateComment(Long id, CommentDTO commentDTO) {
-
-        CommentBean commentBean = CommentMapper.dtoToBean(commentDTO);
-
-        if (!isCurrentUserOwnerOfComment(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"You are not authorized to modify this comment");
+        if (Pseudo.isForbidden(commentBean.getPseudo())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ce pseudo n'est pas autorisé");
         }
         if (!this.commentVerification(commentBean)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment is not valid: it overlaps a forbidden area or another comment.");
         }
 
+        commentBean.setCreatedAt(now());
         CommentEntity commentEntity = CommentMapper.beanToEntity(commentBean);
+        commentEntity.setPasswordHash(CommentPassword.hash(commentCreateDto.getPassword()));
 
-        CommentEntity existingCommentEntity = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
-        existingCommentEntity.setComment(commentEntity.getComment());
-        existingCommentEntity.setCoordinateX(commentEntity.getCoordinateX());
-        existingCommentEntity.setCoordinateY(commentEntity.getCoordinateY());
-        CommentEntity updatedComment = commentRepository.save(existingCommentEntity);
-        return CommentMapper.beanToDto(CommentMapper.entityToBean(updatedComment));
+        return CommentMapper.entityToDto(commentRepository.save(commentEntity));
     }
 
     @Override
-    public void deleteComment(Long id) {
-        if (!isCurrentUserOwnerOfComment(id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not authorized to delete this comment");
+    public boolean verifyPassword(Long id, String password) {
+        CommentEntity commentEntity = findComment(id);
+        return isEditWindowOpen(commentEntity) && CommentPassword.matches(password, commentEntity.getPasswordHash());
+    }
+
+    @Override
+    public CommentDTO updateComment(Long id, CommentUpdateDTO commentUpdateDto) {
+        CommentEntity existingCommentEntity = findAuthorizedComment(id, commentUpdateDto.getPassword());
+
+        CommentBean commentBean = CommentMapper.entityToBean(existingCommentEntity);
+        commentBean.setComment(normalizeText(commentUpdateDto.getComment()));
+        commentBean.setCoordinateX(commentUpdateDto.getCoordinateX());
+        commentBean.setCoordinateY(commentUpdateDto.getCoordinateY());
+
+        if (!this.commentVerification(commentBean)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment is not valid: it overlaps a forbidden area or another comment.");
         }
-        CommentEntity commentEntity = commentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
-        commentRepository.delete(commentEntity);
+
+        existingCommentEntity.setComment(commentBean.getComment());
+        existingCommentEntity.setCoordinateX(commentBean.getCoordinateX());
+        existingCommentEntity.setCoordinateY(commentBean.getCoordinateY());
+        return CommentMapper.entityToDto(commentRepository.save(existingCommentEntity));
+    }
+
+    @Override
+    public void deleteComment(Long id, String password) {
+        commentRepository.delete(findAuthorizedComment(id, password));
+    }
+
+    private CommentEntity findComment(Long id) {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Message introuvable"));
+    }
+
+    /**
+     * Returns the comment if the password matches and the edit window is still open.
+     * @throws ResponseStatusException 404 if the comment does not exist, 403 otherwise
+     */
+    private CommentEntity findAuthorizedComment(Long id, String password) {
+        CommentEntity commentEntity = findComment(id);
+        if (!CommentPassword.matches(password, commentEntity.getPasswordHash())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Vous n'êtes pas autorisé à modifier ce message");
+        }
+        if (!isEditWindowOpen(commentEntity)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Le délai de modification de " + CommentRules.EDIT_WINDOW_DAYS + " jours est dépassé");
+        }
+        return commentEntity;
+    }
+
+    private boolean isEditWindowOpen(CommentEntity commentEntity) {
+        return now().isBefore(commentEntity.getCreatedAt().plus(CommentRules.EDIT_WINDOW));
+    }
+
+    private LocalDateTime now() {
+        return LocalDateTime.now(clock);
+    }
+
+    /**
+     * Line breaks would push the text out of the fixed-size message box: they are replaced by spaces.
+     * The length is checked again after trimming (validation already rejected texts that were too long).
+     */
+    private static String normalizeText(String text) {
+        String normalized = text.replaceAll("\\s*[\\r\\n]+\\s*", " ").trim();
+        if (normalized.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Le message est obligatoire");
+        }
+        return normalized;
     }
 
         /**
      * Checks if the comment overlaps an existing comment.
-     * 
+     *
      * @param commentBean The CommentBean containing the rectangle's coordinates.
      * @return false if overlapping, true otherwise
      */
     private boolean commentVerification(CommentBean commentBean) {
         List<CommentEntity> nearbyEntities = commentRepository.findNearbyComments(
-            commentBean.getCoordinateX()-COMMENT_WIDTH, 
+            commentBean.getCoordinateX()-COMMENT_WIDTH,
             commentBean.getCoordinateX()+COMMENT_WIDTH,
             commentBean.getCoordinateY()-COMMENT_HEIGHT,
             commentBean.getCoordinateY()+COMMENT_HEIGHT);
@@ -139,7 +166,7 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Checks if the comment rectangle (fixed size) at (coordinateX, coordinateY)
      * overlaps the restricted area.
-     * 
+     *
      * @param commentBean The CommentBean containing the rectangle's coordinates.
      * @return true if overlapping, false otherwise
      */
@@ -169,7 +196,7 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Checks if the comment rectangle (fixed size) at (coordinateX, coordinateY)
      * overlaps with any comment in the provided list.
-     * 
+     *
      * @param commentBean   The CommentBean containing the rectangle's coordinates.
      * @param otherComments The list of CommentEntity to check against.
      * @return true if overlapping, false otherwise
@@ -192,20 +219,5 @@ public class CommentServiceImpl implements CommentService {
             }
         }
         return false;
-    }
-
-    /**
-     * Checks in the database if the currently authenticated user is the owner of the comment.
-     * @param commentId The ID of the comment to check.
-     * @return true if the authenticated user is the owner, false otherwise.
-     */
-    public boolean isCurrentUserOwnerOfComment(Long commentId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return false;
-        }
-        String currentUsername = authentication.getName();
-        // Query the DB to check if a comment with this id and this user pseudo exists
-        return commentRepository.existsByIdAndUserPseudo(commentId, currentUsername);
     }
 }

@@ -1,55 +1,61 @@
 package zeldaCV.converter;
 
-import zeldaCV.dto.CommentDTO;
+import java.time.ZoneOffset;
 
 import zeldaCV.bean.CommentBean;
+import zeldaCV.dto.CommentCreateDTO;
+import zeldaCV.dto.CommentDTO;
 import zeldaCV.model.CommentEntity;
 
 public class CommentMapper {
 
-    public static CommentBean dtoToBean(CommentDTO commentDto) {
-        CommentBean commentBean = new CommentBean();
-        if (commentDto.getId() != null) {
-            commentBean.setId(commentDto.getId());
-        }
-        commentBean.setComment(commentDto.getComment());
-        commentBean.setCoordinateX(commentDto.getCoordinateX());
-        commentBean.setCoordinateY(commentDto.getCoordinateY());
-        commentBean.setDate(new java.sql.Date(System.currentTimeMillis()));
-        return commentBean;
+    private CommentMapper() {
     }
 
-    public static CommentEntity beanToEntity(CommentBean commentBean) {
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setId(commentBean.getId());
-        commentEntity.setComment(commentBean.getComment());
-        commentEntity.setCoordinateX(commentBean.getCoordinateX());
-        commentEntity.setCoordinateY(commentBean.getCoordinateY());
-        commentEntity.setId(commentBean.getUserId());
-        commentEntity.setDate(new java.sql.Date(System.currentTimeMillis()));
-        return commentEntity;
+    public static CommentBean createDtoToBean(CommentCreateDTO dto) {
+        CommentBean bean = new CommentBean();
+        bean.setPseudo(dto.getPseudo());
+        bean.setComment(dto.getComment());
+        bean.setCoordinateX(dto.getCoordinateX());
+        bean.setCoordinateY(dto.getCoordinateY());
+        return bean;
     }
 
-    public static CommentBean entityToBean(CommentEntity commentEntity) {
-        CommentBean commentbean = new CommentBean();
-        commentbean.setId(commentEntity.getId());
-        commentbean.setComment(commentEntity.getComment());
-        commentbean.setCoordinateX(commentEntity.getCoordinateX());
-        commentbean.setCoordinateY(commentEntity.getCoordinateY());
-        commentbean.setUserId(commentEntity.getUser().getId());
-        commentbean.setUserPseudo(commentEntity.getUser().getPseudo());
-        commentbean.setDate(commentEntity.getDate());
-        return commentbean;
+    /** The password hash is set by the service, never copied from a bean. */
+    public static CommentEntity beanToEntity(CommentBean bean) {
+        CommentEntity entity = new CommentEntity();
+        entity.setId(bean.getId());
+        entity.setPseudo(bean.getPseudo());
+        entity.setComment(bean.getComment());
+        entity.setCoordinateX(bean.getCoordinateX());
+        entity.setCoordinateY(bean.getCoordinateY());
+        entity.setCreatedAt(bean.getCreatedAt());
+        return entity;
     }
 
-    public static CommentDTO beanToDto(CommentBean commentBean) {
-        CommentDTO commentDto = new CommentDTO();
-        commentDto.setId(commentBean.getId());
-        commentDto.setComment(commentBean.getComment());
-        commentDto.setCoordinateX(commentBean.getCoordinateX());
-        commentDto.setCoordinateY(commentBean.getCoordinateY());
-        commentDto.setUserPseudo(commentBean.getUserPseudo());
-        commentDto.setDate(commentBean.getDate());
-        return commentDto;
+    public static CommentBean entityToBean(CommentEntity entity) {
+        CommentBean bean = new CommentBean();
+        bean.setId(entity.getId());
+        bean.setPseudo(entity.getPseudo());
+        bean.setComment(entity.getComment());
+        bean.setCoordinateX(entity.getCoordinateX());
+        bean.setCoordinateY(entity.getCoordinateY());
+        bean.setCreatedAt(entity.getCreatedAt());
+        return bean;
+    }
+
+    public static CommentDTO beanToDto(CommentBean bean) {
+        CommentDTO dto = new CommentDTO();
+        dto.setId(bean.getId());
+        dto.setComment(bean.getComment());
+        dto.setCoordinateX(bean.getCoordinateX());
+        dto.setCoordinateY(bean.getCoordinateY());
+        dto.setUserPseudo(bean.getPseudo());
+        dto.setDate(bean.getCreatedAt() == null ? null : bean.getCreatedAt().toInstant(ZoneOffset.UTC));
+        return dto;
+    }
+
+    public static CommentDTO entityToDto(CommentEntity entity) {
+        return beanToDto(entityToBean(entity));
     }
 }

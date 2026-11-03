@@ -4,11 +4,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { CommentDTO } from '../models/dto/comment.dto';
-import { UserDTO } from '../models/user.model';
+import {
+  CommentCreateDTO,
+  CommentUpdateDTO,
+  CommentVerifyResponseDTO,
+} from '../models/dto/comment.dto';
 import { MailDTO } from '../models/dto/mail.dto';
-import { LoginDTO, LoginResponseDTO } from '../models/dto/login.dto';
-import { Achievement } from '../models/achievement.model';
 import { GuestBookDto } from '../models/dto/guestBook.dto';
 import { environment } from '../../environments/environment';
 
@@ -20,88 +21,33 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('accessToken');
-    return new HttpHeaders({
-      Authorization: token ? `Bearer ${token}` : ''
-    });
-  }
-
-
   getAllComments(): Observable<GuestBookDto[]> {
     return this.http.get<GuestBookDto[]>(`${this.baseUrl}/comments`);
   }
 
-  createComment(comment: CommentDTO): Observable<CommentDTO> {
-    return this.http.post<CommentDTO>(
-      `${this.baseUrl}/comments`,
-      comment,
-      { headers: this.getAuthHeaders() }
+  createComment(comment: CommentCreateDTO): Observable<GuestBookDto> {
+    return this.http.post<GuestBookDto>(`${this.baseUrl}/comments`, comment);
+  }
+
+  /** true if the password allows editing the comment (right password, edit window still open). */
+  verifyCommentPassword(id: number, password: string): Observable<CommentVerifyResponseDTO> {
+    return this.http.post<CommentVerifyResponseDTO>(
+      `${this.baseUrl}/comments/${id}/verify`,
+      { password }
     );
   }
 
-  updateComment(id: number, comment: CommentDTO): Observable<CommentDTO> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<CommentDTO>(
-      `${this.baseUrl}/comments/${id}`,
-      comment,
-      { headers: this.getAuthHeaders() }
-    );
+  updateComment(id: number, comment: CommentUpdateDTO): Observable<GuestBookDto> {
+    return this.http.put<GuestBookDto>(`${this.baseUrl}/comments/${id}`, comment);
   }
 
-  deleteComment(id: number): Observable<void> {
-    return this.http.delete<void>(
-      `${this.baseUrl}/comments/${id}`,
-      { headers: this.getAuthHeaders() }
-    );
-  }
-
-  createUser(loginDTO: LoginDTO): Observable<LoginResponseDTO> {
-    return this.http.post<LoginResponseDTO>(`${this.baseUrl}/users`, loginDTO);
-  }
-
-  updateUser(user: UserDTO): Observable<LoginResponseDTO> {
-    return this.http.put<LoginResponseDTO>(
-      `${this.baseUrl}/users`,
-      user,
-      { headers: this.getAuthHeaders() }
-    );
-  }
-
-  deleteUser(): Observable<void> {
-    return this.http.delete<void>(
-      `${this.baseUrl}/users`,
-      { headers: this.getAuthHeaders() }
-    );
+  deleteComment(id: number, password: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/comments/${id}`, {
+      headers: new HttpHeaders({ 'X-Comment-Password': password }),
+    });
   }
 
   sendMailToOwner(mail: MailDTO): Observable<string[]> {
     return this.http.post<string[]>(`${this.baseUrl}/sendMailToOwner/`, mail);
-  }
-
-  updateAchievement(achievement: Achievement): Observable<Achievement> {
-    return this.http.put<Achievement>(
-      `${this.baseUrl}/achievements`,
-      achievement,
-      { headers: this.getAuthHeaders() }
-    );
-  }
-
-  getUserAchievement(): Observable<Achievement> {
-    return this.http.get<Achievement>(
-      `${this.baseUrl}/achievements`,
-      { headers: this.getAuthHeaders() }
-    );
-  }
-
-  login(credentials: LoginDTO): Observable<LoginResponseDTO> {
-    return this.http.post<LoginResponseDTO>(`${this.baseUrl}/auth/login`, credentials);
-  }
-
-  getCurrentUser(): Observable<UserDTO> {
-    return this.http.get<UserDTO>(
-      `${this.baseUrl}/users`,
-      { headers: this.getAuthHeaders() }
-    );
   }
 }

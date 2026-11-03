@@ -1,21 +1,48 @@
 <form
   id="messageForm"
-  #loginForm="ngForm"
-  (ngSubmit)="onSubmit(loginForm)"
-  class="hidden"
+  #messageForm="ngForm"
+  (ngSubmit)="onSubmit(messageForm)"
+  [class.hidden]="!visible()"
 >
   <span class="closeButton" (click)="hideForm()">&times;</span>
   <div>
+    @if (mode() === 'create') {
+      <input
+        type="text"
+        name="pseudo"
+        id="pseudo"
+        placeholder="Votre pseudo, ex: Link"
+        [(ngModel)]="pseudo"
+        [maxlength]="rules.PSEUDO_MAX_LENGTH"
+        required
+        (focus)="disablePhaserKeyDownEvent()"
+        (blur)="enablePhaserKeyDownEvent()"
+      />
+    } @else {
+      <p class="title">Modifier le message de {{ pseudo }}</p>
+    }
     <textarea
-      type="text"
       name="message"
       id="message"
       placeholder="Ecrivez votre message ici"
-      ngModel
+      [(ngModel)]="message"
+      [maxlength]="rules.COMMENT_MAX_LENGTH"
       required
       (focus)="disablePhaserKeyDownEvent()"
       (blur)="enablePhaserKeyDownEvent()"
     ></textarea>
+    <small class="counter">{{ message.length }}/{{ rules.COMMENT_MAX_LENGTH }}</small>
   </div>
-  <button type="submit" [disabled]="!loginForm.valid">Créer le message</button>
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+  @if (mode() === 'create') {
+    <p class="info">
+      Pas besoin de compte : vous pourrez modifier ou supprimer votre message depuis ce navigateur
+      pendant {{ rules.EDIT_WINDOW_DAYS }} jours. Déposez-le ensuite où vous voulez dans la pièce.
+    </p>
+  }
+  <button type="submit" [disabled]="!messageForm.valid || !hasContent() || saving()">
+    {{ mode() === 'create' ? 'Créer le message' : 'Modifier le message' }}
+  </button>
 </form>

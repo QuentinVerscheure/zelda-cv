@@ -1,29 +1,34 @@
 import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, map, of, tap } from 'rxjs';
 import { AchievementService } from '../../../services/achievement.service';
 import { Achievement } from '../../../models/achievement.model';
 import { ApiService } from '../../../services/api.service';
 import { GuestBookComment } from '../../../models/guestBookComment.model';
-import { MenuMessageService } from '../../../components/menu/menu-message.service';
-import { CommentDTO } from '../../../models/dto/comment.dto';
 import { CommentContainer } from '../../../models/commentContainer.model';
-import { SessionStorageService } from '../../../services/session-storage.service';
+import { CommentPasswordService } from './comment-password.service';
+import { CommentFormService } from '../../../components/comment-form/comment-form.service';
 
 @Injectable({
   providedIn: 'root',
 })
 //service to manage comments in the guest book scene
-// it allows to create, display, edit and delete comments in the scene
+// it allows to create, display, edit and delete comments in the scene.
+// There are no user accounts: a visitor owns a message if this browser holds its password
+// (cookie set when the message was created, valid 7 days). The backend checks the password on every change.
 export class CommentService {
   private commentContainers: Phaser.GameObjects.Container[] = [];
 
   constructor(
     private achievementService: AchievementService,
     private apiService: ApiService,
-    private menuMessageService: MenuMessageService,
-    private sessionStorageService: SessionStorageService
+    private commentPasswordService: CommentPasswordService,
+    private commentFormService: CommentFormService
   ) {}
 
   displayComments(scaleOfTheGame: number, scene: Phaser.Scene) {
+    // the scene is recreated each time the player enters it: forget the containers of the previous visit
+    this.commentContainers = [];
     this.apiService.getAllComments().subscribe((guestBookDtos) => {
       guestBookDtos.forEach((guestBookDto) => {
         this.createComment(guestBookDto, scaleOfTheGame, scene);
@@ -56,20 +61,7 @@ export class CommentService {
     icon.body.immovable = true;
 
     icon.on('pointerdown', () => {
-      this.sessionStorageService.syncPseudoWithToken();
-      let pseudo = sessionStorage.getItem('pseudo');
-      const token = localStorage.getItem('accessToken');
-
-      if (!pseudo || !token) {
-        const errorMessage =
-          'Merci de vous authentifier/inscrire avant de poster un message';
-        this.menuMessageService.showAuthMessage(errorMessage);
-      } else {
-        this.achievementService.mergeAchievementsAndSave({
-          guestBookComment: true,
-        } as Achievement);
-        this.showForm();
-      }
+      this.commentFormService.openCreate();
     });
 
     scene.physics.add.collider(player, icon);
@@ -101,18 +93,14 @@ export class CommentService {
       dateObj = new Date();
     }
 
-    const formattedText = `${
-      guestBookComment.userPseudo
-    }   -   (${dateObj.toLocaleDateString()})\n\n${guestBookComment.comment}`;
-
-    // fixe dimentions of the message. DO NOT CHANGE. 
+    // fixe dimentions of the message. DO NOT CHANGE.
     // the back system will continue to check collision with this original defined width and height
-    // also if you change it in back, the back can't remember the dimentions of the olds messages and will not be able 
+    // also if you change it in back, the back can't remember the dimentions of the olds messages and will not be able
     // to check collision with old and new dimentions
     // in front, it's a visual detection but back will take the origin of the message and calculate
     // the dimention of the message to check collision
-    const fixedWidth = 131 * scaleOfTheGame; 
-    const fixedHeight = 44 * scaleOfTheGame; 
+    const fixedWidth = 131 * scaleOfTheGame;
+    const fixedHeight = 44 * scaleOfTheGame;
 
     const container : CommentContainer = scene.add.container(
       guestBookComment.coordinateX * scaleOfTheGame,
@@ -136,14 +124,19 @@ export class CommentService {
     const fontSize = 4 * scaleOfTheGame;
     const fontSizeString = fontSize + 'px';
 
-    const text = scene.add.text(0, 0, formattedText, {
+    const text = scene.add.text(0, 0, this.formatText(guestBookComment, dateObj, guestBookComment.comment), {
       fontFamily: 'Pixelify_Sans',
       fontSize: fontSizeString,
       color: '#000000',
       padding: { x: 10, y: 15 },
-      wordWrap: { width: fixedWidth - 20 },
+      // advanced wrap also breaks the words longer than a line
+      wordWrap: { width: fixedWidth - 20, useAdvancedWrap: true },
       align: 'left',
     });
+    text.setOrigin(0, 0);
+    text.setDepth(1);
+    // safety net: the text never goes outside the fixed-size box
+    text.setCrop(0, 0, fixedWidth, fixedHeight);
 
     container.add(text);
 
@@ -152,150 +145,254 @@ export class CommentService {
     borderGraphics.strokeRect(0, 0, fixedWidth, fixedHeight);
     container.add(borderGraphics);
 
-    //is lessage have been created by the user, add a trash icon to delete it
-    if (guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
-      const trashIcon = scene.add
-        .image(fixedWidth - 20, 20, 'trashIcon')
-        .setScale(scaleOfTheGame / 2);
-      trashIcon.setInteractive({ useHandCursor: true });
-      container.add(trashIcon);
-
-      trashIcon.on('pointerdown', () => {
-        if (container.commentId !== undefined) {
-          this.apiService.deleteComment(container.commentId).subscribe();
-        }
-        container.destroy();
-        this.commentContainers = this.commentContainers.filter(
-          (c) => c !== container
-        );
-      });
-    }
-
-    //if new comment or comment created by the user, allow to drag and drop the comment
-    text.setOrigin(0, 0);
-    text.setDepth(1);
-    if (guestBookComment.newComment || guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
-      container.setInteractive(
-        new Phaser.Geom.Rectangle(0, 0, fixedWidth, fixedHeight),
-        Phaser.Geom.Rectangle.Contains
-      );
-      scene.input.setDraggable(container);
-
-      //when comment is dragged, check if it overlaps with the restricted zone (check base on visual detection)
-      container.on(
-        'drag',
-        (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-          container.x = dragX;
-          container.y = dragY;
-          this.checkOverlap(container, fixedWidth, fixedHeight, scaleOfTheGame);
-        }
-      );
-      // when comment is dropped, check if it overlaps with the restricted zone (check base on visual detection)
-      container.on(
-        'dragend',
-        (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-          if (
-            !this.checkOverlap(
-              container,
-              fixedWidth,
-              fixedHeight,
-              scaleOfTheGame
-            )
-          ) {
-            // If overlap, do nothing
-            return;
-          }
-          
-          const commentId = (container as CommentContainer).commentId;
-          const commentDto: CommentDTO = {
-            comment: guestBookComment.comment,
-            coordinateX: container.x/scaleOfTheGame,
-            coordinateY: container.y/scaleOfTheGame,
-            date: (container as CommentContainer).date,
-            id: commentId,
-          };
-          const token = localStorage.getItem('accessToken');
-          if (!token) {
-            this.menuMessageService.showAuthMessage(
-              'Vous devez être authentifié pour modifier un commentaire.'
-            );
-            return;
-          }
-
-          if (commentId) {
-            this.apiService.updateComment(commentId, commentDto).subscribe();
-          } else {
-            this.apiService
-              .createComment(commentDto)
-              .subscribe((createdCommentDto: CommentDTO) => {
-                (container as CommentContainer).commentId =
-                  createdCommentDto.id;
-              });
-          }
-        }
-      );
-    }
-
-    // allow the comment to be edited by the user
-    if (guestBookComment.userPseudo === sessionStorage.getItem('pseudo')) {
-      text.setInteractive({ useHandCursor: true });
-      let isEditing = false;
-
-      //recreate the edition of text in order to modify the comment directly in the game 
-      text.on('pointerdown', () => {
-        if (isEditing) return;
-        isEditing = true;
-
-        // disable player movement while editing
-        if (scene && 'isEditingComment' in scene) {
-          (scene as any).isEditingComment = true;
-        }
-
-        text.setColor('#007bff');
-        let currentText = guestBookComment.comment;
-
-        if (scene.input.keyboard) {
-          const originalText = guestBookComment.comment;
-          const keyListener = (event: KeyboardEvent) => {
-            if (!isEditing) return;
-
-            if (event.key === 'Enter') {
-              isEditing = false;
-              text.setColor('#000000');
-              guestBookComment.comment = currentText;
-              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${currentText}`);
-              scene.input.keyboard?.off('keydown', keyListener);
-              // reactivate player movement
-              if (scene && 'isEditingComment' in scene) {
-                (scene as any).isEditingComment = false;
-              }
-              if (guestBookComment.id !== undefined) {
-                this.apiService.updateComment(guestBookComment.id, guestBookComment).subscribe();
-              }
-            } else if (event.key === 'Escape') {
-              isEditing = false;
-              text.setColor('#000000');
-              currentText = originalText;
-              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${originalText}`);
-              scene.input.keyboard?.off('keydown', keyListener);
-              // reactivate player movement
-              if (scene && 'isEditingComment' in scene) {
-                (scene as any).isEditingComment = false;
-              }
-            } else if (event.key === 'Backspace') {
-              currentText = currentText.slice(0, -1);
-              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${currentText}_`);
-            } else if (event.key.length === 1) {
-              currentText += event.key;
-              text.setText(`${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${currentText}_`);
-            }
-          };
-          scene.input.keyboard.on('keydown', keyListener);
-        }
-      });
-    }
-
     this.commentContainers.push(container);
+
+    const ownerContext: OwnerContext = {
+      scene,
+      container,
+      text,
+      guestBookComment,
+      dateObj,
+      scaleOfTheGame,
+      fixedWidth,
+      fixedHeight,
+      password: '',
+    };
+
+    if (guestBookComment.newComment) {
+      // new message, not saved yet: its password is generated now and stored in a cookie once saved
+      ownerContext.password = this.commentPasswordService.generatePassword();
+      this.enableOwnerControls(ownerContext);
+    } else if (guestBookComment.id != null) {
+      // existing message: the visitor owns it if this browser still has a valid password for it
+      const commentId = guestBookComment.id;
+      const password = this.commentPasswordService.get(commentId);
+      if (password) {
+        this.apiService.verifyCommentPassword(commentId, password).subscribe({
+          next: (response) => {
+            if (response.valid) {
+              ownerContext.password = password;
+              this.enableOwnerControls(ownerContext);
+            } else {
+              this.commentPasswordService.remove(commentId);
+            }
+          },
+        });
+      }
+    }
+  }
+
+  /**
+   * Gives the author of a message the controls to delete it (trash icon), move it (drag and drop)
+   * and edit its text (click on it opens the Angular form). Every change is sent with the message's password.
+   */
+  private enableOwnerControls(ctx: OwnerContext) {
+    const { scene, container, guestBookComment, scaleOfTheGame, fixedWidth, fixedHeight } = ctx;
+
+    // last position saved in DB, to put the message back if the backend refuses a move
+    let savedPosition = { x: container.x, y: container.y };
+    let dragStartPosition = { x: container.x, y: container.y };
+    let isSaving = false;
+    let isDeleting = false;
+
+    // trash icon to delete the message
+    const trashIcon = scene.add
+      .image(fixedWidth - 20, 20, 'trashIcon')
+      .setScale(scaleOfTheGame / 2);
+    trashIcon.setInteractive({ useHandCursor: true });
+    container.add(trashIcon);
+
+    trashIcon.on('pointerdown', () => {
+      isDeleting = true;
+      const commentId = container.commentId;
+      if (commentId === undefined) {
+        // not saved yet: only remove it from the scene
+        this.destroyComment(container);
+        return;
+      }
+      this.apiService.deleteComment(commentId, ctx.password).subscribe({
+        next: () => {
+          this.commentPasswordService.remove(commentId);
+          this.destroyComment(container);
+        },
+        error: (err) => {
+          isDeleting = false;
+          this.showError(scene, container, scaleOfTheGame, err);
+        },
+      });
+    });
+
+    // allow to drag and drop the comment
+    container.setInteractive(
+      new Phaser.Geom.Rectangle(0, 0, fixedWidth, fixedHeight),
+      Phaser.Geom.Rectangle.Contains
+    );
+    container.input!.cursor = 'pointer';
+    scene.input.setDraggable(container);
+
+    container.on('dragstart', () => {
+      dragStartPosition = { x: container.x, y: container.y };
+    });
+
+    //when comment is dragged, check if it overlaps with the restricted zone (check base on visual detection)
+    container.on(
+      'drag',
+      (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+        container.x = dragX;
+        container.y = dragY;
+        this.checkOverlap(container, fixedWidth, fixedHeight, scaleOfTheGame);
+      }
+    );
+    // a click (no real move) opens the edit form; a drop saves the message (creation or move)
+    container.on('dragend', () => {
+      if (isDeleting) {
+        return;
+      }
+      const moved = Phaser.Math.Distance.Between(
+        dragStartPosition.x,
+        dragStartPosition.y,
+        container.x,
+        container.y
+      );
+      if (moved < 3) {
+        container.x = dragStartPosition.x;
+        container.y = dragStartPosition.y;
+        this.openEditForm(ctx);
+        return;
+      }
+
+      if (
+        !this.checkOverlap(container, fixedWidth, fixedHeight, scaleOfTheGame) ||
+        isSaving
+      ) {
+        return;
+      }
+
+      const coordinateX = Math.round(container.x / scaleOfTheGame);
+      const coordinateY = Math.round(container.y / scaleOfTheGame);
+      const commentId = container.commentId;
+      isSaving = true;
+
+      if (commentId !== undefined) {
+        this.apiService
+          .updateComment(commentId, {
+            comment: guestBookComment.comment,
+            coordinateX,
+            coordinateY,
+            password: ctx.password,
+          })
+          .subscribe({
+            next: () => {
+              savedPosition = { x: container.x, y: container.y };
+              isSaving = false;
+            },
+            error: (err) => {
+              container.x = savedPosition.x;
+              container.y = savedPosition.y;
+              this.checkOverlap(container, fixedWidth, fixedHeight, scaleOfTheGame);
+              this.showError(scene, container, scaleOfTheGame, err);
+              isSaving = false;
+            },
+          });
+      } else {
+        this.apiService
+          .createComment({
+            pseudo: guestBookComment.userPseudo,
+            comment: guestBookComment.comment,
+            coordinateX,
+            coordinateY,
+            password: ctx.password,
+          })
+          .subscribe({
+            next: (createdComment) => {
+              if (createdComment.id != null) {
+                container.commentId = createdComment.id;
+                guestBookComment.id = createdComment.id;
+                this.commentPasswordService.save(createdComment.id, ctx.password);
+              }
+              savedPosition = { x: container.x, y: container.y };
+              this.achievementService.mergeAchievementsAndSave({
+                guestBookComment: true,
+              } as Achievement);
+              isSaving = false;
+            },
+            error: (err) => {
+              // stays draggable: the visitor can drop it again to retry
+              this.showError(scene, container, scaleOfTheGame, err);
+              isSaving = false;
+            },
+          });
+      }
+    });
+  }
+
+  /** Opens the Angular form to edit the text of one of the visitor's messages. */
+  private openEditForm(ctx: OwnerContext) {
+    const { container, text, guestBookComment, scaleOfTheGame } = ctx;
+    this.commentFormService.openEdit({
+      pseudo: guestBookComment.userPseudo,
+      comment: guestBookComment.comment,
+      submit: (newComment: string): Observable<void> => {
+        const applyInScene = () => {
+          guestBookComment.comment = newComment;
+          text.setText(this.formatText(guestBookComment, ctx.dateObj, newComment));
+          text.setCrop(0, 0, ctx.fixedWidth, ctx.fixedHeight);
+        };
+        const commentId = container.commentId;
+        if (commentId === undefined) {
+          // not saved yet: it will be saved with its new text when dropped
+          applyInScene();
+          return of(undefined);
+        }
+        return this.apiService
+          .updateComment(commentId, {
+            comment: newComment,
+            coordinateX: Math.round(container.x / scaleOfTheGame),
+            coordinateY: Math.round(container.y / scaleOfTheGame),
+            password: ctx.password,
+          })
+          .pipe(
+            tap(() => applyInScene()),
+            map(() => undefined)
+          );
+      },
+    });
+  }
+
+  private formatText(guestBookComment: GuestBookComment, dateObj: Date, message: string): string {
+    return `${guestBookComment.userPseudo}   -   (${dateObj.toLocaleDateString()})\n\n${message}`;
+  }
+
+  private destroyComment(container: Phaser.GameObjects.Container) {
+    container.destroy();
+    this.commentContainers = this.commentContainers.filter(
+      (c) => c !== container
+    );
+  }
+
+  /**
+   * Shows the backend error message above the comment for a few seconds
+   * (e.g. too many messages, 7-day edit window expired...).
+   */
+  private showError(
+    scene: Phaser.Scene,
+    container: Phaser.GameObjects.Container,
+    scaleOfTheGame: number,
+    err: HttpErrorResponse
+  ) {
+    const message: string =
+      err?.error?.error || 'Une erreur est survenue, merci de réessayer plus tard';
+    const errorText = scene.add.text(container.x, container.y - 4 * scaleOfTheGame, message, {
+      fontFamily: 'Pixelify_Sans',
+      fontSize: 4 * scaleOfTheGame + 'px',
+      color: '#ffffff',
+      backgroundColor: '#c0392b',
+      padding: { x: 6, y: 4 },
+      wordWrap: { width: 131 * scaleOfTheGame },
+    });
+    errorText.setOrigin(0, 1);
+    errorText.setDepth(10);
+    scene.time.delayedCall(4000, () => errorText.destroy());
   }
 
   createBackgroundGraphics(
@@ -398,14 +495,18 @@ export class CommentService {
 
     backgroundGraphics.fillRect(0, 0, width, height);
   }
+}
 
-  /**
-   *  show the form to create the message
-   */
-  showForm() {
-    const form = document.getElementById('messageForm');
-    if (form) {
-      form.classList.remove('hidden');
-    }
-  }
+/** What the owner controls of a message need to know about it. */
+interface OwnerContext {
+  scene: Phaser.Scene;
+  container: CommentContainer;
+  text: Phaser.GameObjects.Text;
+  guestBookComment: GuestBookComment;
+  dateObj: Date;
+  scaleOfTheGame: number;
+  fixedWidth: number;
+  fixedHeight: number;
+  /** password of the message, sent with every change */
+  password: string;
 }

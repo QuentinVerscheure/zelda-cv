@@ -26,9 +26,9 @@ Run all commands from inside `back/`.
 - `./mvnw test` — run the test suite (`mvn test` if you have Maven installed globally)
 - `./mvnw clean package -DskipTests` — build the deployable jar (`target/Zelda-cv-1.0.0.jar`)
 - `java -jar target/Zelda-cv-1.0.0.jar --spring.profiles.active=prod` — run with the `prod` profile (`application-prod.properties`, gitignored, holds real DB/JWT/CORS secrets)
-- Swagger UI: http://localhost:8080/swagger-ui/index.html — create a user via `POST /api/users`, log in via `POST /api/auth/login`, paste the returned token into the "Authorize" button.
+- Swagger UI: http://localhost:8080/swagger-ui/index.html (also exposed in production through the frontend nginx). No authentication: guestbook writes are authorized by the per-message password (see below).
 
-The backend needs a MySQL database (`spring.datasource.url` in `application.properties`) matching the schema in `back/src/main/resources/static/shemaDB.png`.
+The backend needs a MySQL database (`spring.datasource.url` in `application.properties`). The schema is owned by Flyway migrations in `back/src/main/resources/db/migration/`, applied automatically at startup (`ddl-auto=validate`: Hibernate only checks entities match). Schema changes = a new `V<n>__*.sql` migration, never edit an applied one.
 
 ## Architecture
 
@@ -45,22 +45,25 @@ Shared game logic lives in `front/src/app/game/core/`:
 
 Content is data-driven via YAML files in `front/src/assets/texts/` (`cv_data.yaml`, `link_data.yaml`, `portfolio_data.yaml`, `various_data.yaml`) plus `front/src/assets/config.json` for menu name/CV filename/contact email/debug mode. NPC dialogue text lives in per-NPC JSON files under `front/src/assets/game/`. This is the intended customization surface documented in `README.md` for anyone forking the project for their own resume.
 
+Guestbook ownership (no user accounts): `comment.service.ts` + `comment-password.service.ts`. On creation the browser generates a random password, sends it with `POST /api/comments` and stores it in a cookie `gb_pw_<id>` for 7 days; owner controls (trash, drag, click = edit in the Angular form `comment-form`) are enabled only after `POST /api/comments/{id}/verify` confirms it. Text limits (pseudo 20, message 250 chars) come from the fixed 131x44 message box and are duplicated in `comment-rules.ts` and `CommentRules.java` — keep them in sync. Achievements are client-side only (cookie, `achievement-storage.service.ts`).
+
 Multiplayer: `websocket-player.service.ts` sends the local player's position/scene over a WebSocket and `player-sync.service.ts` renders the other players' sprites received from the backend broadcast.
 
 Map/scene assets (tilesets, collision maps, atlases) are authored externally with Tiled and GIMP — see the "To create or edit a scene with Tiled" section of `README.md`. Editable source files (`.tiled-project`, `.tiled-session`, `.xcf`, `.tmx`) live in `front/divers/`; exported JSON/PNG game assets used at runtime live in `front/src/assets/game/`.
 
 ### Backend: layered Spring Boot app
 
-Standard `controller → service (+ Impl) → repository → model` layering per domain under `back/src/main/java/zeldaCV/`: `user`, `comment` (guestbook), `achievement`, plus a `mailControler` for the contact form. DTOs and mapping live in `dto/` and `converter/` (mappers), not in the entities.
+Standard `controller → service (+ Impl) → repository → model` layering under `back/src/main/java/zeldaCV/`: `comment` (guestbook) plus a `mailControler` for the contact form. DTOs and mapping live in `dto/` and `converter/` (mappers), not in the entities.
 
-- Auth: JWT-based (`security/jwt/`: `JwtAuthenticationFilter`, `JwtTokenProvider`), configured in `security/SecurityConfig.java`. Endpoint authorization is declared per-route there (GET comments/achievements/users and login/registration are public; POST/PUT/DELETE comments, and everything else under `/api/**`, require auth). CORS origin is driven by `app.cors.allowed-origin` (wildcard in dev, locked to the production domain in the `prod` profile).
+- No Spring Security / no accounts. Guestbook edits/deletes are authorized by a per-message password: `CommentServiceImpl` stores its SHA-256 hash (`util/CommentPassword`) and enforces a 7-day edit window (`util/CommentRules`). The password hash must never be exposed (responses use `CommentDTO`, which has no password field).
+- Anti-abuse: bean validation on DTOs (`@Valid`) and an in-memory per-IP rate limit (`ratelimit/RateLimitInterceptor`, limits in `app.rate-limit.*`) on guestbook writes and the contact mail. The client IP comes from `X-Forwarded-For`, resolved by Tomcat (`server.forward-headers-strategy=native`, trusting private/loopback proxies only): the chain is VPS host nginx → frontend container nginx (`front/nginx.conf`) → backend.
+- CORS is configured in `config/WebConfig.java`, origin driven by `app.cors.allowed-origin` (wildcard in dev, locked to the production domain in the `prod` profile).
 - WebSocket multiplayer: `websocket/PlayerPositionWebSocketHandler` keeps an in-memory `ConcurrentHashMap` of the latest position per session, and on a fixed 200ms `@Scheduled` tick broadcasts up to ~50 other players in the *same scene* back to each connected client (`TopPlayersDTO`). State is in-memory only — restarting the backend clears all live positions (fine, since it's just visual presence, not persisted data).
-- Achievements: unlocked client-side and synced via `AchievementController`/`AchievementService`, keyed by constants in `constants/AchievementConstants.java`.
 - Mail: contact form submissions go through `MailService`/`JavaMailSenderConfig` (SMTP settings via env vars, see `application.properties`).
 
 ### Configuration/secrets
 
-`back/src/main/resources/application-prod.properties` (gitignored) holds real DB credentials, JWT secret, and the production CORS origin — never commit real values here; `application.properties` in the repo only has local/dev placeholders. Frontend API base URL is set per-build via `front/src/environments/environment*.ts`.
+`back/src/main/resources/application-prod.properties` (gitignored) holds real DB credentials and the production CORS origin — never commit real values here; `application.properties` in the repo only has local/dev placeholders. Frontend API base URL is set per-build via `front/src/environments/environment*.ts`.
 
 ### Known/accepted issue
 

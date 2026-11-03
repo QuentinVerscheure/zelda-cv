@@ -22,12 +22,6 @@
     cursor: pointer;
   }
 
-  .error {
-    color: red;
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
   .burger-menu {
     font-size: 30px;
     cursor: pointer;
@@ -75,99 +69,6 @@
 
       .AchievementDone {
         color: black;
-      }
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-
-      label {
-        margin: 5px 0 2px;
-        font-weight: bold;
-      }
-
-      input {
-        margin-bottom: 10px;
-        padding: 5px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
-      button {
-        font-family: Pixelify_Sans;
-        padding: 10px;
-        margin: 10px;
-        font-size: 16px;
-        background-color: #cacaca;
-        color: black;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-
-        animation: fadeIn 1.5s;
-        transition: opacity 1.5s;
-        opacity: 1;
-
-        &:hover {
-          background-color: #424242;
-          color: white;
-        }
-
-        small {
-          font-size: 12px;
-          width: 100%;
-        }
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      @keyframes fadeOut {
-        from {
-          opacity: 1;
-        }
-        to {
-          opacity: 0;
-        }
-      }
-
-      .fade-anim {
-        animation: fadeIn 1.5s;
-        transition: opacity 1.5s;
-        opacity: 0 !important;
-      }
-
-      @keyframes greenOut {
-        from {
-          background-color: rgb(76, 163, 76);
-        }
-        to {
-          background-color: #cacaca;
-        }
-      }
-
-      @keyframes greenIn {
-        from {
-          background-color: #cacaca;
-        }
-        to {
-          background-color: rgb(76, 163, 76);
-        }
-      }
-
-      .buttonSuccess {
-        animation: greenIn 1.5s;
-      }
-      .buttonReturnNormal {
-        animation: greenOut 1.5s;
       }
     }
   }
