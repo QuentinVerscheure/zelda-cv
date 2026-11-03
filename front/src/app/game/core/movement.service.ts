@@ -26,6 +26,9 @@ export class MovementService {
   private direction: string = '';
   private isMoving: boolean = false;
 
+  // when true, the player stays still until every direction key and the pointer are released
+  private waitingForInputRelease: boolean = false;
+
   /**
    * Initialize the keyboard input and joystick
    * the game isn't qwerty friendly
@@ -85,6 +88,23 @@ export class MovementService {
       player.setVelocity(0, 0);
       player.stop();
       return;
+    }
+
+    // after arriving in a scene, ignore the key/pointer still held from the previous scene
+    if (this.waitingForInputRelease) {
+      const inputStillHeld =
+        scene.input.activePointer.isDown ||
+        !!(
+          this.cursors?.up.isDown ||
+          this.cursors?.down.isDown ||
+          this.cursors?.left.isDown ||
+          this.cursors?.right.isDown
+        );
+      if (inputStillHeld) {
+        player.setVelocity(0, 0);
+        return;
+      }
+      this.waitingForInputRelease = false;
     }
 
     // Keyboard input
@@ -148,6 +168,25 @@ export class MovementService {
           break;
       }
     }
+  }
+
+  /**
+   * Stops the player when arriving in a scene and keeps it still, facing the given direction,
+   * until the visitor releases the keys/pointer used in the previous scene.
+   * Useful when the arrival point is right next to the exit (e.g. stairs): without it, keeping
+   * the same key pressed walks the player straight back into the exit.
+   */
+  waitForInputRelease(
+    player: Phaser.Physics.Arcade.Sprite,
+    facingDirection: 'top' | 'down' | 'left' | 'right'
+  ) {
+    this.waitingForInputRelease = true;
+    this.mousePointerDown = false;
+    this.targetX = null;
+    this.targetY = null;
+    this.isMoving = false;
+    this.direction = facingDirection;
+    if (player.body) player.setVelocity(0, 0);
   }
 
   registerPointerAndUpdateEvents(

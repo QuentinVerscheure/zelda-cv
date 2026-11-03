@@ -99,6 +99,9 @@ export class SceneGuestBookService2 extends Phaser.Scene {
     );
 
     this.movementService.initializeInput(this, this.player, this.scaleOfTheGame);
+    // the player arrives just below the stairs while still walking up: wait for the key to be
+    // released, otherwise they would immediately go back up the stairs
+    this.movementService.waitForInputRelease(this.player, 'down');
 
     this.collisionService.createSceneTransitionCollision(
       this,

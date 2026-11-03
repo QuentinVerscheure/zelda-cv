@@ -78,6 +78,12 @@ export class SceneGuestBookService1 extends Phaser.Scene {
     );
 
     this.movementService.initializeInput(this, this.player, this.scaleOfTheGame);
+    // coming back up from the basement (landing coordinates given), the player arrives right in
+    // front of the stairs while still walking up: wait for the key to be released, otherwise they
+    // would immediately go back down. Coming from the village (no data), nothing changes.
+    if (data?.y !== undefined) {
+      this.movementService.waitForInputRelease(this.player, 'down');
+    }
 
     this.collisionService.createSceneTransitionCollision(
       this,
