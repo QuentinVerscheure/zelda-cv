@@ -3,6 +3,7 @@ import { BehaviorSubject, interval, Subscription } from 'rxjs';
 import { PlayerPositionDTO, TopPlayersDTO } from '../models/dto/top-players.dto';
 import { escapeString } from '../utils/sanitize-string.util';
 import { ScaleOfTheGameService } from '../game/core/scale-of-the-game.service';
+import { PseudoService } from './pseudo.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,10 @@ export class WebsocketPlayerService implements OnDestroy {
   // This will be used to identify an unregister and unname player in the WebSocket communication
   private uuid: string;
 
-  constructor(private ngZone: NgZone) {
+  constructor(
+    private ngZone: NgZone,
+    private pseudoService: PseudoService
+  ) {
             // generate or retrieve a unique identifier for the user
     // This will be used to identify an unregister and unname player in the WebSocket communication
     const storedUuid = sessionStorage.getItem('uuid');
@@ -104,7 +108,7 @@ export class WebsocketPlayerService implements OnDestroy {
     this.currentScene = sceneName;
     if (!this.myPosition) {
       this.myPosition = {
-        pseudo: sessionStorage.getItem('pseudo') || '',
+        pseudo: this.pseudoService.current(),
         x: player.x,
         y: player.y,
         scene: sceneName,
@@ -123,7 +127,7 @@ export class WebsocketPlayerService implements OnDestroy {
         // /this.scaleOfTheGame because the position in player object is scale with a diff desktop/smartphone scaleOfTheGame.
         this.myPosition.x = this.playerRef.x / this.scaleOfTheGame;
         this.myPosition.y = this.playerRef.y / this.scaleOfTheGame;
-        this.myPosition.pseudo = sessionStorage.getItem('pseudo') || '';
+        this.myPosition.pseudo = this.pseudoService.current();
         this.myPosition.scene = this.currentScene;
         this.myPosition.uuid = this.uuid;
         this.ws.send(JSON.stringify(this.myPosition));

@@ -73,6 +73,20 @@
     }
   }
 
+  .pseudo {
+    input {
+      font-family: Pixelify_Sans;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    small {
+      display: block;
+      margin-top: 4px;
+      color: rgb(120, 120, 120);
+    }
+  }
+
   a {
     text-decoration: none;
     color: inherit;

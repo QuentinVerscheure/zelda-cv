@@ -10,6 +10,7 @@ import {
   normalizeCommentText,
 } from '../../game/scenes/guestBookHouse/comment-rules';
 import { CommentEditRequest, CommentFormService } from './comment-form.service';
+import { PseudoService } from '../../services/pseudo.service';
 
 /** Form to write a new guestbook message or edit one of the visitor's messages. */
 @Component({
@@ -27,19 +28,33 @@ export class CommentFormComponent implements OnInit {
   readonly saving = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
-  // the last pseudo used is reused (also shown to the other players in multiplayer)
-  pseudo = sessionStorage.getItem('pseudo') ?? '';
   message = '';
 
   private editRequest: CommentEditRequest | null = null;
+  private editedMessagePseudo = '';
 
   constructor(
     private sceneGuestBookService2: SceneGuestBookService2,
     private commentService: CommentService,
     private commentFormService: CommentFormService,
     private movementService: MovementService,
+    private pseudoService: PseudoService,
     private destroyRef: DestroyRef
   ) {}
+
+  /**
+   * New message: the player's pseudo, linked to the menu field (editing one updates the other).
+   * Edited message: the pseudo of that message, which can't be changed.
+   */
+  get pseudo(): string {
+    return this.mode() === 'edit' ? this.editedMessagePseudo : this.pseudoService.pseudo();
+  }
+
+  set pseudo(value: string) {
+    if (this.mode() === 'create') {
+      this.pseudoService.set(value);
+    }
+  }
 
   ngOnInit() {
     this.commentFormService.createRequest$
@@ -47,7 +62,6 @@ export class CommentFormComponent implements OnInit {
       .subscribe(() => {
         this.editRequest = null;
         this.mode.set('create');
-        this.pseudo = sessionStorage.getItem('pseudo') ?? this.pseudo;
         this.message = '';
         this.open();
       });
@@ -57,7 +71,7 @@ export class CommentFormComponent implements OnInit {
       .subscribe((request) => {
         this.editRequest = request;
         this.mode.set('edit');
-        this.pseudo = request.pseudo;
+        this.editedMessagePseudo = request.pseudo;
         this.message = request.comment;
         this.open();
       });
@@ -79,8 +93,7 @@ export class CommentFormComponent implements OnInit {
   }
 
   private submitCreate() {
-    const pseudo = this.pseudo.trim();
-    sessionStorage.setItem('pseudo', pseudo);
+    const pseudo = this.pseudoService.current();
 
     // the message is only saved when the player drops it somewhere in the scene (see CommentService)
     const guestBookComment: GuestBookComment = {

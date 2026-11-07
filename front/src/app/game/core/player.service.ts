@@ -6,6 +6,8 @@ import { PlayerPositionDTO } from '../../models/dto/top-players.dto';
   providedIn: 'root',
 })
 export class PlayerService {
+  private static readonly WORLD_SCENE_KEY = 'sceneWorld';
+
   constructor(private movementService: MovementService) {}
 
   /**
@@ -87,71 +89,65 @@ export class PlayerService {
       this.movementService.moveOtherPlayer(sprite, playerDTO, oldX, oldY, scene);
     }
 
-    // display the pseudo above the sprite if it exists
-    if (playerDTO.pseudo && playerDTO.pseudo.trim() !== '') {
-      let labelContainer = (sprite as any).pseudoLabel as Phaser.GameObjects.Container | undefined;
-      let pseudoText: Phaser.GameObjects.Text | undefined;
-
-      let shouldRecreate = false;
-      if (labelContainer) {
-        pseudoText = labelContainer.list.find(obj => obj instanceof Phaser.GameObjects.Text) as Phaser.GameObjects.Text;
-        if (!pseudoText || pseudoText.text !== playerDTO.pseudo) {
-          // Pseudo changed, destroy old label
-          labelContainer.destroy();
-          (sprite as any).pseudoLabel = undefined;
-          shouldRecreate = true;
-        }
-      } else {
-        shouldRecreate = true;
-      }
-
-      if (shouldRecreate) {
-        // Create a container for the label
-        labelContainer = scene.add.container();
-        const tempText = scene.add.text(0, 0, playerDTO.pseudo, {
-          fontFamily: 'Pixelify_Sans',
-          fontSize: `${4 * scaleOfTheGame}px`,
-        });
-        const textWidth = tempText.width;
-        tempText.destroy();
-        const padding = 4 * scaleOfTheGame;
-        const bgWidth = textWidth + padding * 2;
-        const bgHeight = 6 * scaleOfTheGame;
-
-        const bg = scene.add.rectangle(
-          0,
-          0,
-          bgWidth,
-          bgHeight,
-          0x000000,
-          0.5
-        );
-        bg.setOrigin(0.5, -0.50);
-
-        pseudoText = scene.add.text(0, 0, playerDTO.pseudo, {
-          fontFamily: 'Pixelify_Sans',
-          fontSize: `${4 * scaleOfTheGame}px`,
-          color: '#ffffff',
-          align: 'center',
-        });
-        pseudoText.setOrigin(0.5, -0.80);
-
-        labelContainer.add(bg);
-        labelContainer.add(pseudoText);
-        labelContainer.setDepth(20);
-        labelContainer.x = playerDTO.x;
-        labelContainer.y = playerDTO.y - 18 * scaleOfTheGame;
-        scene.events.on('update', () => {
-          labelContainer!.x = sprite.x;
-          labelContainer!.y = sprite.y - 18 * scaleOfTheGame;
-        });
-        (sprite as any).pseudoLabel = labelContainer;
-      }
-    } else if ((sprite as any).pseudoLabel) {
-      (sprite as any).pseudoLabel.destroy();
-      (sprite as any).pseudoLabel = undefined;
-    }
+    this.updatePseudoLabel(scene, sprite, playerDTO.pseudo?.trim() ?? '', scaleOfTheGame);
 
     return sprite;
+  }
+
+  /**
+   * Display the pseudo above another player's sprite (nothing when the pseudo is empty).
+   * The label is created once and its text updated in place: the pseudo can change on every
+   * keystroke of the menu field.
+   */
+  private updatePseudoLabel(
+    scene: Phaser.Scene,
+    sprite: Phaser.Physics.Arcade.Sprite,
+    pseudo: string,
+    scaleOfTheGame: number
+  ) {
+    let label = (sprite as any).pseudoLabel as Phaser.GameObjects.Container | undefined;
+
+    if (pseudo === '') {
+      label?.destroy();
+      (sprite as any).pseudoLabel = undefined;
+      return;
+    }
+
+    // the world map is much bigger than the houses: the label is twice as big to stay readable
+    const size = scaleOfTheGame * (scene.scene.key === PlayerService.WORLD_SCENE_KEY ? 2 : 1);
+    const padding = 4 * size;
+    const height = 6 * size;
+    // bottom of the label, just above the head of the sprite
+    const offsetY = 9 * scaleOfTheGame;
+
+    if (!label) {
+      const background = scene.add.rectangle(0, 0, 0, height, 0x000000, 0.5).setOrigin(0.5, 1);
+      const text = scene.add
+        .text(0, -height / 2, '', {
+          fontFamily: 'Pixelify_Sans',
+          fontSize: `${4 * size}px`,
+          color: '#ffffff',
+          align: 'center',
+        })
+        .setOrigin(0.5, 0.5);
+
+      const newLabel = scene.add.container(sprite.x, sprite.y - offsetY, [background, text]);
+      newLabel.setDepth(20);
+      const follow = () => newLabel.setPosition(sprite.x, sprite.y - offsetY);
+      scene.events.on('update', follow);
+      newLabel.once('destroy', () => scene.events.off('update', follow));
+
+      label = newLabel;
+      (sprite as any).pseudoLabel = label;
+    }
+
+    const [background, text] = label.list as [
+      Phaser.GameObjects.Rectangle,
+      Phaser.GameObjects.Text,
+    ];
+    if (text.text !== pseudo) {
+      text.setText(pseudo);
+      background.setSize(text.width + padding * 2, height);
+    }
   }
 }

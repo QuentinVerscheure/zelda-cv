@@ -90,6 +90,24 @@
           </ul>
         </div>
       }
+      <h3 (click)="changeSection('pseudo')">Pseudo</h3>
+      @if (!isSmartphone || currentSection === 'pseudo') {
+        <div class="pseudo">
+          <input
+            type="text"
+            id="menu-pseudo"
+            name="menu-pseudo"
+            placeholder="Ex : Link"
+            autocomplete="off"
+            aria-label="Votre pseudo, visible des autres joueurs"
+            [value]="pseudoService.pseudo()"
+            (input)="onPseudoInput($event)"
+            [attr.maxlength]="pseudoMaxLength"
+            appGameTextInput
+            />
+          <small>Visible au-dessus de votre personnage par les autres joueurs.</small>
+        </div>
+      }
           <h3 (click)="changeSection('noTime')">CV</h3>
           @if (!isSmartphone || currentSection === 'noTime') {
             <div>

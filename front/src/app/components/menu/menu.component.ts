@@ -6,10 +6,13 @@ import { Achievement } from '../../models/achievement.model';
 import { AchievementStorageService } from '../../services/achievement-storage.service';
 import { BehaviorSubject } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { PseudoService } from '../../services/pseudo.service';
+import { GameTextInputDirective } from '../../utils/game-text-input.directive';
+import { COMMENT_RULES } from '../../game/scenes/guestBookHouse/comment-rules';
 
 @Component({
     selector: 'app-menu',
-    imports: [RouterModule, CommonModule],
+    imports: [RouterModule, CommonModule, GameTextInputDirective],
     templateUrl: './menu.component.html',
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./menu.component.scss']
@@ -23,9 +26,12 @@ export class MenuComponent implements OnInit {
 
   achievements$: BehaviorSubject<Achievement | null>;
 
+  readonly pseudoMaxLength = COMMENT_RULES.PSEUDO_MAX_LENGTH;
+
   constructor(
     private configService: ConfigService,
-    private achievementStorageService: AchievementStorageService
+    private achievementStorageService: AchievementStorageService,
+    readonly pseudoService: PseudoService
   ) {
     this.achievements$ = this.achievementStorageService.achievements$;
   }
@@ -42,6 +48,11 @@ export class MenuComponent implements OnInit {
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
+  }
+
+  /** No confirm button: every keystroke updates the pseudo (multiplayer label, guestbook form). */
+  onPseudoInput(event: Event) {
+    this.pseudoService.set((event.target as HTMLInputElement).value);
   }
 
   changeSection(section: string) {
