@@ -13,8 +13,6 @@ export class MovementService {
     D: Phaser.Input.Keyboard.Key | null;
   } = { Z: null, Q: null, S: null, D: null };
 
-  private joystick: any;
-
   //coordinates of mouse click for pointer movement
   private targetX: number | null = null;
   private targetY: number | null = null;
@@ -30,7 +28,7 @@ export class MovementService {
   private waitingForInputRelease: boolean = false;
 
   /**
-   * Initialize the keyboard input and joystick
+   * Initialize the keyboard input
    * the game isn't qwerty friendly
    *
    * Called by every scene on creation, so it also starts the scene with a clean movement state.

@@ -252,8 +252,7 @@ In production, MySQL data is stored in a persistent Docker volume so application
 - GHCR images are deployed by immutable Git SHA.
 - Ubuntu unattended security upgrades are enabled.
 - UFW only exposes the required public services (SSH, HTTP and HTTPS).
-
-Two moderate vulnerabilities currently remain in a transitive frontend dependency (`i18next-http-backend` through `phaser3-rex-plugins`). They are intentionally not force-upgraded because `npm audit fix --force` would require a potentially breaking dependency change. They are tracked for reassessment when a compatible upstream version is available.
+- Unused dependencies are removed rather than kept around: every dependency is attack surface.
 
 ## Engineering notes
 
@@ -261,7 +260,7 @@ Removed functionality is marked with Git tags so historical implementations stay
 
 | Tag | Removed functionality |
 |---|---|
-| `delete-functionality` | Joystick on smartphone (tag on the removal commit) |
+| `delete-functionality` | Joystick on smartphone (tag on the removal commit; the leftover `phaser3-rex-plugins` dependency was removed later) |
 | `delete-functionality-user-accounts` | User accounts: sign-up/login, JWT authentication, Spring Security, achievements stored in the database. The tag points to the last version where this code is complete; it was replaced by per-message guestbook passwords because accounts made the site more complex without adding value for visitors. |
 
 Browse a tag on GitHub (branch/tag selector) or locally with `git checkout <tag>`.

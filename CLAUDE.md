@@ -64,7 +64,3 @@ Standard `controller → service (+ Impl) → repository → model` layering und
 ### Configuration/secrets
 
 `back/src/main/resources/application-prod.properties` (gitignored) holds real DB credentials and the production CORS origin — never commit real values here; `application.properties` in the repo only has local/dev placeholders. Frontend API base URL is set per-build via `front/src/environments/environment*.ts`.
-
-### Known/accepted issue
-
-Per `README.md`: two moderate `npm audit` vulnerabilities in a transitive dependency (`i18next-http-backend` via `phaser3-rex-plugins`) are intentionally left unfixed to avoid a breaking `npm audit fix --force`, pending a compatible `phaser3-rex-plugins` release.

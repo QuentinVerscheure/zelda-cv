@@ -7,7 +7,6 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import * as Phaser from 'phaser';
-import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
 import { HousesDataService } from './houses-data.service';
 import { ConfigService } from '../../services/config.service';
 import { AchievementService } from '../../services/achievement.service';
@@ -84,15 +83,6 @@ export class CoreComponent implements OnInit, OnDestroy {
           this.scenePortfolioService,
           this.scenePortfolio2Service,
         ],
-        plugins: {
-          global: [
-            {
-              key: 'rexVirtualJoystick',
-              plugin: VirtualJoystickPlugin,
-              start: true,
-            },
-          ],
-        },
         pixelArt: true, // (if not, blur pixel)
         physics: {
           default: 'arcade',
