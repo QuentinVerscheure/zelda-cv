@@ -12,7 +12,7 @@ class PseudoTest {
     @ValueSource(strings = {
         "admin", "Admin", "ADMIN !", "a.d.m.i.n", "4dm1n", "superadmin", "Administrateur",
         "Modérateur", "moderator", "modo",
-        "Quentin", "quentin2", "Quentin V", "Quentin Verscheure", "q.verscheure", "Verscheur",
+        "Quentin V", "Quentin Verscheure", "q.verscheure", "Verscheur",
         "Webmestre", "Propriétaire", "root", "Support 2", "postmaster"
     })
     void forbiddenPseudos(String pseudo) {
@@ -21,7 +21,7 @@ class PseudoTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-        "Link", "Zelda", "guest", "Invité", "test", "Anonyme", "Marie", "Quentine", "Jean-Mod",
+        "Link", "Zelda", "guest", "Invité", "test", "Anonyme", "Marie", "Quentin", "quentin2", "Quentine", "Jean-Mod",
         "Bob42", "リンク", "🙂"
     })
     void allowedPseudos(String pseudo) {

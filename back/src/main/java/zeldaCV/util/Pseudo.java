@@ -31,7 +31,7 @@ public final class Pseudo {
     /** Forbidden as the whole pseudo only, trailing digits ignored ("Support 2", "root123"). */
     private static final Set<String> FORBIDDEN_PSEUDOS = Set.of(
         // owner's first name and initials
-        "quentin", "quentinv", "qv", "qverscheure",
+        "quentinv", "qv", "qverscheure",
         // site roles
         "root", "system", "systeme", "superuser", "owner", "proprio",
         "mod", "modo", "staff", "team", "equipe", "official", "officiel",

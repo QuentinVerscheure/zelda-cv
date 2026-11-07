@@ -43,7 +43,7 @@ class PlayerPositionWebSocketHandlerTest {
         @Test
         void dropsForbiddenPseudosToPreventImpersonation() {
             assertThat(PlayerPositionWebSocketHandler.displayablePseudo("Admin")).isEmpty();
-            assertThat(PlayerPositionWebSocketHandler.displayablePseudo("Quentin")).isEmpty();
+            assertThat(PlayerPositionWebSocketHandler.displayablePseudo("Quentin V")).isEmpty();
         }
     }
 
