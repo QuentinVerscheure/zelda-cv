@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { COMMENT_RULES } from '../game/scenes/guestBookHouse/comment-rules';
 
 /**
@@ -14,6 +14,23 @@ export class PseudoService {
 
   /** Value as typed (spaces included), so the fields don't fight the user while typing. */
   readonly pseudo = signal(PseudoService.read());
+
+  // last pseudo refused by the server (multiplayer), null when accepted
+  private readonly rejectedByServer = signal<string | null>(null);
+
+  /**
+   * True when the server refused the current pseudo (reserved name, impersonation): the other
+   * players then see no name. Compared with the current value so the error disappears as soon as
+   * the player types another pseudo, without waiting for the server's answer.
+   */
+  readonly rejected = computed(() => {
+    const rejected = this.rejectedByServer();
+    return rejected !== null && rejected === this.current();
+  });
+
+  setRejectedByServer(pseudo: string | null) {
+    this.rejectedByServer.set(pseudo);
+  }
 
   set(value: string) {
     const pseudo = (value ?? '').slice(0, COMMENT_RULES.PSEUDO_MAX_LENGTH);

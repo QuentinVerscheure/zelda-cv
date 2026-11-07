@@ -110,7 +110,7 @@ npm ci
 npm start
 ```
 
-The Angular development server is available on `http://localhost:4200`.
+The Angular development server is available on `http://localhost:4200`. It forwards the multiplayer WebSocket (`/ws`) to the backend on `localhost:8080` (`proxy.conf.json`), like nginx does in production: open the game in two browsers (e.g. one private window) to test the multiplayer locally.
 
 Production build:
 

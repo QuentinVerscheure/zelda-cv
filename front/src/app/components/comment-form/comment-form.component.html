@@ -17,7 +17,11 @@
         required
         (focus)="disablePhaserKeyDownEvent()"
         (blur)="enablePhaserKeyDownEvent()"
+        [attr.aria-invalid]="pseudoRejected()"
       />
+      @if (pseudoRejected()) {
+        <p class="error" role="alert">Pseudo incorrect : ce nom est réservé.</p>
+      }
     } @else {
       <p class="title">Modifier le message de {{ pseudo }}</p>
     }
@@ -42,7 +46,7 @@
       pendant {{ rules.EDIT_WINDOW_DAYS }} jours. Déposez-le ensuite où vous voulez dans la pièce.
     </p>
   }
-  <button type="submit" [disabled]="!messageForm.valid || !hasContent() || saving()">
+  <button type="submit" [disabled]="!messageForm.valid || !hasContent() || pseudoRejected() || saving()">
     {{ mode() === 'create' ? 'Créer le message' : 'Modifier le message' }}
   </button>
 </form>

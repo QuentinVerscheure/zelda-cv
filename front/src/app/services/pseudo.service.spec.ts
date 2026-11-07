@@ -32,6 +32,22 @@ describe('PseudoService', () => {
     expect(service.current()).toBe('Link');
   });
 
+  it('reports a pseudo refused by the server until another one is typed', () => {
+    const service = TestBed.inject(PseudoService);
+    service.set('Admin ');
+    expect(service.rejected()).toBe(false);
+
+    service.setRejectedByServer('Admin');
+    expect(service.rejected()).toBe(true);
+
+    // the error disappears at once, before the server answers
+    service.set('Marin');
+    expect(service.rejected()).toBe(false);
+
+    service.setRejectedByServer(null);
+    expect(service.rejected()).toBe(false);
+  });
+
   it('cuts the pseudo to the guestbook limit', () => {
     const service = TestBed.inject(PseudoService);
     service.set('x'.repeat(COMMENT_RULES.PSEUDO_MAX_LENGTH + 10));

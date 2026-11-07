@@ -18,6 +18,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, PlayerPositionDTO> playerPositions = new ConcurrentHashMap<>();
+    // pseudo refused for a session (forbidden), sent back to that player only
+    private final Map<String, String> rejectedPseudos = new ConcurrentHashMap<>();
     private final Set<WebSocketSession> sessions = new CopyOnWriteArraySet<>();
     private final JsonMapper objectMapper = JsonMapper.builder().build();
 
@@ -32,6 +34,7 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
             @org.jspecify.annotations.NonNull CloseStatus status) {
         sessions.remove(session);
         playerPositions.remove(session.getId());
+        rejectedPseudos.remove(session.getId());
         System.out.println("[WebSocket] Connection closed: sessionId=" + session.getId() + " | total=" + sessions.size());
     }
 
@@ -41,8 +44,16 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
         PlayerPositionDTO playerPosition;
         try {
             playerPosition = objectMapper.readValue(message.getPayload(), PlayerPositionDTO.class);
-            playerPosition.setPseudo(displayablePseudo(playerPosition.getPseudo()));
+            String requested = playerPosition.getPseudo() == null ? "" : playerPosition.getPseudo().strip();
+            String displayed = displayablePseudo(requested);
+            playerPosition.setPseudo(displayed);
             playerPositions.put(session.getId(), playerPosition);
+            // tell the player its pseudo was refused, so the menu can show an error
+            if (!requested.isEmpty() && displayed.isEmpty()) {
+                rejectedPseudos.put(session.getId(), requested);
+            } else {
+                rejectedPseudos.remove(session.getId());
+            }
         } catch (Exception e) {
             System.err.println("[WebSocket] Error parsing message from sessionId=" + session.getId() + ": " + e.getMessage());
             e.printStackTrace();
@@ -97,7 +108,7 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
                     .forEach(result::add);
             }
 
-            TopPlayersDTO topPlayersDTO = new TopPlayersDTO(result);
+            TopPlayersDTO topPlayersDTO = new TopPlayersDTO(result, rejectedPseudos.get(session.getId()));
 
             try {
                 String json = objectMapper.writeValueAsString(topPlayersDTO);

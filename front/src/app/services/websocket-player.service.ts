@@ -88,6 +88,7 @@ export class WebsocketPlayerService implements OnDestroy {
         }));
         this.ngZone.run(() => {
           this.topPlayers$.next(scaledPlayers);
+          this.pseudoService.setRejectedByServer(data.rejectedPseudo ?? null);
         });
       } catch {
         // Si erreur, affiche la donnée brute

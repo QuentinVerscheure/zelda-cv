@@ -78,12 +78,21 @@
       font-family: Pixelify_Sans;
       width: 100%;
       box-sizing: border-box;
+
+      &.invalid {
+        border-color: #c0392b;
+        outline-color: #c0392b;
+      }
     }
 
     small {
       display: block;
       margin-top: 4px;
       color: rgb(120, 120, 120);
+
+      &.error {
+        color: #c0392b;
+      }
     }
   }
 

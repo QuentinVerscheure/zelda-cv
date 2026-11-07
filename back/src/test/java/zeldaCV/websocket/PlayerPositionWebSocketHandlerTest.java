@@ -106,5 +106,33 @@ class PlayerPositionWebSocketHandlerTest {
             assertThat(player.get("uuid").asString()).isEqualTo("i");
             assertThat(player.get("pseudo").asString()).isEmpty();
         }
+
+        @Test
+        void onlyTheRefusedPlayerIsToldItsPseudoWasRejected() throws Exception {
+            PlayerPositionWebSocketHandler handler = new PlayerPositionWebSocketHandler();
+            WebSocketSession viewer = session("viewer");
+            WebSocketSession impostor = session("impostor");
+            handler.afterConnectionEstablished(viewer);
+            handler.afterConnectionEstablished(impostor);
+            handler.handleTextMessage(viewer, position("v", "Link"));
+            handler.handleTextMessage(impostor, position("i", " admin "));
+
+            handler.broadcastTopPlayers();
+
+            assertThat(rejectedPseudoSentTo(viewer)).isNull();
+            assertThat(rejectedPseudoSentTo(impostor)).isEqualTo("admin");
+
+            // the player picks another pseudo: the error goes away
+            handler.handleTextMessage(impostor, position("i", "Marin"));
+            handler.broadcastTopPlayers();
+            assertThat(rejectedPseudoSentTo(impostor)).isNull();
+        }
+
+        private String rejectedPseudoSentTo(WebSocketSession session) throws Exception {
+            ArgumentCaptor<TextMessage> sent = ArgumentCaptor.forClass(TextMessage.class);
+            verify(session, org.mockito.Mockito.atLeastOnce()).sendMessage(sent.capture());
+            JsonNode rejected = json.readTree(sent.getValue().getPayload()).get("rejectedPseudo");
+            return rejected == null || rejected.isNull() ? null : rejected.asString();
+        }
     }
 }

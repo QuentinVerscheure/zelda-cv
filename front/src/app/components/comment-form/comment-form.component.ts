@@ -81,8 +81,13 @@ export class CommentFormComponent implements OnInit {
     return this.pseudo.trim().length > 0 && normalizeCommentText(this.message).length > 0;
   }
 
+  /** New message only: the server already refused this pseudo (reserved name). */
+  pseudoRejected(): boolean {
+    return this.mode() === 'create' && this.pseudoService.rejected();
+  }
+
   onSubmit(form: NgForm) {
-    if (!form.valid || !this.hasContent() || this.saving()) {
+    if (!form.valid || !this.hasContent() || this.pseudoRejected() || this.saving()) {
       return;
     }
     if (this.mode() === 'edit') {

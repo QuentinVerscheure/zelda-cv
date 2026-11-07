@@ -15,7 +15,7 @@ The repo is split into two independently-run projects:
 
 ### Frontend (`front/`)
 Run all commands from inside `front/`.
-- `npm start` / `ng serve` — dev server at http://localhost:4200 (talks to backend at `http://localhost:8080/api`, see `src/environments/environment.ts`)
+- `npm start` / `ng serve` — dev server at http://localhost:4200 (talks to backend at `http://localhost:8080/api`, see `src/environments/environment.ts`); the multiplayer WebSocket `/ws` is proxied to the backend by `proxy.conf.json`
 - `ng build` — production build into `dist/` (only needed if you changed code outside `assets/`, since dev server serves `assets/` directly)
 - `ng build --configuration=production` — the build used for deployment
 - `npm test -- --watch=false` — Vitest unit tests (jsdom, no browser), `*.spec.ts` next to the code they test

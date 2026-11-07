@@ -12,8 +12,6 @@ import java.util.List;
 public class TopPlayersDTO {
     private List<PlayerPositionDTO> players;
 
-
-    public void setPlayers(List<PlayerPositionDTO> players) {
-        this.players = players;
-    }
+    /** Pseudo of the receiving player refused by the server (forbidden), null when accepted. */
+    private String rejectedPseudo;
 }

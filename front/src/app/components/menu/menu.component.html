@@ -104,8 +104,17 @@
             (input)="onPseudoInput($event)"
             [attr.maxlength]="pseudoMaxLength"
             appGameTextInput
+            [class.invalid]="pseudoService.rejected()"
+            [attr.aria-invalid]="pseudoService.rejected()"
+            aria-describedby="menu-pseudo-help"
             />
-          <small>Visible au-dessus de votre personnage par les autres joueurs.</small>
+          @if (pseudoService.rejected()) {
+            <small id="menu-pseudo-help" class="error" role="alert">
+              Pseudo incorrect : ce nom est réservé. Les autres joueurs vous voient sans pseudo.
+            </small>
+          } @else {
+            <small id="menu-pseudo-help">Visible au-dessus de votre personnage par les autres joueurs.</small>
+          }
         </div>
       }
           <h3 (click)="changeSection('noTime')">CV</h3>
