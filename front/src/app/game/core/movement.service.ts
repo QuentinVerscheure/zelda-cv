@@ -32,6 +32,16 @@ export class MovementService {
   /**
    * Initialize the keyboard input and joystick
    * the game isn't qwerty friendly
+   *
+   * Called by every scene on creation, so it also starts the scene with a clean movement state.
+   * This service is a singleton shared by all scenes: without this reset, the movement of the
+   * previous scene (held key, mouse target) would carry over. The player then stays still,
+   * keeping its spawn frame, until every direction key and the pointer are released. This
+   * prevents walking straight back into the exit when the arrival point is right next to it
+   * (e.g. the guest book stairs).
+   * A one-way level design (entering and leaving a room in the same direction, so the exit is
+   * always behind the player) would avoid the issue too, but every map and hitbox would need
+   * to be reworked: this guard covers all scenes, including future ones.
    */
   initializeInput(
     scene: Phaser.Scene,
@@ -42,6 +52,8 @@ export class MovementService {
     if (input.keyboard) {
       this.cursors = input.keyboard.createCursorKeys();
     }
+
+    this.resetMovementState(player);
 
     //register pointer events for mouse clic movement
     this.registerPointerAndUpdateEvents(scene, player, scaleOfTheGame);
@@ -171,21 +183,17 @@ export class MovementService {
   }
 
   /**
-   * Stops the player when arriving in a scene and keeps it still, facing the given direction,
-   * until the visitor releases the keys/pointer used in the previous scene.
-   * Useful when the arrival point is right next to the exit (e.g. stairs): without it, keeping
-   * the same key pressed walks the player straight back into the exit.
+   * Stops the player and waits for the keys/pointer to be released (see initializeInput).
+   * The direction is cleared so the idle frame set in movePlayer doesn't override the
+   * spawn frame chosen by the scene.
    */
-  waitForInputRelease(
-    player: Phaser.Physics.Arcade.Sprite,
-    facingDirection: 'top' | 'down' | 'left' | 'right'
-  ) {
+  private resetMovementState(player: Phaser.Physics.Arcade.Sprite) {
     this.waitingForInputRelease = true;
     this.mousePointerDown = false;
     this.targetX = null;
     this.targetY = null;
     this.isMoving = false;
-    this.direction = facingDirection;
+    this.direction = '';
     if (player.body) player.setVelocity(0, 0);
   }
 
