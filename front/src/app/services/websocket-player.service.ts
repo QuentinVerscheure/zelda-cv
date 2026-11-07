@@ -44,6 +44,11 @@ export class WebsocketPlayerService implements OnDestroy {
     }
   }
 
+  /** Identifier of the local player, kept for the browser tab session only (sessionStorage). */
+  getUuid(): string {
+    return this.uuid;
+  }
+
   /**
    * Escape dangerous characters in all string fields of PlayerPositionDTO[]
    * string from back come front other users's front and should be sanitized

@@ -3,7 +3,6 @@ import { WebsocketPlayerService } from './websocket-player.service';
 import { PlayerService } from '../game/core/player.service';
 import { PlayerPositionDTO } from '../models/dto/top-players.dto';
 import { Subscription } from 'rxjs';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -12,20 +11,19 @@ export class PlayerSyncService {
   // Map of players displayed in the scene for destroy sprite of disconnected players
   private otherPlayers: Map<string, Phaser.Physics.Arcade.Sprite> = new Map();
   private subscription: Subscription | null = null;
+  // same identifier as the one sent over the WebSocket (kept in sessionStorage by WebsocketPlayerService)
   private uuid: string;
 
   constructor(
     private websocketPlayerService: WebsocketPlayerService,
     private playerService: PlayerService
   ) {
-        // generate or retrieve a unique identifier for the user
-    // This will be used to identify an unregister and unname player in the WebSocket communication
-    const storedUuid = localStorage.getItem('uuid');
-    if (storedUuid) {
-      this.uuid = storedUuid;
-    } else {
-      this.uuid = uuidv4();
-      localStorage.setItem('uuid', this.uuid);
+    this.uuid = this.websocketPlayerService.getUuid();
+    // older versions kept a second, never-expiring identifier in localStorage: remove it
+    try {
+      localStorage.removeItem('uuid');
+    } catch {
+      // storage unavailable (private browsing, blocked site data): nothing to clean
     }
   }
 
