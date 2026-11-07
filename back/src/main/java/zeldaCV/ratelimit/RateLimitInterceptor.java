@@ -36,7 +36,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     public RateLimitInterceptor(
             RateLimiter rateLimiter,
             ObjectMapper objectMapper,
-            @Value("${app.rate-limit.comment-create-per-hour:3}") int commentCreatePerHour,
+            @Value("${app.rate-limit.comment-create-per-hour:5}") int commentCreatePerHour,
             @Value("${app.rate-limit.comment-edit-per-hour:120}") int commentEditPerHour,
             @Value("${app.rate-limit.mail-per-hour:3}") int mailPerHour) {
         this.rateLimiter = rateLimiter;
