@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
@@ -13,6 +13,7 @@ import { SceneContactService } from '../../game/scenes/contactHouse/scene-contac
     selector: 'app-contact-form',
     imports: [ReactiveFormsModule],
     templateUrl: './contact-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './contact-form.component.scss'
 })
 export class ContactFormComponent implements OnInit {

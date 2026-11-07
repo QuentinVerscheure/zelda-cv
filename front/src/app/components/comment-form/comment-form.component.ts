@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgForm, FormsModule } from '@angular/forms';
 import { CommentService } from '../../game/scenes/guestBookHouse/comment.service';
@@ -16,6 +16,7 @@ import { CommentEditRequest, CommentFormService } from './comment-form.service';
     selector: 'app-comment-form',
     imports: [FormsModule],
     templateUrl: './comment-form.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './comment-form.component.scss'
 })
 export class CommentFormComponent implements OnInit {

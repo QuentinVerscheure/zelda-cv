@@ -26,7 +26,7 @@ The project combines a game-oriented Angular frontend with a Spring Boot backend
 
 | Layer | Technologies |
 | --- | --- |
-| Frontend | Angular 21, TypeScript, Phaser, RxJS |
+| Frontend | Angular 22, TypeScript, Phaser, RxJS |
 | Backend | Java 21, Spring Boot 4.1, Spring Web, Spring Data JPA, Bean Validation |
 | Realtime | WebSocket |
 | Database | MySQL 8, Flyway migrations |

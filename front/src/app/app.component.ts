@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CoreComponent } from './game/core/core.component';
 import { MenuComponent } from './components/menu/menu.component';
@@ -15,6 +15,7 @@ import { CommentFormComponent } from './components/comment-form/comment-form.com
         CommentFormComponent,
     ],
     templateUrl: './app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './app.component.scss'
 })
 export class AppComponent {

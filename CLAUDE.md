@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Zelda-CV is a personal resume/portfolio site styled as a playable Game Boy "Link's Awakening" game. A player walks around a world map and enters "houses" to view CV content, portfolio, contact form, guestbook, etc. It has a real-time multiplayer layer (WebSocket) showing other visitors moving on the map, and a JWT-authenticated guestbook.
 
 The repo is split into two independently-run projects:
-- `front/` — Angular 21 app that embeds a Phaser 3 game
+- `front/` — Angular 22 app that embeds a Phaser 3 game
 - `back/` — Spring Boot 4.1 (Java 21) REST + WebSocket API
 - 
 

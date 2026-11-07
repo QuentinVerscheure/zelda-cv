@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnChanges,
   SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import * as Phaser from 'phaser';
 import VirtualJoystickPlugin from 'phaser3-rex-plugins/plugins/virtualjoystick-plugin.js';
@@ -28,6 +29,7 @@ import { SceneWorldService } from '../scenes/world/scene-world.service';
   standalone: true,
   templateUrl: './core.component.html',
   styleUrls: ['./core.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [],
 })
 export class CoreComponent implements OnInit, OnDestroy {

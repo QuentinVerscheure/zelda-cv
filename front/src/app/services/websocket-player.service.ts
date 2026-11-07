@@ -2,7 +2,6 @@ import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { BehaviorSubject, interval, Subscription } from 'rxjs';
 import { PlayerPositionDTO, TopPlayersDTO } from '../models/dto/top-players.dto';
 import { escapeString } from '../utils/sanitize-string.util';
-import { v4 as uuidv4 } from 'uuid';
 import { ScaleOfTheGameService } from '../game/core/scale-of-the-game.service';
 
 @Injectable({
@@ -39,7 +38,7 @@ export class WebsocketPlayerService implements OnDestroy {
     if (storedUuid && storedUuid !== '') {
       this.uuid = storedUuid;
     } else {
-      this.uuid = uuidv4();
+      this.uuid = crypto.randomUUID(); // built into browsers (HTTPS or localhost)
       sessionStorage.setItem('uuid', this.uuid);
     }
   }

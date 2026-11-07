@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConfigService } from '../../services/config.service';
 import { AppConfig } from '../../models/config.model';
@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
     selector: 'app-menu',
     imports: [RouterModule, CommonModule],
     templateUrl: './menu.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
