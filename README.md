@@ -247,9 +247,14 @@ Two moderate vulnerabilities currently remain in a transitive frontend dependenc
 
 ## Engineering notes
 
-Removed functionality that may be useful again is occasionally marked with the Git tag `delete-functionality` to make historical implementations easier to locate.
+Removed functionality is marked with Git tags so historical implementations stay easy to locate:
 
-previous focntionality: joystick on smartphone
+| Tag | Removed functionality |
+|---|---|
+| `delete-functionality` | Joystick on smartphone (tag on the removal commit) |
+| `delete-functionality-user-accounts` | User accounts: sign-up/login, JWT authentication, Spring Security, achievements stored in the database. The tag points to the last version where this code is complete; it was replaced by per-message guestbook passwords because accounts made the site more complex without adding value for visitors. |
+
+Browse a tag on GitHub (branch/tag selector) or locally with `git checkout <tag>`.
 
 ## Legal notice
 
