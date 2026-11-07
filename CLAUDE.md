@@ -18,12 +18,12 @@ Run all commands from inside `front/`.
 - `npm start` / `ng serve` — dev server at http://localhost:4200 (talks to backend at `http://localhost:8080/api`, see `src/environments/environment.ts`)
 - `ng build` — production build into `dist/` (only needed if you changed code outside `assets/`, since dev server serves `assets/` directly)
 - `ng build --configuration=production` — the build used for deployment
-- `ng test` — Karma/Jasmine unit tests (there are currently no `*.spec.ts` files in the repo)
+- `npm test -- --watch=false` — Vitest unit tests (jsdom, no browser), `*.spec.ts` next to the code they test
 
 ### Backend (`back/`)
 Run all commands from inside `back/`.
 - `./mvnw spring-boot:run` — dev server at http://localhost:8080
-- `./mvnw test` — run the test suite (`mvn test` if you have Maven installed globally)
+- `./mvnw test` — run the test suite: unit tests plus `ApiIntegrationTest`, which starts the whole app against a throwaway MySQL via Testcontainers (**Docker must be running**)
 - `./mvnw clean package -DskipTests` — build the deployable jar (`target/Zelda-cv-1.0.0.jar`)
 - `java -jar target/Zelda-cv-1.0.0.jar --spring.profiles.active=prod` — run with the `prod` profile (`application-prod.properties`, gitignored, holds real DB/JWT/CORS secrets)
 - Swagger UI: http://localhost:8080/swagger-ui/index.html (also exposed in production through the frontend nginx). No authentication: guestbook writes are authorized by the per-message password (see below).

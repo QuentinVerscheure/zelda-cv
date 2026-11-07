@@ -1,13 +1,13 @@
 name: CI Zelda CV
 
+# On master, this workflow is run by deploy.yml (workflow_call) before building the production
+# images: a failing test blocks the deployment. It also runs on pull requests and manually.
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   test-backend:
@@ -28,9 +28,11 @@ jobs:
         working-directory: back
         run: chmod +x mvnw
 
-      - name: Build backend
+      # Unit + integration tests; the integration tests start a throwaway MySQL with Testcontainers
+      # (Docker is available on GitHub-hosted runners).
+      - name: Test and build backend
         working-directory: back
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean verify
 
   test-frontend:
     runs-on: ubuntu-latest
@@ -49,6 +51,10 @@ jobs:
       - name: Install dependencies
         working-directory: front
         run: npm ci
+
+      - name: Test frontend
+        working-directory: front
+        run: npm test -- --watch=false
 
       - name: Build frontend
         working-directory: front

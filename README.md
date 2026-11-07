@@ -58,13 +58,14 @@ Only the host Nginx is exposed publicly. The application containers communicate 
 
 A push to `master` triggers the deployment workflow:
 
-1. GitHub Actions builds the backend and frontend Docker images.
-2. Images are published to GHCR with both `latest` and the Git commit SHA.
-3. The deployment job connects to the VPS over SSH.
-4. Docker Compose pulls the images identified by the commit SHA.
-5. The frontend and backend containers are recreated from those immutable images.
-6. On startup, the backend applies any pending database migration (Flyway).
-7. MySQL data remains persisted in a Docker volume.
+1. The CI runs first: backend unit and integration tests (against a throwaway MySQL started with Testcontainers), frontend unit tests (Vitest), builds. **A failing test stops the deployment.**
+2. GitHub Actions builds the backend and frontend Docker images.
+3. Images are published to GHCR with both `latest` and the Git commit SHA.
+4. The deployment job connects to the VPS over SSH.
+5. Docker Compose pulls the images identified by the commit SHA.
+6. The frontend and backend containers are recreated from those immutable images.
+7. On startup, the backend applies any pending database migration (Flyway).
+8. MySQL data remains persisted in a Docker volume.
 
 Using the Git SHA makes the deployed application version traceable and allows a previous image version to be redeployed manually if a rollback is required.
 
@@ -140,6 +141,15 @@ Swagger UI is available locally at:
 ```text
 http://localhost:8080/swagger-ui/index.html
 ```
+
+### Tests
+
+```bash
+cd back && ./mvnw test                  # unit + integration tests (Docker must be running)
+cd front && npm test -- --watch=false   # Vitest unit tests
+```
+
+The backend integration tests start the whole application against a throwaway MySQL 8 container (Testcontainers) and call it over HTTP: guestbook lifecycle, validation, rate limiting, CORS, WebSocket multiplayer. A test also checks that the guestbook limits stay identical in the frontend and the backend.
 
 ### Docker
 
