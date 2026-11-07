@@ -14,8 +14,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final RateLimitInterceptor rateLimitInterceptor;
 
-    // allowed origin of the frontend: "*" in dev, the production domain in prod
-    @Value("${app.cors.allowed-origin:*}")
+    // allowed origin of the frontend: "*" in dev, the production domain in prod.
+    // No default value on purpose: if the property is missing, the app fails to start
+    // instead of silently opening the API to every origin.
+    @Value("${app.cors.allowed-origin}")
     private String allowedOrigin;
 
     public WebConfig(RateLimitInterceptor rateLimitInterceptor) {
@@ -26,7 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(@NonNull CorsRegistry registry) {
         var mapping = registry.addMapping("/api/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*");
+                // only the headers the frontend sends: JSON body + guestbook password (delete)
+                .allowedHeaders("Content-Type", "X-Comment-Password");
         if ("*".equals(allowedOrigin)) {
             mapping.allowedOriginPatterns("*");
         } else {
