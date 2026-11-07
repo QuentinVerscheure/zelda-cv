@@ -1,11 +1,11 @@
 package zeldaCV.websocket;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import zeldaCV.websocket.dto.PlayerPositionDTO;
+import tools.jackson.databind.json.JsonMapper;
 import zeldaCV.websocket.dto.TopPlayersDTO;
 
 import java.util.*;
@@ -17,25 +17,25 @@ public class PlayerPositionWebSocketHandler extends TextWebSocketHandler {
 
     private final Map<String, PlayerPositionDTO> playerPositions = new ConcurrentHashMap<>();
     private final Set<WebSocketSession> sessions = new CopyOnWriteArraySet<>();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonMapper objectMapper = JsonMapper.builder().build();
 
     @Override
-    public void afterConnectionEstablished(@org.springframework.lang.NonNull WebSocketSession session) {
+    public void afterConnectionEstablished(@org.jspecify.annotations.NonNull WebSocketSession session) {
         sessions.add(session);
         System.out.println("[WebSocket] New connection: sessionId=" + session.getId() + " | total=" + sessions.size());
     }
 
     @Override
-    public void afterConnectionClosed(@org.springframework.lang.NonNull WebSocketSession session,
-            @org.springframework.lang.NonNull CloseStatus status) {
+    public void afterConnectionClosed(@org.jspecify.annotations.NonNull WebSocketSession session,
+            @org.jspecify.annotations.NonNull CloseStatus status) {
         sessions.remove(session);
         playerPositions.remove(session.getId());
         System.out.println("[WebSocket] Connection closed: sessionId=" + session.getId() + " | total=" + sessions.size());
     }
 
     @Override
-    protected void handleTextMessage(@org.springframework.lang.NonNull WebSocketSession session,
-            @org.springframework.lang.NonNull TextMessage message) throws Exception {
+    protected void handleTextMessage(@org.jspecify.annotations.NonNull WebSocketSession session,
+            @org.jspecify.annotations.NonNull TextMessage message) throws Exception {
         PlayerPositionDTO playerPosition;
         try {
             playerPosition = objectMapper.readValue(message.getPayload(), PlayerPositionDTO.class);

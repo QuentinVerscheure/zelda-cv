@@ -8,7 +8,7 @@ Zelda-CV is a personal resume/portfolio site styled as a playable Game Boy "Link
 
 The repo is split into two independently-run projects:
 - `front/` — Angular 21 app that embeds a Phaser 3 game
-- `back/` — Spring Boot 3.3 REST + WebSocket API
+- `back/` — Spring Boot 4.1 (Java 21) REST + WebSocket API
 - 
 
 ## Commands

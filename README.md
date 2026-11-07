@@ -27,7 +27,7 @@ The project combines a game-oriented Angular frontend with a Spring Boot backend
 | Layer | Technologies |
 | --- | --- |
 | Frontend | Angular 21, TypeScript, Phaser, RxJS |
-| Backend | Java 17, Spring Boot 3.3, Spring Web, Spring Data JPA, Bean Validation |
+| Backend | Java 21, Spring Boot 4.1, Spring Web, Spring Data JPA, Bean Validation |
 | Realtime | WebSocket |
 | Database | MySQL 8, Flyway migrations |
 | API documentation | Springdoc OpenAPI / Swagger UI |
@@ -98,7 +98,7 @@ zelda-cv/
 
 - Docker / Docker Compose, or:
   - Node.js for the frontend
-  - Java 17 for the backend
+  - Java 21 for the backend
 - MySQL 8 when running without Docker
 
 ### Frontend
