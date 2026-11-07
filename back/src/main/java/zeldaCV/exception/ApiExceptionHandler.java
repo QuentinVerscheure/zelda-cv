@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,12 +50,12 @@ public class ApiExceptionHandler {
             return body(errorResponse.getStatusCode(), errorResponse.getBody().getDetail());
         }
         logger.error("Unexpected error", ex);
-        return body(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+        return body(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur inattendue est survenue");
     }
 
     private static ResponseEntity<Object> body(HttpStatusCode status, String error) {
         Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
+        body.put("timestamp", Instant.now());
         body.put("status", status.value());
         body.put("error", error);
         return new ResponseEntity<>(body, status);
